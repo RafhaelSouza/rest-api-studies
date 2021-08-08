@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+
+  postgres_foodorders:
+    image: postgres
+    environment:
+      POSTGRES_DB: foodorders
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/food_data-database:/var/lib/postgresql/data
