@@ -49,6 +49,7 @@ public class RestaurantService {
     public void delete(Long id) {
         try {
             restaurantRepository.deleteById(id);
+            restaurantRepository.flush();
         }
         catch (EmptyResultDataAccessException e) {
             throw new RestaurantNotFoundException(id);

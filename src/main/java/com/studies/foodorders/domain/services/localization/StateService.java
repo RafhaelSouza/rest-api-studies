@@ -39,6 +39,7 @@ public class StateService {
     public void delete(Long id) {
         try {
             stateRepository.deleteById(id);
+            stateRepository.flush();
         }
         catch (EmptyResultDataAccessException e) {
             throw new StateNotFoundException(id);
