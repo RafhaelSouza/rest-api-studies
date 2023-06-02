@@ -36,6 +36,11 @@ public class KitchenService {
     }
 
     @Transactional
+    public Kitchen update(Kitchen kitchen) {
+        return kitchenRepository.save(kitchen);
+    }
+
+    @Transactional
     public void delete(Long id) {
         try {
             kitchenRepository.deleteById(id);

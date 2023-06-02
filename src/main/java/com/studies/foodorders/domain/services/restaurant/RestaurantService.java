@@ -59,6 +59,20 @@ public class RestaurantService {
         }
     }
 
+    @Transactional
+    public void activate(Long id) {
+        Restaurant restauranteAtual = findIfExists(id);
+
+        restauranteAtual.activate();
+    }
+
+    @Transactional
+    public void inactivate(Long id) {
+        Restaurant restauranteAtual = findIfExists(id);
+
+        restauranteAtual.inactivate();
+    }
+
     public Restaurant findIfExists(Long id) {
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));

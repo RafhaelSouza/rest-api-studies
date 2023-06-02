@@ -58,6 +58,8 @@ public class Restaurant implements Serializable {
     @Column(nullable = false, columnDefinition = "timestamp")
     private LocalDateTime updatedAt;
 
+    private Boolean active = Boolean.TRUE;
+
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
     @NotNull
@@ -73,5 +75,13 @@ public class Restaurant implements Serializable {
 
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
+
+    public void activate() {
+        setActive(true);
+    }
+
+    public void inactivate() {
+        setActive(false);
+    }
 
 }

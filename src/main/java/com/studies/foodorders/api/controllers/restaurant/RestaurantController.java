@@ -80,6 +80,18 @@ public class RestaurantController {
         }
     }
 
+    @PutMapping("/{id}/activate")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void activate(@PathVariable Long id) {
+        restaurantService.activate(id);
+    }
+
+    @DeleteMapping("/{id}/inactivate")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inactivate(@PathVariable Long id) {
+        restaurantService.inactivate(id);
+    }
+
     /*@PatchMapping("/{id}")
     public Restaurant partialUpdate(@PathVariable Long id,
                                     @RequestBody Map<String, Object> fields, HttpServletRequest request) {
