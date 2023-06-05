@@ -1,14 +1,8 @@
 package com.studies.foodorders.domain.repositories.paymentway;
 
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface PaymentWayRepository {
-
-    List<PaymentWay> list();
-    PaymentWay find(Long id);
-    PaymentWay save(PaymentWay kitchen);
-    void delete(PaymentWay kitchen);
-
-}
+@Repository
+public interface PaymentWayRepository extends JpaRepository<PaymentWay, Long> {}
