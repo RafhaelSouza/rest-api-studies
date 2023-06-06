@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.converter.state;
 
-import com.studies.foodorders.api.model.state.StateModel;
+import com.studies.foodorders.api.model.localization.state.StateModel;
 import com.studies.foodorders.domain.models.localization.State;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

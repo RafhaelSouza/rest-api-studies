@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.model.state;
+package com.studies.foodorders.api.model.localization.state;
 
 import lombok.Getter;
 import lombok.Setter;

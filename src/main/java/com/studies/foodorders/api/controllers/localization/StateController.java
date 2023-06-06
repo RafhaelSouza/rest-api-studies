@@ -2,11 +2,10 @@ package com.studies.foodorders.api.controllers.localization;
 
 import com.studies.foodorders.api.converter.state.StateInputDisconverter;
 import com.studies.foodorders.api.converter.state.StateModelConverter;
-import com.studies.foodorders.api.model.state.StateInput;
-import com.studies.foodorders.api.model.state.StateModel;
+import com.studies.foodorders.api.model.localization.state.StateInput;
+import com.studies.foodorders.api.model.localization.state.StateModel;
 import com.studies.foodorders.domain.models.localization.State;
 import com.studies.foodorders.domain.services.localization.StateService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
