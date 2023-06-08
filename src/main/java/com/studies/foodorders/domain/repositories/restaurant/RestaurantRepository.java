@@ -24,7 +24,8 @@ public interface RestaurantRepository
     int countByKitchenId(Long kitchenId);
     List<Restaurant> searchByName(String name, Long kitchenId);
     public List<Restaurant> find(String name, BigDecimal initialCost, BigDecimal finalCost);
-    @Query("from Restaurant r join r.kitchen left outer join fetch r.paymentWay")
+    //@Query("from Restaurant r join r.kitchen left outer join fetch r.paymentWay")
+    @Query("from Restaurant r join r.kitchen")
     List<Restaurant> findAll();
 
 }
