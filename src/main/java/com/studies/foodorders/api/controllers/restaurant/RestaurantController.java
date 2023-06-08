@@ -8,7 +8,8 @@ import com.studies.foodorders.api.model.restaurant.RestaurantInput;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
 import com.studies.foodorders.core.validation.ValidationException;
 import com.studies.foodorders.domain.exceptions.BusinessException;
-import com.studies.foodorders.domain.exceptions.NotFoundEntityException;
+import com.studies.foodorders.domain.exceptions.CityNotFoundException;
+import com.studies.foodorders.domain.exceptions.KitchenNotFoundException;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -61,7 +62,7 @@ public class RestaurantController {
         try {
             Restaurant restaurant = restaurantInputDisconverter.toDomainObject(restaurantInput);
             return restaurantModelConverter.toModel(restaurantService.save(restaurant));
-        } catch (NotFoundEntityException e) {
+        } catch (KitchenNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
@@ -75,7 +76,7 @@ public class RestaurantController {
                 "id", "createdAt", "paymentWay", "address");*/
         try {
             return restaurantModelConverter.toModel(restaurantService.save(currentRestaurant));
-        } catch (NotFoundEntityException e) {
+        } catch (KitchenNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }

@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.model.restaurant;
 
 import com.studies.foodorders.api.model.kitchen.KitchenIdInput;
+import com.studies.foodorders.api.model.localization.address.AddressInput;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,5 +25,9 @@ public class RestaurantInput {
     @Valid
     @NotNull
     private KitchenIdInput kitchen;
+
+    @Valid
+    @NotNull
+    private AddressInput address;
 
 }

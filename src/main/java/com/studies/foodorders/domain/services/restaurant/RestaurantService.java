@@ -4,9 +4,11 @@ import com.studies.foodorders.domain.exceptions.KitchenNotFoundException;
 import com.studies.foodorders.domain.exceptions.RestaurantNotFoundException;
 import com.studies.foodorders.domain.exceptions.UsedEntityException;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
+import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
-import com.studies.foodorders.domain.repositories.kitchen.KitchenRepository;
 import com.studies.foodorders.domain.repositories.restaurant.RestaurantRepository;
+import com.studies.foodorders.domain.services.kitchen.KitchenService;
+import com.studies.foodorders.domain.services.localization.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,7 +27,10 @@ public class RestaurantService {
     private RestaurantRepository restaurantRepository;
 
     @Autowired
-    private KitchenRepository kitchenRepository;
+    private KitchenService kitchenService;
+
+    @Autowired
+    private CityService cityService;
 
     public List<Restaurant> list() {
         return restaurantRepository.findAll();
@@ -39,9 +44,14 @@ public class RestaurantService {
     @Transactional
     public Restaurant save(Restaurant restaurant) {
         Long kitchenId = restaurant.getKitchen().getId();
-        Kitchen kitchen = kitchenRepository.findById(kitchenId)
-                .orElseThrow(() -> new KitchenNotFoundException(kitchenId));
+        Long cityId = restaurant.getAddress().getCity().getId();
+
+        Kitchen kitchen = kitchenService.findIfExists(kitchenId);
+        City city = cityService.findIfExists(cityId);
+
         restaurant.setKitchen(kitchen);
+        restaurant.getAddress().setCity(city);
+
         return restaurantRepository.save(restaurant);
     }
 
