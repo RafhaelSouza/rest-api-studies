@@ -1,7 +1,6 @@
 package com.studies.foodorders.api.controllers.paymentway;
 
 import com.studies.foodorders.api.converter.paymentway.PaymentWayModelConverter;
-import com.studies.foodorders.api.converter.paymentway.PaymentWayModelDisconverter;
 import com.studies.foodorders.api.model.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
@@ -22,9 +21,6 @@ public class PaymentWayController {
     @Autowired
     private PaymentWayModelConverter paymentWayModelConverter;
 
-    @Autowired
-    private PaymentWayModelDisconverter paymentWayModelDisconverter;
-
     @GetMapping
     public List<PaymentWayModel> list() {
         return paymentWayModelConverter.toCollectionModel(paymentWayService.list());
@@ -38,7 +34,7 @@ public class PaymentWayController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentWayModel save(@RequestBody @Valid PaymentWayInput paymentWayInput) {
-        PaymentWay paymentWay = paymentWayModelDisconverter.toDomainObject(paymentWayInput);
+        PaymentWay paymentWay = paymentWayModelConverter.toDomainObject(paymentWayInput);
 
         return paymentWayModelConverter.toModel(paymentWayService.save(paymentWay));
     }
@@ -48,7 +44,7 @@ public class PaymentWayController {
                                          @RequestBody @Valid PaymentWayInput paymentWayInput) {
         PaymentWay currentPaymentWay = paymentWayService.findIfExists(id);
 
-        paymentWayModelDisconverter.copyToDomainObject(paymentWayInput, currentPaymentWay);
+        paymentWayModelConverter.copyToDomainObject(paymentWayInput, currentPaymentWay);
 
         return paymentWayModelConverter.toModel(paymentWayService.save(currentPaymentWay));
     }

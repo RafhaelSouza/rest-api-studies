@@ -1,6 +1,5 @@
 package com.studies.foodorders.api.controllers.localization;
 
-import com.studies.foodorders.api.converter.state.StateInputDisconverter;
 import com.studies.foodorders.api.converter.state.StateModelConverter;
 import com.studies.foodorders.api.model.localization.state.StateInput;
 import com.studies.foodorders.api.model.localization.state.StateModel;
@@ -24,9 +23,6 @@ public class StateController {
     @Autowired
     private StateModelConverter stateModelConverter;
 
-    @Autowired
-    private StateInputDisconverter stateInputDisconverter;
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<StateModel> list() {
         return stateModelConverter.toCollectionModel(stateService.list());
@@ -40,14 +36,14 @@ public class StateController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public StateModel save(@RequestBody @Valid StateInput stateInput) {
-        State state = stateInputDisconverter.toDomainObject(stateInput);
+        State state = stateModelConverter.toDomainObject(stateInput);
         return stateModelConverter.toModel(stateService.save(state));
     }
 
     @PutMapping("/{id}")
     public StateModel update(@PathVariable Long id, @RequestBody @Valid StateInput stateInput) {
         State currentState = stateService.findIfExists(id);
-        stateInputDisconverter.copyToDomainObject(stateInput, currentState);
+        stateModelConverter.copyToDomainObject(stateInput, currentState);
         currentState = stateService.save(currentState);
         return stateModelConverter.toModel(stateService.save(currentState));
 

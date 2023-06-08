@@ -1,5 +1,6 @@
 package com.studies.foodorders.api.converter.kitchen;
 
+import com.studies.foodorders.api.model.kitchen.KitchenInput;
 import com.studies.foodorders.api.model.kitchen.KitchenModel;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import org.modelmapper.ModelMapper;
@@ -25,6 +26,14 @@ public class KitchenModelConverter {
                 .map(kitchen -> toModel(kitchen))
                 .collect(Collectors.toList());
 
+    }
+
+    public Kitchen toDomainObject(KitchenInput kitchenInput) {
+        return modelMapper.map(kitchenInput, Kitchen.class);
+    }
+
+    public void copyToDomainObject(KitchenInput kitchenInput, Kitchen kitchen) {
+        modelMapper.map(kitchenInput, kitchen);
     }
 
 }

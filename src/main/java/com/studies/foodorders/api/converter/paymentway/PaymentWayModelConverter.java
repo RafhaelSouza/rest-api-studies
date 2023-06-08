@@ -1,5 +1,6 @@
 package com.studies.foodorders.api.converter.paymentway;
 
+import com.studies.foodorders.api.model.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,14 @@ public class PaymentWayModelConverter {
 		return paymentWays.stream()
 				.map(paymentWay -> toModel(paymentWay))
 				.collect(Collectors.toList());
+	}
+
+	public PaymentWay toDomainObject(PaymentWayInput paymentWayInput) {
+		return modelMapper.map(paymentWayInput, PaymentWay.class);
+	}
+
+	public void copyToDomainObject(PaymentWayInput paymentWayInput, PaymentWay paymentWay) {
+		modelMapper.map(paymentWayInput, paymentWay);
 	}
 	
 }

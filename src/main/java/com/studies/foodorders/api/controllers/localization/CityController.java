@@ -1,6 +1,5 @@
 package com.studies.foodorders.api.controllers.localization;
 
-import com.studies.foodorders.api.converter.city.CityInputDisconverter;
 import com.studies.foodorders.api.converter.city.CityModelConverter;
 import com.studies.foodorders.api.model.city.CityInput;
 import com.studies.foodorders.api.model.city.CityModel;
@@ -25,9 +24,6 @@ public class CityController {
     @Autowired
     private CityModelConverter cityModelConverter;
 
-    @Autowired
-    private CityInputDisconverter cityInputDisconverter;
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CityModel> list() {
         return cityModelConverter.toCollectionModel(cityService.list());
@@ -42,7 +38,7 @@ public class CityController {
     @ResponseStatus(HttpStatus.CREATED)
     public CityModel save(@RequestBody @Valid CityInput cityInput) {
         try {
-            City city = cityInputDisconverter.toDomainObject(cityInput);
+            City city = cityModelConverter.toDomainObject(cityInput);
             return cityModelConverter.toModel(cityService.save(city));
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
@@ -53,7 +49,7 @@ public class CityController {
     public CityModel update(@PathVariable Long id, @RequestBody @Valid CityInput cityInput) {
         try {
             City currentCity = cityService.findIfExists(id);
-            cityInputDisconverter.copyToDomainObject(cityInput, currentCity);
+            cityModelConverter.copyToDomainObject(cityInput, currentCity);
             return cityModelConverter.toModel(cityService.save(currentCity));
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage());

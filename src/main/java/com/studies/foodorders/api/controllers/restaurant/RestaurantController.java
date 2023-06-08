@@ -2,7 +2,6 @@ package com.studies.foodorders.api.controllers.restaurant;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.studies.foodorders.api.converter.restaurant.RestaurantInputDisconverter;
 import com.studies.foodorders.api.converter.restaurant.RestaurantModelConverter;
 import com.studies.foodorders.api.model.restaurant.RestaurantInput;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
@@ -42,9 +41,6 @@ public class RestaurantController {
     @Autowired
     private RestaurantModelConverter restaurantModelConverter;
 
-    @Autowired
-    private RestaurantInputDisconverter restaurantInputDisconverter;
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RestaurantModel> list() {
         return restaurantModelConverter.toCollectionModel(restaurantService.list());
@@ -60,7 +56,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantModel save(@RequestBody @Valid RestaurantInput restaurantInput) {
         try {
-            Restaurant restaurant = restaurantInputDisconverter.toDomainObject(restaurantInput);
+            Restaurant restaurant = restaurantModelConverter.toDomainObject(restaurantInput);
             return restaurantModelConverter.toModel(restaurantService.save(restaurant));
         } catch (KitchenNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
@@ -71,7 +67,7 @@ public class RestaurantController {
     public RestaurantModel update(@PathVariable Long id, @RequestBody @Valid RestaurantInput restaurantInput) {
 
         Restaurant currentRestaurant = restaurantService.findIfExists(id);
-        restaurantInputDisconverter.copyToDomainObject(restaurantInput, currentRestaurant);
+        restaurantModelConverter.copyToDomainObject(restaurantInput, currentRestaurant);
         /*BeanUtils.copyProperties(restaurant, currentRestaurant,
                 "id", "createdAt", "paymentWay", "address");*/
         try {

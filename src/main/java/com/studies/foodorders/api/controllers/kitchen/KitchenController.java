@@ -1,6 +1,5 @@
 package com.studies.foodorders.api.controllers.kitchen;
 
-import com.studies.foodorders.api.converter.kitchen.KitchenInputDisconverter;
 import com.studies.foodorders.api.converter.kitchen.KitchenModelConverter;
 import com.studies.foodorders.api.model.KitchensXmlWrapper;
 import com.studies.foodorders.api.model.kitchen.KitchenInput;
@@ -26,9 +25,6 @@ public class KitchenController {
     @Autowired
     private KitchenModelConverter kitchenModelConverter;
 
-    @Autowired
-    private KitchenInputDisconverter kitchenInputDisconverter;
-
     @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
     public KitchensXmlWrapper listXml() {
         return new KitchensXmlWrapper(kitchenService.list());
@@ -47,14 +43,14 @@ public class KitchenController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public KitchenModel save(@RequestBody @Valid KitchenInput kitchenInput) {
-        Kitchen kitchen = kitchenInputDisconverter.toDomainObject(kitchenInput);
+        Kitchen kitchen = kitchenModelConverter.toDomainObject(kitchenInput);
         return kitchenModelConverter.toModel(kitchenService.save(kitchen));
     }
 
     @PutMapping("/{id}")
     public KitchenModel update(@PathVariable Long id, @RequestBody @Valid KitchenInput kitchenInput) {
         Kitchen currentKitchen = kitchenService.findIfExists(id);
-        kitchenInputDisconverter.copyToDomainObject(kitchenInput, currentKitchen);
+        kitchenModelConverter.copyToDomainObject(kitchenInput, currentKitchen);
         currentKitchen = kitchenService.save(currentKitchen);
         //BeanUtils.copyProperties(kitchen, currentKitchen, "id");
         return kitchenModelConverter.toModel(kitchenService.save(currentKitchen));
