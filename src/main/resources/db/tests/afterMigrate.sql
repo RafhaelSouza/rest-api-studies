@@ -73,3 +73,8 @@ insert into tab_products (name, description, price, active, restaurant_id, creat
 insert into tab_products (name, description, price, active, restaurant_id, created_at, updated_at) values ('T-Bone', 'Very tasty cut, with a T-shaped bone, with the sirloin on one side and the filet mignon on the other', 89, true, 4, current_timestamp, current_timestamp);
 insert into tab_products (name, description, price, active, restaurant_id, created_at, updated_at) values ('X-All sandwich', 'Big sandwich with lots of cheese, beef burger, bacon, egg, salad and mayonnaise', 19, true, 5, current_timestamp, current_timestamp);
 insert into tab_products (name, description, price, active, restaurant_id, created_at, updated_at) values ('termite skewer', 'Comes with flour, cassava and vinaigrette', 8, true, 6, current_timestamp, current_timestamp);
+
+insert into tab_groups (name, created_at, updated_at) values ('Manager', current_timestamp, current_timestamp);
+insert into tab_groups (name, created_at, updated_at) values ('Seller', current_timestamp, current_timestamp);
+insert into tab_groups (name, created_at, updated_at) values ('Secretary', current_timestamp, current_timestamp);
+insert into tab_groups (name, created_at, updated_at) values ('Register', current_timestamp, current_timestamp);
