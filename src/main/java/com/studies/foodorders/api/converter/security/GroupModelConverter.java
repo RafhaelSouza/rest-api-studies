@@ -1,7 +1,7 @@
 package com.studies.foodorders.api.converter.security;
 
-import com.studies.foodorders.api.model.security.GroupInput;
-import com.studies.foodorders.api.model.security.GroupModel;
+import com.studies.foodorders.api.model.security.group.GroupInput;
+import com.studies.foodorders.api.model.security.group.GroupModel;
 import com.studies.foodorders.domain.models.security.Group;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -51,4 +51,12 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Group> groups = new ArrayList<>();
 
+    public boolean passwordMatches(String password) {
+        return getPassword().equals(password);
+    }
+
+    public boolean passwordDoesNotMatch(String password) {
+        return !passwordMatches(password);
+    }
+
 }

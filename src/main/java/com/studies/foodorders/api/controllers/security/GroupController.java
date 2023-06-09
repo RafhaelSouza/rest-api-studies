@@ -1,8 +1,8 @@
 package com.studies.foodorders.api.controllers.security;
 
 import com.studies.foodorders.api.converter.security.GroupModelConverter;
-import com.studies.foodorders.api.model.security.GroupInput;
-import com.studies.foodorders.api.model.security.GroupModel;
+import com.studies.foodorders.api.model.security.group.GroupInput;
+import com.studies.foodorders.api.model.security.group.GroupModel;
 import com.studies.foodorders.domain.models.security.Group;
 import com.studies.foodorders.domain.services.security.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ public class GroupController {
 	
 	@GetMapping
 	public List<GroupModel> list() {
-		List<Group> todosGrupos = groupService.list();
+		List<Group> allGroups = groupService.list();
 		
-		return groupModelConverter.toCollectionModel(todosGrupos);
+		return groupModelConverter.toCollectionModel(allGroups);
 	}
 	
 	@GetMapping("/{id}")

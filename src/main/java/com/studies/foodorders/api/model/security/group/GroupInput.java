@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.model.security;
+package com.studies.foodorders.api.model.security.group;
 
 import lombok.Getter;
 import lombok.Setter;
