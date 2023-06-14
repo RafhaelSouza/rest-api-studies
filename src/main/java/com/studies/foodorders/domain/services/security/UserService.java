@@ -28,6 +28,14 @@ public class UserService {
 
     @Transactional
     public User save(User user) {
+        userRepository.detach(user);
+        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+
+        if (existingUser.isPresent() && !existingUser.get().equals(user)) {
+            throw new BusinessException(
+                    String.format("There is already a user registered with the email %s", user.getEmail()));
+        }
+
         return userRepository.save(user);
     }
 
