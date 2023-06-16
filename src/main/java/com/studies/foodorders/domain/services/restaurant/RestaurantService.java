@@ -1,14 +1,15 @@
 package com.studies.foodorders.domain.services.restaurant;
 
-import com.studies.foodorders.domain.exceptions.KitchenNotFoundException;
 import com.studies.foodorders.domain.exceptions.RestaurantNotFoundException;
 import com.studies.foodorders.domain.exceptions.UsedEntityException;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.models.localization.City;
+import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.repositories.restaurant.RestaurantRepository;
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
 import com.studies.foodorders.domain.services.localization.CityService;
+import com.studies.foodorders.domain.services.paymentway.PaymentWayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,6 +32,9 @@ public class RestaurantService {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private PaymentWayService paymentWayService;
 
     public List<Restaurant> list() {
         return restaurantRepository.findAll();
@@ -81,6 +85,22 @@ public class RestaurantService {
         Restaurant restauranteAtual = findIfExists(id);
 
         restauranteAtual.inactivate();
+    }
+
+    @Transactional
+    public void associatePaymentWay(Long restaurantId, Long paymentWayId) {
+        Restaurant restaurant = findIfExists(restaurantId);
+        PaymentWay paymentWay = paymentWayService.findIfExists(paymentWayId);
+
+        restaurant.addPaymentWay(paymentWay);
+    }
+
+    @Transactional
+    public void disassociatePaymentWay(Long restaurantId, Long paymentWayId) {
+        Restaurant restaurant = findIfExists(restaurantId);
+        PaymentWay paymentWay = paymentWayService.findIfExists(paymentWayId);
+
+        restaurant.deletePaymentWay(paymentWay);
     }
 
     public Restaurant findIfExists(Long id) {
