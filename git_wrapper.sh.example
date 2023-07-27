@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Function to perform Git operations with different SSH keys
+git_wrapper() {
+    local repo_url="$(git config --get remote.origin.url)"
+    local ssh_key_path=""
+    local git_command="$1"
+
+    # Determine the repository's full name with owner
+    local repository_name="$(basename -s .git $repo_url)"
+    local repository_owner="$(dirname $repo_url | sed 's/.*://')"
+
+    # Determine the SSH key path based on the repository owner
+    if [[ $repository_owner == "git-repo-user-1" ]]; then
+        ssh_key_path="/home/your-machine-user/.ssh/private-file-1"
+    elif [[ $repository_owner == "git-repo-user-2" ]]; then
+        ssh_key_path="/home/your-machine-user/.ssh/private-file-2"
+    else
+        echo "Unknown repository owner"
+        return 1
+    fi
+
+    # Modify GIT_SSH_COMMAND accordingly
+    GIT_SSH_COMMAND="ssh -i $ssh_key_path" git $git_command
+}
+
+# Usage example
+git_wrapper "push --set-upstream origin main"
