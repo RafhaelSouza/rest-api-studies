@@ -10,6 +10,7 @@ public enum ApiErrorType {
     INVALID_REQUEST("Invalid Request","/invalid-request"),
     BUSINESS_ERROR("Business Error", "/business-error"),
     RESOURCE_NOT_FOUND("Resource Not Found", "/resource-not-found"),
+    INCOMPREENSIBLE_MESSAGE("Incomprehensible Message", "/incomprehensible-message"),
     USED_ENTITY("Used Entity", "used-entity");
 
     private String title;

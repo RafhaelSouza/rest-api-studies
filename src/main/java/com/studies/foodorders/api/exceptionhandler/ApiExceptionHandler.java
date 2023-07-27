@@ -27,11 +27,16 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    public static final String GENERIC_END_USER_MESSAGE
+            = "An unexpected internal system error has occurred. Please try again and if "
+            + "the problem persists, contact your system administrator.";
 
     @Autowired
     private MessageSource messageSource;
@@ -110,10 +115,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex, HttpHeaders headers,
             HttpStatus status, WebRequest request) {
+
         ApiErrorType errorType = ApiErrorType.INVALID_PARAMETER;
+
         String detail = String.format("URL Parameter '%s' received value '%s'. Expected Type: %s",
                 ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
-        ApiError error = createApiErrorBuilder(status, errorType, detail).build();
+
+        ApiError error = createApiErrorBuilder(status, errorType, detail)
+                .userMessage(GENERIC_END_USER_MESSAGE)
+                .build();
+
         return handleExceptionInternal(ex, error, headers, status, request);
     }
 
@@ -127,9 +138,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         } else if (rootCause instanceof PropertyBindingException) {
             return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
         }
-        ApiErrorType errorType = ApiErrorType.INVALID_REQUEST;
+        ApiErrorType errorType = ApiErrorType.INCOMPREENSIBLE_MESSAGE;
         String detail = "Bad Formatted Json Or Invalid Request";
-        ApiError error = createApiErrorBuilder(status, errorType, detail).build();
+        ApiError error = createApiErrorBuilder(status, errorType, detail)
+                .userMessage(GENERIC_END_USER_MESSAGE)
+                .build();
 
         return handleExceptionInternal(e, error, headers, status, request);
     }
@@ -141,7 +154,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = String.format("Property %s received invalid value %. % is expected.",
                 path, e.getValue(), e.getTargetType().getSimpleName());
         ApiError apiError = createApiErrorBuilder(status, errorType, detail)
-                                .userMessage("Ops :( An error has happened")
+                                .userMessage(GENERIC_END_USER_MESSAGE)
                                 .build();
 
         return handleExceptionInternal(e, apiError, headers, status, request);
@@ -154,7 +167,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ApiErrorType errorType = ApiErrorType.INVALID_REQUEST;
 		String detail = String.format("Property '%s' does not exist. ", path);
         ApiError apiError = createApiErrorBuilder(status, errorType, detail)
-                                .userMessage("Ops :( An error has happened")
+                                .userMessage(GENERIC_END_USER_MESSAGE)
                                 .build();
 
 		return handleExceptionInternal(e, apiError, headers, status, request);
@@ -165,7 +178,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ApiErrorType errorType = ApiErrorType.BUSINESS_ERROR;
         String detail = e.getMessage();
-        ApiError error = createApiErrorBuilder(status, errorType, detail).build();
+
+        ApiError error = createApiErrorBuilder(status, errorType, detail)
+                .userMessage(detail)
+                .build();
 
         return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
     }
@@ -175,7 +191,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = HttpStatus.NOT_FOUND;
         ApiErrorType errorType = ApiErrorType.RESOURCE_NOT_FOUND;
         String detail = e.getMessage();
-        ApiError error = createApiErrorBuilder(status, errorType, detail).build();
+        ApiError error = createApiErrorBuilder(status, errorType, detail)
+                .userMessage(detail)
+                .build();
 
         return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
     }
@@ -185,7 +203,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = HttpStatus.CONFLICT;
         ApiErrorType errorType = ApiErrorType.USED_ENTITY;
         String detail = e.getMessage();
-        ApiError error = createApiErrorBuilder(status, errorType, detail).build();
+        ApiError error = createApiErrorBuilder(status, errorType, detail)
+                .userMessage(detail)
+                .build();
 
         return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
     }
@@ -194,14 +214,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (body == null) {
             body = ApiError.builder()
+                    .timestamp(OffsetDateTime.now())
                     .title(status.getReasonPhrase())
                     .status(status.value())
+                    .userMessage(GENERIC_END_USER_MESSAGE)
                     .build();
         }
         else if (body instanceof String) {
             body = ApiError.builder()
+                    .timestamp(OffsetDateTime.now())
                     .title((String) body)
                     .status(status.value())
+                    .userMessage(GENERIC_END_USER_MESSAGE)
                     .build();
         }
 
@@ -214,7 +238,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .type(errorType.getUri())
                 .title(errorType.getTitle())
                 .detail(detail)
-                .timestamp(LocalDateTime.now());
+                .timestamp(OffsetDateTime.now());
     }
 
     private String joinPath(List<Reference> references) {
