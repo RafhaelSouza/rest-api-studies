@@ -61,6 +61,7 @@ public class Restaurant implements Serializable {
     private LocalDateTime updatedAt;
 
     private Boolean active = Boolean.TRUE;
+    private Boolean opened = Boolean.TRUE;
 
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
@@ -84,6 +85,14 @@ public class Restaurant implements Serializable {
 
     public void inactivate() {
         setActive(false);
+    }
+
+    public void toOpen() {
+        setOpened(true);
+    }
+
+    public void toClose() {
+        setOpened(false);
     }
 
     public boolean addPaymentWay(PaymentWay paymentWay) {

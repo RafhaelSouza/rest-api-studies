@@ -89,6 +89,18 @@ public class RestaurantController {
         restaurantService.inactivate(id);
     }
 
+    @PutMapping("/{id}/open")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void toOpen(@PathVariable Long id) {
+        restaurantService.toOpen(id);
+    }
+
+    @DeleteMapping("/{id}/close")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void toClose(@PathVariable Long id) {
+        restaurantService.toClose(id);
+    }
+
     /*@PatchMapping("/{id}")
     public Restaurant partialUpdate(@PathVariable Long id,
                                     @RequestBody Map<String, Object> fields, HttpServletRequest request) {

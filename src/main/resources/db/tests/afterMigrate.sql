@@ -42,18 +42,18 @@ insert into tab_cities (id, name, state_id) values (3, 'miami', 2);
 insert into tab_cities (id, name, state_id) values (4, 'pensacola', 2);
 insert into tab_cities (id, name, state_id) values (5, 'austin', 3);
 
-insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active, address_city_id, address_postalcode, address_street, address_number, address_district)
-values (1, 'thai gourmet', 10, 1, current_timestamp, current_timestamp, true, 1, '11111-222', 'fifth Avenue', '1000', 'downtown');
-insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active)
-values (2, 'thai delivery', 9.50, 1, current_timestamp, current_timestamp, true);
-insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active)
-values (3, 'tuk tuk indian food', 15, 2, current_timestamp, current_timestamp, true);
-insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active)
-values (4, 'java steakhouse', 12, 3, current_timestamp, current_timestamp, true);
-insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active)
-values (5, 'Uncle Sams Diner', 11, 4, current_timestamp, current_timestamp, true);
-insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active)
-values (6, 'Marys Bar', 6, 4, current_timestamp, current_timestamp, true);
+insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active, opened, address_city_id, address_postalcode, address_street, address_number, address_district)
+values (1, 'thai gourmet', 10, 1, current_timestamp, current_timestamp, true, true, 1, '11111-222', 'fifth Avenue', '1000', 'downtown');
+insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
+values (2, 'thai delivery', 9.50, 1, current_timestamp, current_timestamp, true, true);
+insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
+values (3, 'tuk tuk indian food', 15, 2, current_timestamp, current_timestamp, true, true);
+insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
+values (4, 'java steakhouse', 12, 3, current_timestamp, current_timestamp, true, true);
+insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
+values (5, 'Uncle Sams Diner', 11, 4, current_timestamp, current_timestamp, true, true);
+insert into tab_restaurants (id, name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
+values (6, 'Marys Bar', 6, 4, current_timestamp, current_timestamp, true, true);
 
 insert into tab_payment_ways (id, description) values (1, 'Credit Card');
 insert into tab_payment_ways (id, description) values (2, 'Debit Card');

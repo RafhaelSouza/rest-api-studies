@@ -88,6 +88,20 @@ public class RestaurantService {
     }
 
     @Transactional
+    public void toOpen(Long id) {
+        Restaurant restauranteAtual = findIfExists(id);
+
+        restauranteAtual.toOpen();
+    }
+
+    @Transactional
+    public void toClose(Long id) {
+        Restaurant restauranteAtual = findIfExists(id);
+
+        restauranteAtual.toClose();
+    }
+
+    @Transactional
     public void associatePaymentWay(Long restaurantId, Long paymentWayId) {
         Restaurant restaurant = findIfExists(restaurantId);
         PaymentWay paymentWay = paymentWayService.findIfExists(paymentWayId);
