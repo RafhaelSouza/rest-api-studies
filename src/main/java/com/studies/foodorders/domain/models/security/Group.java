@@ -45,4 +45,12 @@ public class Group implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions = new ArrayList<>();
 
+    public boolean addPermission(Permission permission) {
+        return getPermissions().add(permission);
+    }
+
+    public boolean deletePermission(Permission permission) {
+        return getPermissions().remove(permission);
+    }
+
 }

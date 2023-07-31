@@ -2,8 +2,8 @@ package com.studies.foodorders.domain.services.security;
 
 import com.studies.foodorders.domain.exceptions.GroupNotFoundException;
 import com.studies.foodorders.domain.exceptions.UsedEntityException;
-import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.models.security.Group;
+import com.studies.foodorders.domain.models.security.Permission;
 import com.studies.foodorders.domain.repositories.security.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +21,9 @@ public class GroupService {
 
     @Autowired
     private GroupRepository groupRepository;
+
+    @Autowired
+    private PermissionService permissionService;
 
     public List<Group> list() {
         return groupRepository.findAll();
@@ -49,6 +52,22 @@ public class GroupService {
             throw new UsedEntityException(
                     String.format(GROUP_IN_USE, id));
         }
+    }
+
+    @Transactional
+    public void permissionAssociate(Long gruopId, Long permissionId) {
+        Group group = findIfExists(gruopId);
+        Permission permission = permissionService.findIfExists(permissionId);
+
+        group.addPermission(permission);
+    }
+
+    @Transactional
+    public void permissionDisassociate(Long gruopId, Long permissionId) {
+        Group group = findIfExists(gruopId);
+        Permission permission = permissionService.findIfExists(permissionId);
+
+        group.deletePermission(permission);
     }
 
     public Group findIfExists(Long id) {

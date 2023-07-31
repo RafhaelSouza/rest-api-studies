@@ -1,14 +1,8 @@
 package com.studies.foodorders.domain.repositories.security;
 
 import com.studies.foodorders.domain.models.security.Permission;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface PermissionRepository {
-
-    List<Permission> list();
-    Permission find(Long id);
-    Permission save(Permission kitchen);
-    void delete(Permission kitchen);
-
-}
+@Repository
+public interface PermissionRepository extends JpaRepository<Permission, Long> {}

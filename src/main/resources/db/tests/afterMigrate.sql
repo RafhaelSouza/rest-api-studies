@@ -78,3 +78,10 @@ insert into tab_groups (name, created_at, updated_at) values ('Manager', current
 insert into tab_groups (name, created_at, updated_at) values ('Seller', current_timestamp, current_timestamp);
 insert into tab_groups (name, created_at, updated_at) values ('Secretary', current_timestamp, current_timestamp);
 insert into tab_groups (name, created_at, updated_at) values ('Register', current_timestamp, current_timestamp);
+
+insert into group_permission (group_id, permission_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
+
+insert into tab_users (id, name, email, password, created_at, updated_at) values (1, 'User One', 'name1@domain.com', '123', current_timestamp, current_timestamp);
+insert into tab_users (id, name, email, password, created_at, updated_at) values (2, 'User Two', 'name2@domain.com', '123', current_timestamp, current_timestamp);
+insert into tab_users (id, name, email, password, created_at, updated_at) values (3, 'User Three', 'name3@domain.com', '123', current_timestamp, current_timestamp);
+insert into tab_users (id, name, email, password, created_at, updated_at) values (4, 'User Four', 'name4@domain.com', '123', current_timestamp, current_timestamp);
