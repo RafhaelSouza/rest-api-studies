@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class GroupModelConverter {
         return modelMapper.map(group, GroupModel.class);
     }
 
-    public List<GroupModel> toCollectionModel(List<Group> groups) {
+    public List<GroupModel> toCollectionModel(Collection<Group> groups) {
         return groups.stream()
                 .map(group -> toModel(group))
                 .collect(Collectors.toList());

@@ -2,9 +2,9 @@ package com.studies.foodorders.domain.services.security;
 
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.UserNotFoundException;
+import com.studies.foodorders.domain.models.security.Group;
 import com.studies.foodorders.domain.models.security.User;
 import com.studies.foodorders.domain.repositories.security.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +14,14 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepository userRepository;
+
+    private GroupService groupService;
+
+    public UserService(UserRepository userRepository, GroupService groupService) {
+        this.userRepository = userRepository;
+        this.groupService = groupService;
+    }
 
     public List<User> list() {
         return userRepository.findAll();
@@ -48,6 +54,22 @@ public class UserService {
         }
 
         user.setPassword(newPassword);
+    }
+
+    @Transactional
+    public void groupAssociate(Long userId, Long groupId) {
+        User user = findIfExists(userId);
+        Group group = groupService.findIfExists(groupId);
+
+        user.addGroup(group);
+    }
+
+    @Transactional
+    public void groupDisassociate(Long userId, Long groupId) {
+        User user = findIfExists(userId);
+        Group group = groupService.findIfExists(groupId);
+
+        user.deleteGroup(group);
     }
 
     public User findIfExists(Long id) {
