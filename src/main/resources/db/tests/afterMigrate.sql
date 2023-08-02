@@ -85,5 +85,8 @@ insert into tab_users (id, name, email, password, created_at, updated_at) values
 insert into tab_users (id, name, email, password, created_at, updated_at) values (2, 'User Two', 'name2@domain.com', '123', current_timestamp, current_timestamp);
 insert into tab_users (id, name, email, password, created_at, updated_at) values (3, 'User Three', 'name3@domain.com', '123', current_timestamp, current_timestamp);
 insert into tab_users (id, name, email, password, created_at, updated_at) values (4, 'User Four', 'name4@domain.com', '123', current_timestamp, current_timestamp);
+insert into tab_users (id, name, email, password, created_at, updated_at) values (5, 'User Five', 'name5@domain.com', '123', current_timestamp, current_timestamp);
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
+
+insert into restaurant_responsible_user (user_id, restaurant_id) values (1, 5), (3, 5);

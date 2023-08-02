@@ -6,6 +6,7 @@ import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.models.localization.Address;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.models.product.Product;
+import com.studies.foodorders.domain.models.security.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -76,6 +77,12 @@ public class Restaurant implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "paymentway_id"))
     private Set<PaymentWay> paymentWay = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "restaurant_responsible_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
+    private Set<User> responsible = new HashSet<>();
+
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
 
@@ -101,6 +108,14 @@ public class Restaurant implements Serializable {
 
     public boolean deletePaymentWay(PaymentWay paymentWay) {
         return getPaymentWay().remove(paymentWay);
+    }
+
+    public boolean addResponsible(User user) {
+        return getResponsible().add(user);
+    }
+
+    public boolean deleteResponsible(User user) {
+        return getResponsible().remove(user);
     }
 
 }
