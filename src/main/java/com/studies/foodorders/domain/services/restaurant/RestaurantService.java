@@ -93,6 +93,16 @@ public class RestaurantService {
     }
 
     @Transactional
+    public void activate(List<Long> restaurantsId) {
+        restaurantsId.forEach(this::activate);
+    }
+
+    @Transactional
+    public void inactivate(List<Long> restaurantsId) {
+        restaurantsId.forEach(this::inactivate);
+    }
+
+    @Transactional
     public void toOpen(Long id) {
         Restaurant restauranteAtual = findIfExists(id);
 

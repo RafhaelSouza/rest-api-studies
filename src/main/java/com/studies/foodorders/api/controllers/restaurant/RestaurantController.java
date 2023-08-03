@@ -9,6 +9,7 @@ import com.studies.foodorders.core.validation.ValidationException;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.CityNotFoundException;
 import com.studies.foodorders.domain.exceptions.KitchenNotFoundException;
+import com.studies.foodorders.domain.exceptions.RestaurantNotFoundException;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -87,6 +88,26 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inactivate(@PathVariable Long id) {
         restaurantService.inactivate(id);
+    }
+
+    @PutMapping("/activations")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void batchActivate(@RequestBody List<Long> restaurantsId) {
+        try {
+            restaurantService.activate(restaurantsId);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/activations")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void batchInactivate(@RequestBody List<Long> restaurantsId) {
+        try {
+            restaurantService.inactivate(restaurantsId);
+        } catch (RestaurantNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
+        }
     }
 
     @PutMapping("/{id}/open")
