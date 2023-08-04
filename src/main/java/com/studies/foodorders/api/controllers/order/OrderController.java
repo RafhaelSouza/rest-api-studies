@@ -1,7 +1,9 @@
 package com.studies.foodorders.api.controllers.order;
 
 import com.studies.foodorders.api.converter.order.OrderModelConverter;
+import com.studies.foodorders.api.converter.order.OrderSummaryModelConverter;
 import com.studies.foodorders.api.model.order.OrderModel;
+import com.studies.foodorders.api.model.order.OrderSummaryModel;
 import com.studies.foodorders.domain.repositories.order.OrderRepository;
 import com.studies.foodorders.domain.services.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,16 @@ public class OrderController {
     @Autowired
     private OrderModelConverter orderModelConverter;
 
+    @Autowired
+    private OrderSummaryModelConverter orderSummaryModelConverter;
+
     @GetMapping
-    public List<OrderModel> list() {
-        return orderModelConverter.toCollectionModel(orderRepository.findAll());
+    public List<OrderSummaryModel> list() {
+        return orderSummaryModelConverter.toCollectionModel(orderRepository.findAll());
     }
 
     @GetMapping("/{orderId}")
-    public OrderModel buscar(@PathVariable Long orderId) {
+    public OrderModel find(@PathVariable Long orderId) {
         return orderModelConverter.toModel(orderService.findIfExists(orderId));
     }
 
