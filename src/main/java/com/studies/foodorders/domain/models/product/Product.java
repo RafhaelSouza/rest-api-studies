@@ -10,7 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -40,12 +40,12 @@ public class Product implements Serializable {
     @JsonIgnore
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @JsonIgnore
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime updatedAt;
+    @Column(columnDefinition = "timestamp")
+    private OffsetDateTime updatedAt;
 
     @JsonIgnore
     @ManyToOne

@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +31,12 @@ public class Group implements Serializable {
     @JsonIgnore
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @JsonIgnore
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime updatedAt;
+    @Column(columnDefinition = "timestamp")
+    private OffsetDateTime updatedAt;
 
     @JsonIgnore
     @ManyToMany

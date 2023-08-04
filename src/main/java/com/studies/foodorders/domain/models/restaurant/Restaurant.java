@@ -21,7 +21,7 @@ import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -55,11 +55,11 @@ public class Restaurant implements Serializable {
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime updatedAt;
+    @Column(columnDefinition = "timestamp")
+    private OffsetDateTime updatedAt;
 
     private Boolean active = Boolean.TRUE;
     private Boolean opened = Boolean.TRUE;
@@ -116,6 +116,14 @@ public class Restaurant implements Serializable {
 
     public boolean deleteResponsible(User user) {
         return getResponsible().remove(user);
+    }
+
+    public boolean acceptsPaymentWay(PaymentWay paymentWay) {
+        return getPaymentWay().contains(paymentWay);
+    }
+
+    public boolean doesNotAcceptPaymentWay(PaymentWay paymentWay) {
+        return !acceptsPaymentWay(paymentWay);
     }
 
 }
