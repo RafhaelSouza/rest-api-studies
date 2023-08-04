@@ -14,7 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -42,24 +42,27 @@ public class Order implements Serializable {
     @JsonIgnore
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @JsonIgnore
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime updatedAt;
+    @Column(columnDefinition = "timestamp")
+    private OffsetDateTime updatedAt;
 
     @JsonIgnore
     @Column(columnDefinition = "timestamp")
-    private LocalDateTime confirmedAt;
+    private OffsetDateTime confirmedAt;
 
     @JsonIgnore
     @Column(columnDefinition = "timestamp")
-    private LocalDateTime deliveredAt;
+    private OffsetDateTime canceledAt;
 
     @JsonIgnore
+    @Column(columnDefinition = "timestamp")
+    private OffsetDateTime deliveredAt;
+
     @Embedded
-    private Address address;
+    private Address deliveryAddress;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
@@ -77,7 +80,23 @@ public class Order implements Serializable {
     private Restaurant restaurant;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "client_user_id", nullable = false)
+    private User client;
+
+    public void calculateTotalPrice() {
+        this.partialPrice = getOrderItems().stream()
+                .map(item -> item.getTotalPrice())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.totalPrice = this.partialPrice.add(this.shippingCosts);
+    }
+
+    public void calculateShippingCosts() {
+        setShippingCosts(getRestaurant().getShippingCosts());
+    }
+
+    public void assignOrderToItems() {
+        getOrderItems().forEach(item -> item.setOrder(this));
+    }
 
 }

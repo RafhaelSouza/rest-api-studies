@@ -44,7 +44,7 @@ public class OrderItem implements Serializable {
 
     @JsonIgnore
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "timestamp")
+    @Column(columnDefinition = "timestamp")
     private LocalDateTime updatedAt;
 
     @ManyToOne
