@@ -1,3 +1,15 @@
+drop sequence if exists tab_cities_seq;
+drop sequence if exists tab_groups_seq;
+drop sequence if exists tab_kitchens_seq;
+drop sequence if exists tab_order_items_seq;
+drop sequence if exists tab_orders_seq;
+drop sequence if exists tab_payment_ways_seq;
+drop sequence if exists tab_permissions_seq;
+drop sequence if exists tab_products_seq;
+drop sequence if exists tab_restaurants_seq;
+drop sequence if exists tab_states_seq;
+drop sequence if exists tab_users_seq;
+
 alter table if exists group_permission drop constraint if exists fk_permission_group;
 alter table if exists group_permission drop constraint if exists fk_group_permission;
 alter table if exists restaurant_payment_way drop constraint if exists fk_payment_restaurant;
@@ -57,16 +69,16 @@ create sequence tab_users_seq start with 1 increment by 1 no minvalue no maxvalu
 create table group_permission (group_id int8 not null, permission_id int8 not null);
 create table restaurant_payment_way (restaurant_id int8 not null, paymentway_id int8 not null);
 create table tab_cities (id bigserial not null, name varchar(255) not null, state_id int8 not null, primary key (id));
-create table tab_groups (id bigserial not null, created_at timestamp not null, name varchar(255) not null, updated_at timestamp not null, primary key (id));
+create table tab_groups (id bigserial not null, created_at timestamp not null, name varchar(255) not null, updated_at timestamp, primary key (id));
 create table tab_kitchens (id bigserial not null, name varchar(255) not null, primary key (id));
-create table tab_order_items (id bigserial not null, amount int8 not null, created_at timestamp not null, observations varchar(255) not null, total_price numeric(19, 2) not null, unit_price numeric(19, 2) not null, updated_at timestamp not null, order_id int8 not null, product_id int8 not null, primary key (id));
-create table tab_orders (id bigserial not null, address_complement varchar(255), address_district varchar(255), address_number varchar(255), address_postalcode varchar(255), address_street varchar(255), confirmed_at timestamp, created_at timestamp not null, delivered_at timestamp, partial_price numeric(19, 2) not null, shipping_costs numeric(19, 2) not null, status varchar(255) not null, total_price numeric(19, 2) not null, updated_at timestamp not null, address_city_id int8, paymentway_id int8 not null, restaurant_id int8 not null, user_id int8 not null, primary key (id));
+create table tab_order_items (id bigserial not null, amount int8 not null, created_at timestamp not null, observations varchar(255), total_price numeric(19, 2) not null, unit_price numeric(19, 2) not null, updated_at timestamp, order_id int8 not null, product_id int8 not null, primary key (id));
+create table tab_orders (id bigserial not null, address_complement varchar(255), address_district varchar(255), address_number varchar(255), address_postalcode varchar(255), address_street varchar(255), confirmed_at timestamp, canceled_at timestamp, created_at timestamp not null, delivered_at timestamp, partial_price numeric(19, 2) not null, shipping_costs numeric(19, 2) not null, status varchar(255) not null, total_price numeric(19, 2) not null, updated_at timestamp, address_city_id int8, paymentway_id int8 not null, restaurant_id int8 not null, client_user_id int8 not null, primary key (id));
 create table tab_payment_ways (id bigserial not null, description varchar(255) not null, primary key (id));
 create table tab_permissions (id bigserial not null, description varchar(255) not null, name varchar(255) not null, primary key (id));
-create table tab_products (id bigserial not null, active boolean not null, created_at timestamp not null, description varchar(255) not null, name varchar(255) not null, price numeric(19, 2) not null, updated_at timestamp not null, restaurant_id int8 not null, primary key (id));
-create table tab_restaurants (id bigserial not null, address_complement varchar(255), address_district varchar(255), address_number varchar(255), address_postalcode varchar(255), address_street varchar(255), created_at timestamp not null, name varchar(255) not null, shipping_costs numeric(19, 2) not null, updated_at timestamp not null, address_city_id int8, kitchen_id int8 not null, primary key (id));
+create table tab_products (id bigserial not null, active boolean not null, created_at timestamp not null, description varchar(255) not null, name varchar(255) not null, price numeric(19, 2) not null, updated_at timestamp, restaurant_id int8 not null, primary key (id));
+create table tab_restaurants (id bigserial not null, address_complement varchar(255), address_district varchar(255), address_number varchar(255), address_postalcode varchar(255), address_street varchar(255), created_at timestamp not null, name varchar(255) not null, shipping_costs numeric(19, 2) not null, updated_at timestamp, address_city_id int8, kitchen_id int8 not null, primary key (id));
 create table tab_states (id bigserial not null, name varchar(255) not null, primary key (id));
-create table tab_users (id bigserial not null, created_at timestamp not null, email varchar(255) not null, name varchar(255) not null, password varchar(255) not null, updated_at timestamp not null, primary key (id));
+create table tab_users (id bigserial not null, created_at timestamp not null, email varchar(255) not null, name varchar(255) not null, password varchar(255) not null, updated_at timestamp, primary key (id));
 create table user_group (user_id int8 not null, group_id int8 not null);
 
 create index if not exists tab_cities_idx on tab_cities using btree (id);
@@ -103,7 +115,7 @@ alter table if exists tab_order_items add constraint fk_order_product foreign ke
 alter table if exists tab_orders add constraint fk_order_address foreign key (address_city_id) references tab_cities;
 alter table if exists tab_orders add constraint fk_order_payment foreign key (paymentway_id) references tab_payment_ways;
 alter table if exists tab_orders add constraint fk_order_restaurant foreign key (restaurant_id) references tab_restaurants;
-alter table if exists tab_orders add constraint fk_order_user foreign key (user_id) references tab_users;
+alter table if exists tab_orders add constraint fk_order_user foreign key (client_user_id) references tab_users;
 alter table if exists tab_products add constraint fk_product_restaurant foreign key (restaurant_id) references tab_restaurants;
 alter table if exists tab_restaurants add constraint fk_restaurant_city foreign key (address_city_id) references tab_cities;
 alter table if exists tab_restaurants add constraint fk_restaurant_kitchen foreign key (kitchen_id) references tab_kitchens;

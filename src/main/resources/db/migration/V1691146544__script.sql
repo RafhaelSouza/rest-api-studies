@@ -1,4 +1,4 @@
-create table restaurant_responsible_user (user_id int8 not null, restaurant_id int8 not null);
+create table restaurant_responsible_user (user_id int8 not null, restaurant_id int8 not null, primary key(user_id, restaurant_id));
 create index if not exists restaurant_responsible_user_idx on restaurant_responsible_user using btree (user_id, restaurant_id);
 
 alter table if exists restaurant_responsible_user add constraint fk_user_restaurant foreign key (user_id) references tab_users;

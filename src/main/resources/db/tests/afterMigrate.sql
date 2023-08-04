@@ -13,6 +13,9 @@ delete from tab_restaurants;
 delete from restaurant_payment_way;
 delete from tab_users;
 delete from user_group;
+delete from restaurant_responsible_user;
+delete from tab_orders;
+delete from tab_order_items;
 
 -- enable foreign key checks
 set session_replication_role = 'origin';
@@ -90,3 +93,24 @@ insert into tab_users (id, name, email, password, created_at, updated_at) values
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
 
 insert into restaurant_responsible_user (user_id, restaurant_id) values (1, 5), (3, 5);
+
+insert into tab_orders (id, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
+                    address_street, address_number, address_complement, address_district,
+	                status, created_at, partial_price, shipping_costs, total_price)
+values (1, 1, 1, 1, 1, '11111-111', 'First Avenue', '100', 'Apt 101', 'Downtown',
+        'CREATED', current_timestamp, 298.90, 10, 308.90);
+
+insert into tab_order_items (id, order_id, product_id, amount, unit_price, total_price, observations, created_at)
+values (1, 1, 1, 1, 78.9, 78.9, null, current_timestamp);
+
+insert into tab_order_items (id, order_id, product_id, amount, unit_price, total_price, observations, created_at)
+values (2, 1, 2, 2, 110, 220, 'More spicy, please', current_timestamp);
+
+insert into tab_orders (id, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
+                            address_street, address_number, address_complement, address_district,
+                            status, created_at, partial_price, shipping_costs, total_price)
+values (2, 4, 1, 2, 1, '22222-222', 'First Avenue', '500', 'First block', 'Downtown',
+        'CREATED', current_timestamp, 79, 0, 79);
+
+insert into tab_order_items (id, order_id, product_id, amount, unit_price, total_price, observations, created_at)
+values (3, 2, 6, 1, 79, 79, 'Well done steak', current_timestamp);
