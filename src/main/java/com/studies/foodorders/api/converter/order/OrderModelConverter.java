@@ -1,5 +1,6 @@
 package com.studies.foodorders.api.converter.order;
 
+import com.studies.foodorders.api.model.order.OrderInput;
 import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.domain.models.order.Order;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,14 @@ public class OrderModelConverter {
         return orders.stream()
                 .map(order -> toModel(order))
                 .collect(Collectors.toList());
+    }
+
+    public Order toDomainObject(OrderInput orderInput) {
+        return modelMapper.map(orderInput, Order.class);
+    }
+
+    public void copyToDomainObject(OrderInput orderInput, Order order) {
+        modelMapper.map(orderInput, order);
     }
 
 }

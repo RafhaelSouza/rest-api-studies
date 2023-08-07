@@ -1,5 +1,6 @@
 package com.studies.foodorders.api.model.localization.address;
 
+import com.studies.foodorders.api.model.localization.city.CitySummaryModel;
 import lombok.Getter;
 import lombok.Setter;
 

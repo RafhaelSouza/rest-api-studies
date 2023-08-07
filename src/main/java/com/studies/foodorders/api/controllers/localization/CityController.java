@@ -1,13 +1,12 @@
 package com.studies.foodorders.api.controllers.localization;
 
 import com.studies.foodorders.api.converter.city.CityModelConverter;
-import com.studies.foodorders.api.model.city.CityInput;
-import com.studies.foodorders.api.model.city.CityModel;
+import com.studies.foodorders.api.model.localization.city.CityInput;
+import com.studies.foodorders.api.model.localization.city.CityModel;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.StateNotFoundException;
 import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.services.localization.CityService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

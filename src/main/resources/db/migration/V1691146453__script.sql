@@ -27,18 +27,6 @@ alter table if exists tab_restaurants drop constraint if exists fk_restaurant_ki
 alter table if exists user_group drop constraint if exists fk_group_user;
 alter table if exists user_group drop constraint if exists fk_user_group;
 
-drop index if exists tab_cities_idx;
-drop index if exists tab_groups_idx;
-drop index if exists tab_kitchens_idx;
-drop index if exists tab_order_items_idx;
-drop index if exists tab_orders_idx;
-drop index if exists tab_payment_ways_idx;
-drop index if exists tab_permissions_idx;
-drop index if exists tab_products_idx;
-drop index if exists tab_restaurants_idx;
-drop index if exists tab_states_idx;
-drop index if exists tab_users_idx;
-
 drop table if exists group_permission cascade;
 drop table if exists restaurant_payment_way cascade;
 drop table if exists tab_cities cascade;
@@ -80,18 +68,6 @@ create table tab_restaurants (id bigserial not null, address_complement varchar(
 create table tab_states (id bigserial not null, name varchar(255) not null, primary key (id));
 create table tab_users (id bigserial not null, created_at timestamp not null, email varchar(255) not null, name varchar(255) not null, password varchar(255) not null, updated_at timestamp, primary key (id));
 create table user_group (user_id int8 not null, group_id int8 not null);
-
-create index if not exists tab_cities_idx on tab_cities using btree (id);
-create index if not exists tab_groups_idx on tab_groups using btree (id);
-create index if not exists tab_kitchens_idx on tab_kitchens using btree (id);
-create index if not exists tab_order_items_idx on tab_order_items using btree (id);
-create index if not exists tab_orders_idx on tab_orders using btree (id);
-create index if not exists tab_payment_ways_idx on tab_payment_ways using btree (id);
-create index if not exists tab_permissions_idx on tab_permissions using btree (id);
-create index if not exists tab_products_idx on tab_products using btree (id);
-create index if not exists tab_restaurants_idx on tab_restaurants using btree (id);
-create index if not exists tab_states_idx on tab_states using btree (id);
-create index if not exists tab_users_idx on tab_users using btree (id);
 
 alter table only tab_cities alter column id set default nextval('tab_cities_seq'::regclass);
 alter table only tab_groups alter column id set default nextval('tab_groups_seq'::regclass);

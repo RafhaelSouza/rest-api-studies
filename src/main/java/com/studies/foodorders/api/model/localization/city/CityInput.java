@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.model.city;
+package com.studies.foodorders.api.model.localization.city;
 
 import com.studies.foodorders.api.model.localization.state.StateInput;
 import lombok.Getter;

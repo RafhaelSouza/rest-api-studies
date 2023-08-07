@@ -1,7 +1,7 @@
 package com.studies.foodorders.api.converter.city;
 
-import com.studies.foodorders.api.model.city.CityInput;
-import com.studies.foodorders.api.model.city.CityModel;
+import com.studies.foodorders.api.model.localization.city.CityInput;
+import com.studies.foodorders.api.model.localization.city.CityModel;
 import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.models.localization.State;
 import org.modelmapper.ModelMapper;

@@ -26,7 +26,7 @@ public class OrderItem implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private Long amount;
+    private Integer amount;
 
     @Column(nullable = false)
     private BigDecimal unitPrice;
@@ -54,5 +54,20 @@ public class OrderItem implements Serializable {
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
+    public void calculateTotalPrice() {
+        BigDecimal unitPrice = this.getUnitPrice();
+        Integer amount = this.getAmount();
+
+        if (unitPrice == null) {
+            unitPrice = BigDecimal.ZERO;
+        }
+
+        if (amount == null) {
+            amount = 0;
+        }
+
+        this.setTotalPrice(unitPrice.multiply(new BigDecimal(amount)));
+    }
 
 }

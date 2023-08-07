@@ -15,6 +15,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -65,7 +66,7 @@ public class Order implements Serializable {
     private Address deliveryAddress;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
+    private List<OrderItem> items = new ArrayList<>();
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -73,7 +74,7 @@ public class Order implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paymentway_id", nullable = false)
-    private PaymentWay paymentMethod;
+    private PaymentWay paymentWay;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -84,7 +85,9 @@ public class Order implements Serializable {
     private User client;
 
     public void calculateTotalPrice() {
-        this.partialPrice = getOrderItems().stream()
+        getItems().forEach(OrderItem::calculateTotalPrice);
+
+        this.partialPrice = getItems().stream()
                 .map(item -> item.getTotalPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -96,7 +99,7 @@ public class Order implements Serializable {
     }
 
     public void assignOrderToItems() {
-        getOrderItems().forEach(item -> item.setOrder(this));
+        getItems().forEach(item -> item.setOrder(this));
     }
 
 }
