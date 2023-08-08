@@ -1,6 +1,7 @@
 package com.studies.foodorders.domain.models.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.models.localization.Address;
 import com.studies.foodorders.domain.models.order.enumerations.OrderStatus;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
@@ -100,6 +101,32 @@ public class Order implements Serializable {
 
     public void assignOrderToItems() {
         getItems().forEach(item -> item.setOrder(this));
+    }
+
+    public void confirm() {
+        setStatus(OrderStatus.CONFIRMED);
+        setConfirmedAt(OffsetDateTime.now());
+    }
+
+    public void cancel() {
+        setStatus(OrderStatus.CANCELLED);
+        setCanceledAt(OffsetDateTime.now());
+    }
+
+    public void deliver() {
+        setStatus(OrderStatus.DELIVERED);
+        setDeliveredAt(OffsetDateTime.now());
+    }
+
+    private void setStatus(OrderStatus newStatus) {
+        if (getStatus().itCanNotChangeTo(newStatus)) {
+            throw new BusinessException(
+                    String.format("Order status %d cannot be changed from %s to %s",
+                            getId(), getStatus().getDescription(),
+                            newStatus.getDescription()));
+        }
+
+        this.status = newStatus;
     }
 
 }

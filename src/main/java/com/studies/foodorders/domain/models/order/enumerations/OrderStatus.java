@@ -11,19 +11,19 @@ public enum OrderStatus {
     CANCELLED("Cancelled", CREATED);
 
     private String description;
-    private List<OrderStatus> previousOrderStatuses;
+    private List<OrderStatus> previousOrderStatus;
 
-    OrderStatus(String description, OrderStatus... previousOrderStatuses) {
+    OrderStatus(String description, OrderStatus... previousOrderStatus) {
         this.description = description;
-        this.previousOrderStatuses = Arrays.asList(previousOrderStatuses);
+        this.previousOrderStatus = Arrays.asList(previousOrderStatus);
     }
 
     public String getDescription() {
         return description;
     }
 
-    public boolean canNotTransitionTo(OrderStatus newStatus) {
-        return !newStatus.previousOrderStatuses.contains(this);
+    public boolean itCanNotChangeTo(OrderStatus newStatus) {
+        return !newStatus.previousOrderStatus.contains(this);
     }
 
 }
