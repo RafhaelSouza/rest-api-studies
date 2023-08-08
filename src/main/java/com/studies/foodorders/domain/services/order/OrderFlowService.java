@@ -31,4 +31,35 @@ public class OrderFlowService {
         order.setStatus(OrderStatus.CONFIRMED);
         order.setConfirmedAt(OffsetDateTime.now());
     }
+
+    @Transactional
+    public void cancel(Long orderId) {
+        Order order = orderService.findIfExists(orderId);
+
+        if (!order.getStatus().equals(OrderStatus.CREATED)) {
+            throw new BusinessException(
+                    String.format("Order status %d cannot be changed from %s to %s",
+                            order.getId(), order.getStatus().getDescription(),
+                            OrderStatus.CANCELLED.getDescription()));
+        }
+
+        order.setStatus(OrderStatus.CANCELLED);
+        order.setConfirmedAt(OffsetDateTime.now());
+    }
+
+    @Transactional
+    public void deliver(Long orderId) {
+        Order order = orderService.findIfExists(orderId);
+
+        if (!order.getStatus().equals(OrderStatus.CONFIRMED)) {
+            throw new BusinessException(
+                    String.format("Order status %d cannot be changed from %s to %s",
+                            order.getId(), order.getStatus().getDescription(),
+                            OrderStatus.DELIVERED.getDescription()));
+        }
+
+        order.setStatus(OrderStatus.DELIVERED);
+        order.setConfirmedAt(OffsetDateTime.now());
+    }
+
 }
