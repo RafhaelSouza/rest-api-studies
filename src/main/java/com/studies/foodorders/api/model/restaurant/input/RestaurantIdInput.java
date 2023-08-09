@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.model.restaurant;
+package com.studies.foodorders.api.model.restaurant.input;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,33 +1,25 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.studies.foodorders.api.converter.restaurant.RestaurantModelConverter;
-import com.studies.foodorders.api.model.restaurant.RestaurantInput;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
-import com.studies.foodorders.core.validation.ValidationException;
+import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
+import com.studies.foodorders.api.model.restaurant.view.RestaurantView;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.CityNotFoundException;
 import com.studies.foodorders.domain.exceptions.KitchenNotFoundException;
 import com.studies.foodorders.domain.exceptions.RestaurantNotFoundException;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -42,9 +34,34 @@ public class RestaurantController {
     @Autowired
     private RestaurantModelConverter restaurantModelConverter;
 
+    @GetMapping
+    public MappingJacksonValue list(@RequestParam(required = false) String projection) {
+        List<Restaurant> restaurants = restaurantService.list();
+        List<RestaurantModel> restaurantsModel = restaurantModelConverter.toCollectionModel(restaurants);
+
+        MappingJacksonValue restaurantsWrapper = new MappingJacksonValue(restaurantsModel);
+
+        restaurantsWrapper.setSerializationView(RestaurantView.Summary.class);
+
+        if ("id-and-name".equals(projection)) {
+            restaurantsWrapper.setSerializationView(RestaurantView.IdAndName.class);
+        } else if ("full".equals(projection)) {
+            restaurantsWrapper.setSerializationView(null);
+        }
+
+        return restaurantsWrapper;
+    }
+
+    @JsonView({ RestaurantView.Summary.class })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RestaurantModel> list() {
         return restaurantModelConverter.toCollectionModel(restaurantService.list());
+    }
+
+    @JsonView({ RestaurantView.IdAndName.class })
+    @GetMapping(params = "projection=id-and-name")
+    public List<RestaurantModel> listIdAndName() {
+        return list();
     }
 
     @GetMapping("/{id}")
@@ -129,7 +146,7 @@ public class RestaurantController {
         merge(fields, currentRestaurant, request);
         validate(currentRestaurant, "restaurant");
         return update(id, currentRestaurant);
-    }*/
+    }
 
     private void validate(Restaurant restaurant, String objectName) {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurant, objectName);
@@ -158,6 +175,6 @@ public class RestaurantController {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, servletServerHttpRequest);
         }
-    }
+    }*/
 
 }

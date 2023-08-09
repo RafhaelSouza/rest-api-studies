@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.model.restaurant;
+package com.studies.foodorders.api.model.restaurant.input;
 
 import com.studies.foodorders.api.model.kitchen.KitchenIdInput;
 import com.studies.foodorders.api.model.localization.address.AddressInput;

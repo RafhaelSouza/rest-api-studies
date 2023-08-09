@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.converter.restaurant;
 
-import com.studies.foodorders.api.model.restaurant.RestaurantInput;
+import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.models.localization.City;

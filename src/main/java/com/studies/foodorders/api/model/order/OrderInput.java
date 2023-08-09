@@ -2,7 +2,7 @@ package com.studies.foodorders.api.model.order;
 
 import com.studies.foodorders.api.model.localization.address.AddressInput;
 import com.studies.foodorders.api.model.paymentway.PaymentWayIdInput;
-import com.studies.foodorders.api.model.restaurant.RestaurantIdInput;
+import com.studies.foodorders.api.model.restaurant.input.RestaurantIdInput;
 import lombok.Getter;
 import lombok.Setter;
 
