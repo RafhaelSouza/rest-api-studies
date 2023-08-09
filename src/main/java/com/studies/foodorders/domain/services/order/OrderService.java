@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class OrderService {
 
@@ -78,9 +80,9 @@ public class OrderService {
         });
     }
 
-    public Order findIfExists(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException(id));
+    public Order findIfExists(String code) {
+        return orderRepository.findByCode(UUID.fromString(code))
+                .orElseThrow(() -> new OrderNotFoundException(code));
     }
 
 }

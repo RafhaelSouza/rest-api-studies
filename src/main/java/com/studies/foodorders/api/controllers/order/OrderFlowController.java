@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/orders/{orderId}")
+@RequestMapping(value = "/orders/{orderCode}")
 @RequiredArgsConstructor
 public class OrderFlowController {
 
@@ -14,20 +14,20 @@ public class OrderFlowController {
 
     @PutMapping("/confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirm(@PathVariable Long orderId) {
-        orderFlowService.confirm(orderId);
+    public void confirm(@PathVariable String orderCode) {
+        orderFlowService.confirm(orderCode);
     }
 
     @PutMapping("/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancel(@PathVariable Long orderId) {
-        orderFlowService.cancel(orderId);
+    public void cancel(@PathVariable String orderCode) {
+        orderFlowService.cancel(orderCode);
     }
 
     @PutMapping("/deliver")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deliver(@PathVariable Long orderId) {
-        orderFlowService.deliver(orderId);
+    public void deliver(@PathVariable String orderCode) {
+        orderFlowService.deliver(orderCode);
     }
 
 }

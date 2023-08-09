@@ -39,9 +39,9 @@ public class OrderController {
         return orderSummaryModelConverter.toCollectionModel(orderRepository.findAll());
     }
 
-    @GetMapping("/{orderId}")
-    public OrderModel find(@PathVariable Long orderId) {
-        return orderModelConverter.toModel(orderService.findIfExists(orderId));
+    @GetMapping("/{orderCode}")
+    public OrderModel find(@PathVariable String orderCode) {
+        return orderModelConverter.toModel(orderService.findIfExists(orderCode));
     }
 
     @PostMapping

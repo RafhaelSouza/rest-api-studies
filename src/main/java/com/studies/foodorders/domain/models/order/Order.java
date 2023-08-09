@@ -10,6 +10,7 @@ import com.studies.foodorders.domain.models.security.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -31,6 +33,10 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Type(type="org.hibernate.type.PostgresUUIDType")
+    @Column(nullable = false)
+    private UUID code;
 
     @Column(nullable = false)
     private BigDecimal partialPrice;
@@ -121,12 +127,17 @@ public class Order implements Serializable {
     private void setStatus(OrderStatus newStatus) {
         if (getStatus().itCanNotChangeTo(newStatus)) {
             throw new BusinessException(
-                    String.format("Order status %d cannot be changed from %s to %s",
-                            getId(), getStatus().getDescription(),
+                    String.format("Order status %s cannot be changed from %s to %s",
+                            getCode().toString(), getStatus().getDescription(),
                             newStatus.getDescription()));
         }
 
         this.status = newStatus;
+    }
+
+    @PrePersist
+    private void codeGenerate() {
+        setCode(UUID.randomUUID());
     }
 
 }

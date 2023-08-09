@@ -14,20 +14,20 @@ public class OrderFlowService {
     }
 
     @Transactional
-    public void confirm(Long orderId) {
-        Order order = orderService.findIfExists(orderId);
+    public void confirm(String orderCode) {
+        Order order = orderService.findIfExists(orderCode);
         order.confirm();
     }
 
     @Transactional
-    public void cancel(Long orderId) {
-        Order order = orderService.findIfExists(orderId);
+    public void cancel(String orderCode) {
+        Order order = orderService.findIfExists(orderCode);
         order.cancel();
     }
 
     @Transactional
-    public void deliver(Long orderId) {
-        Order order = orderService.findIfExists(orderId);
+    public void deliver(String orderCode) {
+        Order order = orderService.findIfExists(orderCode);
         order.deliver();
     }
 
