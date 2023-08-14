@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.controllers.product;
+package com.studies.foodorders.api.controllers.restaurant;
 
 import com.studies.foodorders.api.converter.product.ProductModelConverter;
 import com.studies.foodorders.api.model.product.ProductInput;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/products")
-public class ProductController {
+public class RestaurantProductController {
 
     @Autowired
     private ProductRepository productRepository;
@@ -32,11 +32,15 @@ public class ProductController {
     private ProductModelConverter productModelConverter;
 
     @GetMapping
-    public List<ProductModel> list(@PathVariable Long restaurantId) {
+    public List<ProductModel> list(@PathVariable Long restaurantId,
+                                   @RequestParam(required = false) boolean includeInactives) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
-        List<Product> allProducts = productRepository.findByRestaurant(restaurant);
 
-        return productModelConverter.toCollectionModel(allProducts);
+        if (includeInactives) {
+            return productModelConverter.toCollectionModel(productRepository.findAllByRestaurant(restaurant));
+        }
+
+        return productModelConverter.toCollectionModel(productRepository.findActivesByRestaurant(restaurant));
     }
 
     @GetMapping("/{id}")

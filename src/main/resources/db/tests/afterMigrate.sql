@@ -70,7 +70,7 @@ insert into tab_permissions (name, description) values ('UPDATE_KITCHEN', 'Allow
 
 insert into restaurant_payment_way (restaurant_id, paymentway_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3), (4, 1), (4, 2), (5, 1), (5, 2), (6, 3);
 
-insert into tab_products (name, description, price, active, restaurant_id, created_at, updated_at) values ('Pork with sweet and sour sauce', 'Delicious pork with special sauce', 78.90, true, 1, current_timestamp, current_timestamp);
+insert into tab_products (name, description, price, active, restaurant_id, created_at, updated_at) values ('Pork with sweet and sour sauce', 'Delicious pork with special sauce', 78.90, false, 1, current_timestamp, current_timestamp);
 insert into tab_products (name, description, price, active, restaurant_id, created_at, updated_at) values ('Thai shrimp', '16 large prawns in spicy sauce', 110, true, 1, current_timestamp, current_timestamp);
 insert into tab_products (name, description, price, active, restaurant_id, created_at, updated_at) values ('Spicy salad with grilled meat', 'Leaf salad with thinly sliced grilled beef and our special red pepper sauce', 87.20, true, 2, current_timestamp, current_timestamp);
 insert into tab_products (name, description, price, active, restaurant_id, created_at, updated_at) values ('Garlic Naan', 'Indian traditional bread with garlic topping', 21, true, 3, current_timestamp, current_timestamp);
