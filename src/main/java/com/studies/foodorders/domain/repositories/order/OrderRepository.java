@@ -2,6 +2,7 @@ package com.studies.foodorders.domain.repositories.order;
 
 import com.studies.foodorders.domain.models.order.Order;
 import com.studies.foodorders.domain.repositories.springcustom.CustomJpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface OrderRepository extends CustomJpaRepository<Order, Long> {
+public interface OrderRepository extends CustomJpaRepository<Order, Long>,
+                                         JpaSpecificationExecutor<Order> {
 
     Optional<Order> findByCode(UUID code);
 

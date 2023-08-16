@@ -9,7 +9,9 @@ import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.models.order.Order;
 import com.studies.foodorders.domain.models.security.User;
 import com.studies.foodorders.domain.repositories.order.OrderRepository;
+import com.studies.foodorders.domain.repositories.order.filter.OrderFilter;
 import com.studies.foodorders.domain.services.order.OrderService;
+import com.studies.foodorders.infrastructure.repositories.restaurant.specifications.OrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +37,8 @@ public class OrderController {
     private OrderSummaryModelConverter orderSummaryModelConverter;
 
     @GetMapping
-    public List<OrderSummaryModel> list() {
-        return orderSummaryModelConverter.toCollectionModel(orderRepository.findAll());
+    public List<OrderSummaryModel> searchBy(OrderFilter filters) {
+        return orderSummaryModelConverter.toCollectionModel(orderRepository.findAll(OrderSpecs.usingFilter(filters)));
     }
 
     @GetMapping("/{orderCode}")
