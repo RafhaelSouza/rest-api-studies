@@ -7,10 +7,11 @@ import com.studies.foodorders.domain.repositories.kitchen.KitchenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,8 +22,8 @@ public class KitchenService {
     @Autowired
     private KitchenRepository kitchenRepository;
 
-    public List<Kitchen> list() {
-        return kitchenRepository.findAll();
+    public Page<Kitchen> list(Pageable pageable) {
+        return kitchenRepository.findAll(pageable);
     }
 
     public Optional<Kitchen> find(Long id) {
