@@ -11,8 +11,12 @@ public class OrderSpecs {
 
 	public static Specification<Order> usingFilter(OrderFilter filter) {
 		return (root, query, builder) -> {
-			root.fetch("restaurant").fetch("kitchen");
-			root.fetch("client");
+
+			// Spring JPA perform a select count when it's used Page class, so it returns a number type, this condition is to escape these cases
+			if (Order.class.equals(query.getResultType())) {
+				root.fetch("restaurant").fetch("kitchen");
+				root.fetch("client");
+			}
 			
 			var predicates = new ArrayList<Predicate>();
 			

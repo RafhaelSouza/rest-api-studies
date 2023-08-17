@@ -13,6 +13,10 @@ import com.studies.foodorders.domain.repositories.order.filter.OrderFilter;
 import com.studies.foodorders.domain.services.order.OrderService;
 import com.studies.foodorders.infrastructure.repositories.restaurant.specifications.OrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +41,13 @@ public class OrderController {
     private OrderSummaryModelConverter orderSummaryModelConverter;
 
     @GetMapping
-    public List<OrderSummaryModel> searchBy(OrderFilter filters) {
-        return orderSummaryModelConverter.toCollectionModel(orderRepository.findAll(OrderSpecs.usingFilter(filters)));
+    public Page<OrderSummaryModel> searchBy(@PageableDefault(size = 2) Pageable pageable, OrderFilter filters) {
+        Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(filters), pageable);
+
+        List<OrderSummaryModel> ordersSummaryModel = orderSummaryModelConverter
+                .toCollectionModel(ordersPage.getContent());
+
+        return new PageImpl<>(ordersSummaryModel, pageable, ordersPage.getTotalElements());
     }
 
     @GetMapping("/{orderCode}")
