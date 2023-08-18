@@ -1,4 +1,4 @@
-package com.studies.foodorders.domain.repositories.order.filter;
+package com.studies.foodorders.domain.filter;
 
 import lombok.Getter;
 import lombok.Setter;

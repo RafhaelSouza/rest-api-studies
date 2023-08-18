@@ -1,7 +1,7 @@
 package com.studies.foodorders.infrastructure.repositories.restaurant.specifications;
 
 import com.studies.foodorders.domain.models.order.Order;
-import com.studies.foodorders.domain.repositories.order.filter.OrderFilter;
+import com.studies.foodorders.domain.filter.OrderFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;

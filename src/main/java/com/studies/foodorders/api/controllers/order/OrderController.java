@@ -10,7 +10,7 @@ import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.models.order.Order;
 import com.studies.foodorders.domain.models.security.User;
 import com.studies.foodorders.domain.repositories.order.OrderRepository;
-import com.studies.foodorders.domain.repositories.order.filter.OrderFilter;
+import com.studies.foodorders.domain.filter.OrderFilter;
 import com.studies.foodorders.domain.services.order.OrderService;
 import com.studies.foodorders.infrastructure.repositories.restaurant.specifications.OrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
