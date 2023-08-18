@@ -5,6 +5,7 @@ import com.studies.foodorders.api.converter.order.OrderSummaryModelConverter;
 import com.studies.foodorders.api.model.order.OrderInput;
 import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
+import com.studies.foodorders.core.data.PageableCast;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.models.order.Order;
 import com.studies.foodorders.domain.models.security.User;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/orders")
@@ -41,7 +43,9 @@ public class OrderController {
     private OrderSummaryModelConverter orderSummaryModelConverter;
 
     @GetMapping
-    public Page<OrderSummaryModel> searchBy(@PageableDefault(size = 2) Pageable pageable, OrderFilter filters) {
+    public Page<OrderSummaryModel> searchBy(@PageableDefault(size = 5) Pageable pageable, OrderFilter filters) {
+        pageable = castPageable(pageable);
+
         Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(filters), pageable);
 
         List<OrderSummaryModel> ordersSummaryModel = orderSummaryModelConverter
@@ -70,6 +74,18 @@ public class OrderController {
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }
+    }
+
+    private Pageable castPageable(Pageable apiPageable) {
+
+        var mapeamento = Map.of(
+                "code", "code",
+                "restaurant.name", "restaurant.name",
+                "clientName", "client.name",
+                "totalPrice", "totalPrice"
+        );
+
+        return PageableCast.translate(apiPageable, mapeamento);
     }
 
 }
