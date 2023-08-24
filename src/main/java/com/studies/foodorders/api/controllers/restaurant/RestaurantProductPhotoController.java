@@ -20,7 +20,7 @@ public class RestaurantProductPhotoController {
         var fileName = UUID.randomUUID()
                 + "_" + photoProductInput.getFile().getOriginalFilename();
 
-        var filePhoto = Path.of("/home/rafhael/catalog/", fileName);
+        var filePhoto = Path.of("/home/users/catalog/", fileName);
 
         System.out.println(photoProductInput.getDescription());
         System.out.println(filePhoto);
