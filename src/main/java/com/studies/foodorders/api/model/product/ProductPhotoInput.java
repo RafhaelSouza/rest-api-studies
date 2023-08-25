@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class PhotoProductInput {
+public class ProductPhotoInput {
 
 	@NotNull
 	@FileSize(max = "300KB")

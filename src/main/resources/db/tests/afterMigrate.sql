@@ -16,6 +16,7 @@ delete from user_group;
 delete from restaurant_responsible_user;
 delete from tab_orders;
 delete from tab_order_items;
+delete from tab_product_photo;
 
 -- enable foreign key checks
 set session_replication_role = 'origin';

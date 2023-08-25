@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.studies.foodorders.api.model.product.PhotoProductInput;
+import com.studies.foodorders.api.model.product.ProductPhotoInput;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,19 +15,19 @@ import java.util.UUID;
 public class RestaurantProductPhotoController {
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updatePhoto(@Valid PhotoProductInput photoProductInput) {
+    public void updatePhoto(@Valid ProductPhotoInput productPhotoInput) {
 
         var fileName = UUID.randomUUID()
-                + "_" + photoProductInput.getFile().getOriginalFilename();
+                + "_" + productPhotoInput.getFile().getOriginalFilename();
 
         var filePhoto = Path.of("/home/users/catalog/", fileName);
 
-        System.out.println(photoProductInput.getDescription());
+        System.out.println(productPhotoInput.getDescription());
         System.out.println(filePhoto);
-        System.out.println(photoProductInput.getFile().getContentType());
+        System.out.println(productPhotoInput.getFile().getContentType());
 
         try {
-            photoProductInput.getFile().transferTo(filePhoto);
+            productPhotoInput.getFile().transferTo(filePhoto);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
