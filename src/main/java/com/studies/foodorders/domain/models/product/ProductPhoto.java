@@ -28,4 +28,11 @@ public class ProductPhoto implements Serializable {
     @MapsId
     private Product product;
 
+    public Long getRestaurantId() {
+        if (getProduct() == null)
+            return null;
+
+        return getProduct().getRestaurant().getId();
+    }
+
 }

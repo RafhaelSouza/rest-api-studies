@@ -5,5 +5,7 @@ import com.studies.foodorders.domain.models.product.ProductPhoto;
 public interface ProductRepositoryQueries {
 
 	ProductPhoto save(ProductPhoto productPhoto);
+
+	void delete(ProductPhoto productPhoto);
 	
 }

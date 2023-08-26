@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class ProductPhotoService {
 
@@ -13,7 +15,18 @@ public class ProductPhotoService {
     private ProductRepository productRepository;
 
     @Transactional
-    public ProductPhoto salvar(ProductPhoto productPhoto) {
+    public ProductPhoto save(ProductPhoto productPhoto) {
+
+        Long restaurantId = productPhoto.getRestaurantId();
+        Long productId = productPhoto.getProduct().getId();
+
+        Optional<ProductPhoto> existentPhoto = productRepository
+                .findPhotoById(restaurantId, productId);
+
+        if (existentPhoto.isPresent()) {
+            productRepository.delete(existentPhoto.get());
+        }
+
         return productRepository.save(productPhoto);
     }
 

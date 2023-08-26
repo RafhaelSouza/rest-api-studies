@@ -46,7 +46,7 @@ public class RestaurantProductPhotoController {
         productPhoto.setFileSize(file.getSize());
         productPhoto.setFileName(file.getOriginalFilename());
 
-        ProductPhoto savedProductPhoto = productPhotoService.salvar(productPhoto);
+        ProductPhoto savedProductPhoto = productPhotoService.save(productPhoto);
 
         return converter.toModel(savedProductPhoto);
 
