@@ -7,10 +7,10 @@ import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
 import com.studies.foodorders.core.data.PageableCast;
 import com.studies.foodorders.domain.exceptions.BusinessException;
+import com.studies.foodorders.domain.filter.OrderFilter;
 import com.studies.foodorders.domain.models.order.Order;
 import com.studies.foodorders.domain.models.security.User;
 import com.studies.foodorders.domain.repositories.order.OrderRepository;
-import com.studies.foodorders.domain.filter.OrderFilter;
 import com.studies.foodorders.domain.services.order.OrderService;
 import com.studies.foodorders.infrastructure.repositories.restaurant.specifications.OrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,14 +78,14 @@ public class OrderController {
 
     private Pageable castPageable(Pageable apiPageable) {
 
-        var mapeamento = Map.of(
+        var mapping = Map.of(
                 "code", "code",
                 "restaurant.name", "restaurant.name",
                 "clientName", "client.name",
                 "totalPrice", "totalPrice"
         );
 
-        return PageableCast.translate(apiPageable, mapeamento);
+        return PageableCast.translate(apiPageable, mapping);
     }
 
 }
