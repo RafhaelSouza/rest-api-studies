@@ -1,13 +1,18 @@
 package com.studies.foodorders.domain.repositories.product;
 
-import java.io.InputStream;
-
 import lombok.Builder;
 import lombok.Getter;
+
+import java.io.InputStream;
+import java.util.UUID;
 
 public interface ProductPhotoStorageService {
 
 	void storage(NewProductPhoto newProductPhoto);
+
+	default String fileNameGenerate() {
+		return UUID.randomUUID().toString();
+	}
 	
 	@Builder
 	@Getter

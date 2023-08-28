@@ -1,11 +1,14 @@
 package com.studies.foodorders.domain.services.product;
 
 import com.studies.foodorders.domain.models.product.ProductPhoto;
+import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageService;
+import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageService.NewProductPhoto;
 import com.studies.foodorders.domain.repositories.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.InputStream;
 import java.util.Optional;
 
 @Service
@@ -14,11 +17,15 @@ public class ProductPhotoService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProductPhotoStorageService productPhotoStorageService;
+
     @Transactional
-    public ProductPhoto save(ProductPhoto productPhoto) {
+    public ProductPhoto save(ProductPhoto productPhoto, InputStream fileData) {
 
         Long restaurantId = productPhoto.getRestaurantId();
         Long productId = productPhoto.getProduct().getId();
+        String newFileName = productPhotoStorageService.fileNameGenerate();
 
         Optional<ProductPhoto> existentPhoto = productRepository
                 .findPhotoById(restaurantId, productId);
@@ -27,7 +34,19 @@ public class ProductPhotoService {
             productRepository.delete(existentPhoto.get());
         }
 
-        return productRepository.save(productPhoto);
+        productPhoto.setFileName(newFileName);
+        productPhoto = productRepository.save(productPhoto);
+        productRepository.flush();
+
+        NewProductPhoto newProductPhoto = NewProductPhoto
+                .builder()
+                .fileName(productPhoto.getFileName())
+                .inputStream(fileData)
+                .build();
+
+        productPhotoStorageService.storage(newProductPhoto);
+
+        return productPhoto;
     }
 
 }

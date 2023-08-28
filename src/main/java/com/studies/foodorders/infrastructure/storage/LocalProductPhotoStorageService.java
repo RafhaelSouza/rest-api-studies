@@ -3,11 +3,13 @@ package com.studies.foodorders.infrastructure.storage;
 import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageService;
 import com.studies.foodorders.infrastructure.exceptions.StorageException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Service
 public class LocalProductPhotoStorageService implements ProductPhotoStorageService {
 
     @Value("${com.studies.storage.local.product-photos-directory}")
