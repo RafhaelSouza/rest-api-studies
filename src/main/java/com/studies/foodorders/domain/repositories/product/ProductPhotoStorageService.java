@@ -8,10 +8,6 @@ import java.util.UUID;
 
 public interface ProductPhotoStorageService {
 
-	void storage(NewProductPhoto newProductPhoto);
-
-	void delete(String fileName);
-
 	default void replace(String oldFileName, NewProductPhoto newProductPhoto) {
 		this.storage(newProductPhoto);
 
@@ -22,6 +18,12 @@ public interface ProductPhotoStorageService {
 	default String fileNameGenerate() {
 		return UUID.randomUUID().toString();
 	}
+
+	void storage(NewProductPhoto newProductPhoto);
+
+	InputStream recover(String fileName);
+
+	void delete(String fileName);
 	
 	@Builder
 	@Getter

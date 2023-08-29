@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -17,27 +18,38 @@ public class LocalProductPhotoStorageService implements ProductPhotoStorageServi
     @Override
     public void storage(NewProductPhoto newProductPhoto) {
         try {
-            Path arquivoPath = getPathFile(newProductPhoto.getFileName());
+            Path filePath = getFilePath(newProductPhoto.getFileName());
 
             FileCopyUtils.copy(newProductPhoto.getInputStream(),
-                    Files.newOutputStream(arquivoPath));
+                    Files.newOutputStream(filePath));
         } catch (Exception e) {
             throw new StorageException("Unable to store file", e);
         }
     }
 
     @Override
+    public InputStream recover(String fileName) {
+        try {
+            Path filePath = getFilePath(fileName);
+
+            return Files.newInputStream(filePath);
+        } catch (Exception e) {
+            throw new StorageException("Unable to recover file", e);
+        }
+    }
+
+    @Override
     public void delete(String fileName) {
         try {
-            Path pathFile = getPathFile(fileName);
+            Path filePath = getFilePath(fileName);
 
-            Files.deleteIfExists(pathFile);
+            Files.deleteIfExists(filePath);
         } catch (Exception e) {
             throw new StorageException("Unable to delete file", e);
         }
     }
 
-    private Path getPathFile(String fileName) {
+    private Path getFilePath(String fileName) {
         return photoDirectory.resolve(Path.of(fileName));
     }
 }
