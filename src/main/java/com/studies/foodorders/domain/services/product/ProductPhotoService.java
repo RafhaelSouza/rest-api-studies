@@ -26,11 +26,13 @@ public class ProductPhotoService {
         Long restaurantId = productPhoto.getRestaurantId();
         Long productId = productPhoto.getProduct().getId();
         String newFileName = productPhotoStorageService.fileNameGenerate();
+        String currentFileName = null;
 
         Optional<ProductPhoto> existentPhoto = productRepository
                 .findPhotoById(restaurantId, productId);
 
         if (existentPhoto.isPresent()) {
+            currentFileName = existentPhoto.get().getFileName();
             productRepository.delete(existentPhoto.get());
         }
 
@@ -44,7 +46,7 @@ public class ProductPhotoService {
                 .inputStream(fileData)
                 .build();
 
-        productPhotoStorageService.storage(newProductPhoto);
+        productPhotoStorageService.replace(currentFileName, newProductPhoto);
 
         return productPhoto;
     }

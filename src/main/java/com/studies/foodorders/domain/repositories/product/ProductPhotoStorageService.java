@@ -10,6 +10,15 @@ public interface ProductPhotoStorageService {
 
 	void storage(NewProductPhoto newProductPhoto);
 
+	void delete(String fileName);
+
+	default void replace(String oldFileName, NewProductPhoto newProductPhoto) {
+		this.storage(newProductPhoto);
+
+		if (oldFileName != null)
+			this.delete(oldFileName);
+	}
+
 	default String fileNameGenerate() {
 		return UUID.randomUUID().toString();
 	}

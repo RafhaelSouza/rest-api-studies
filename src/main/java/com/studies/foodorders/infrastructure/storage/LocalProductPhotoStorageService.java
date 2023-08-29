@@ -26,6 +26,17 @@ public class LocalProductPhotoStorageService implements ProductPhotoStorageServi
         }
     }
 
+    @Override
+    public void delete(String fileName) {
+        try {
+            Path pathFile = getPathFile(fileName);
+
+            Files.deleteIfExists(pathFile);
+        } catch (Exception e) {
+            throw new StorageException("Unable to delete file", e);
+        }
+    }
+
     private Path getPathFile(String fileName) {
         return photoDirectory.resolve(Path.of(fileName));
     }
