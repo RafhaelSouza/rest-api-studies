@@ -1,5 +1,6 @@
 package com.studies.foodorders.domain.services.product;
 
+import com.studies.foodorders.domain.exceptions.ProductPhotoNotFoundException;
 import com.studies.foodorders.domain.models.product.ProductPhoto;
 import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageService;
 import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageService.NewProductPhoto;
@@ -49,6 +50,11 @@ public class ProductPhotoService {
         productPhotoStorageService.replace(currentFileName, newProductPhoto);
 
         return productPhoto;
+    }
+
+    public ProductPhoto findIfExists(Long restaurantId, Long productId) {
+        return productRepository.findPhotoById(restaurantId, productId)
+                .orElseThrow(() -> new ProductPhotoNotFoundException(restaurantId, productId));
     }
 
 }

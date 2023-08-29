@@ -9,10 +9,7 @@ import com.studies.foodorders.domain.services.product.ProductPhotoService;
 import com.studies.foodorders.domain.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -30,6 +27,14 @@ public class RestaurantProductPhotoController {
 
     @Autowired
     private ProductPhotoModelConverter converter;
+
+    @GetMapping
+    public ProductPhotoModel find(@PathVariable Long restaurantId,
+                                   @PathVariable Long productId) {
+        ProductPhoto productPhoto = productPhotoService.findIfExists(restaurantId, productId);
+
+        return converter.toModel(productPhoto);
+    }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId,
