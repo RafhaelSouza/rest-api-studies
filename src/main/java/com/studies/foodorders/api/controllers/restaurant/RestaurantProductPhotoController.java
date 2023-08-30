@@ -13,13 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/products/{productId}/photo")
@@ -45,16 +46,23 @@ public class RestaurantProductPhotoController {
         return converter.toModel(productPhoto);
     }
 
-    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<InputStreamResource> findImage(@PathVariable Long restaurantId,
-                                                         @PathVariable Long productId) {
+    @GetMapping
+    public ResponseEntity<InputStreamResource> findPhoto(@PathVariable Long restaurantId,
+                                                         @PathVariable Long productId,
+                                                         @RequestHeader(name = "accept") String acceptHeader)
+                                                         throws HttpMediaTypeNotAcceptableException {
         try {
             ProductPhoto productPhoto = productPhotoService.findIfExists(restaurantId, productId);
+
+            MediaType photoMediaType = MediaType.parseMediaType(productPhoto.getContentType());
+            List<MediaType> acceptableMediaTypes = MediaType.parseMediaTypes(acceptHeader);
+
+            checkMediaTypeCompatibility(photoMediaType, acceptableMediaTypes);
 
             InputStream inputStream = photoStorageService.recover(productPhoto.getFileName());
 
             return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
+                    .contentType(photoMediaType)
                     .body(new InputStreamResource(inputStream));
 
         } catch (NotFoundEntityException e) {
@@ -83,6 +91,17 @@ public class RestaurantProductPhotoController {
 
         return converter.toModel(savedProductPhoto);
 
+    }
+
+    private void checkMediaTypeCompatibility(MediaType mediaTypeFoto,
+                                                   List<MediaType> acceptableMediaTypes)
+            throws HttpMediaTypeNotAcceptableException {
+
+        boolean compatible = acceptableMediaTypes.stream()
+                .anyMatch(acceptableMediaType -> acceptableMediaType.isCompatibleWith(mediaTypeFoto));
+
+        if (!compatible)
+            throw new HttpMediaTypeNotAcceptableException(acceptableMediaTypes);
     }
 
 }
