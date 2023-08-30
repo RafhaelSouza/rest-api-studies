@@ -11,6 +11,7 @@ import com.studies.foodorders.domain.services.product.ProductPhotoService;
 import com.studies.foodorders.domain.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -93,12 +94,19 @@ public class RestaurantProductPhotoController {
 
     }
 
-    private void checkMediaTypeCompatibility(MediaType mediaTypeFoto,
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long restaurantId,
+                        @PathVariable Long productId) {
+        productPhotoService.delete(restaurantId, productId);
+    }
+
+    private void checkMediaTypeCompatibility(MediaType photoMediaType,
                                                    List<MediaType> acceptableMediaTypes)
             throws HttpMediaTypeNotAcceptableException {
 
         boolean compatible = acceptableMediaTypes.stream()
-                .anyMatch(acceptableMediaType -> acceptableMediaType.isCompatibleWith(mediaTypeFoto));
+                .anyMatch(acceptableMediaType -> acceptableMediaType.isCompatibleWith(photoMediaType));
 
         if (!compatible)
             throw new HttpMediaTypeNotAcceptableException(acceptableMediaTypes);
