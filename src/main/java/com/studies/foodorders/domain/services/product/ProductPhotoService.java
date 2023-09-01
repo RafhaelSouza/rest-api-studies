@@ -44,6 +44,7 @@ public class ProductPhotoService {
         NewProductPhoto newProductPhoto = NewProductPhoto
                 .builder()
                 .fileName(productPhoto.getFileName())
+                .contentType(productPhoto.getContentType())
                 .inputStream(fileData)
                 .build();
 

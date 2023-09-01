@@ -30,6 +30,7 @@ public interface ProductPhotoStorageService {
 	class NewProductPhoto {
 		
 		private String fileName;
+		private String contentType;
 		private InputStream inputStream;
 		
 	}
