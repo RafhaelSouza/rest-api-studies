@@ -21,7 +21,7 @@ public interface ProductPhotoStorageService {
 
 	void storage(NewProductPhoto newProductPhoto);
 
-	InputStream recover(String fileName);
+	RecoveredPhoto recover(String fileName);
 
 	void delete(String fileName);
 	
@@ -33,6 +33,23 @@ public interface ProductPhotoStorageService {
 		private String contentType;
 		private InputStream inputStream;
 		
+	}
+
+	@Builder
+	@Getter
+	class RecoveredPhoto {
+
+		private InputStream inputStream;
+		private String url;
+
+		public boolean isThereUrl() {
+			return url != null;
+		}
+
+		public boolean isThereInputStream() {
+			return inputStream != null;
+		}
+
 	}
 	
 }

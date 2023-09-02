@@ -7,10 +7,12 @@ import com.studies.foodorders.domain.exceptions.NotFoundEntityException;
 import com.studies.foodorders.domain.models.product.Product;
 import com.studies.foodorders.domain.models.product.ProductPhoto;
 import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageService;
+import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageService.RecoveredPhoto;
 import com.studies.foodorders.domain.services.product.ProductPhotoService;
 import com.studies.foodorders.domain.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -48,7 +49,7 @@ public class RestaurantProductPhotoController {
     }
 
     @GetMapping
-    public ResponseEntity<InputStreamResource> findPhoto(@PathVariable Long restaurantId,
+    public ResponseEntity<?> findPhoto(@PathVariable Long restaurantId,
                                                          @PathVariable Long productId,
                                                          @RequestHeader(name = "accept") String acceptHeader)
                                                          throws HttpMediaTypeNotAcceptableException {
@@ -60,11 +61,17 @@ public class RestaurantProductPhotoController {
 
             checkMediaTypeCompatibility(photoMediaType, acceptableMediaTypes);
 
-            InputStream inputStream = photoStorageService.recover(productPhoto.getFileName());
+            RecoveredPhoto recoveredPhoto = photoStorageService.recover(productPhoto.getFileName());
+
+            if (recoveredPhoto.isThereUrl())
+                return ResponseEntity
+                        .status(HttpStatus.FOUND)
+                        .header(HttpHeaders.LOCATION, recoveredPhoto.getUrl())
+                        .build();
 
             return ResponseEntity.ok()
                     .contentType(photoMediaType)
-                    .body(new InputStreamResource(inputStream));
+                    .body(new InputStreamResource(recoveredPhoto.getInputStream()));
 
         } catch (NotFoundEntityException e) {
             return ResponseEntity.notFound().build();

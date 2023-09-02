@@ -1,7 +1,6 @@
 package com.studies.foodorders.infrastructure.storage;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -10,11 +9,8 @@ import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageSer
 import com.studies.foodorders.infrastructure.exceptions.StorageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.net.URL;
 
 @Service
 public class S3ProductPhotoStorageService implements ProductPhotoStorageService {
@@ -47,9 +43,14 @@ public class S3ProductPhotoStorageService implements ProductPhotoStorageService 
     }
 
     @Override
-    public InputStream recover(String fileName) {
+    public RecoveredPhoto recover(String fileName) {
 
-        return null;
+        String filePath = getFilePath(fileName);
+
+        URL url = amazonS3.getUrl(storageProperties.getS3().getBucket(), filePath);
+
+        return RecoveredPhoto.builder()
+                .url(url.toString()).build();
     }
 
     @Override

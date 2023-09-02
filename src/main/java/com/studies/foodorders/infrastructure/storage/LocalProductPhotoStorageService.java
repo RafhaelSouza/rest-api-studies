@@ -4,10 +4,8 @@ import com.studies.foodorders.core.storage.StorageProperties;
 import com.studies.foodorders.domain.repositories.product.ProductPhotoStorageService;
 import com.studies.foodorders.infrastructure.exceptions.StorageException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -30,11 +28,13 @@ public class LocalProductPhotoStorageService implements ProductPhotoStorageServi
     }
 
     @Override
-    public InputStream recover(String fileName) {
+    public RecoveredPhoto recover(String fileName) {
         try {
             Path filePath = getFilePath(fileName);
 
-            return Files.newInputStream(filePath);
+            return RecoveredPhoto.builder()
+                    .inputStream(Files.newInputStream(filePath))
+                    .build();
         } catch (Exception e) {
             throw new StorageException("Unable to recover file", e);
         }
