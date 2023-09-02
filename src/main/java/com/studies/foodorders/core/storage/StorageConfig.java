@@ -33,11 +33,10 @@ public class StorageConfig {
 
 	@Bean
 	public ProductPhotoStorageService productPhotoStorageService() {
-		if (StorageProperties.StorageType.S3.equals(storageProperties.getType())) {
+		if (StorageProperties.StorageType.S3.equals(storageProperties.getType()))
 			return new S3ProductPhotoStorageService();
-		} else {
-			return new LocalProductPhotoStorageService();
-		}
+
+		return new LocalProductPhotoStorageService();
 	}
 	
 }
