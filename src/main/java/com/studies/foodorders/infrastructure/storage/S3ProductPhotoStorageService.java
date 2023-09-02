@@ -2,6 +2,7 @@ package com.studies.foodorders.infrastructure.storage;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.studies.foodorders.core.storage.StorageProperties;
@@ -53,7 +54,16 @@ public class S3ProductPhotoStorageService implements ProductPhotoStorageService 
 
     @Override
     public void delete(String fileName) {
+        try {
+            String filePath = getFilePath(fileName);
 
+            var deleteObjectRequest = new DeleteObjectRequest(
+                    storageProperties.getS3().getBucket(), filePath);
+
+            amazonS3.deleteObject(deleteObjectRequest);
+        } catch (Exception e) {
+            throw new StorageException("Unable to delete file in Amazon S3", e);
+        }
     }
 
     private String getFilePath(String fileName) {
