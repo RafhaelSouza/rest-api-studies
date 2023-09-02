@@ -20,7 +20,7 @@
 
 ✔️ Best practices and advanced API modeling
 
-✖️️️ Uploading and downloading files (Local and Amazon S3)
+✔️ Uploading and downloading files (Local and Amazon S3)
 
 ✖️️ Sending transactional emails (Apache FreeMarker)
 

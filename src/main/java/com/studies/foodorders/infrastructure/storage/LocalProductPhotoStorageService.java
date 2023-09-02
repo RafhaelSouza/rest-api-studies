@@ -9,7 +9,6 @@ import org.springframework.util.FileCopyUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-//@Service
 public class LocalProductPhotoStorageService implements ProductPhotoStorageService {
 
     @Autowired
