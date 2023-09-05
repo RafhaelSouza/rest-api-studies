@@ -88,11 +88,11 @@ insert into tab_groups (name, created_at, updated_at) values ('Register', curren
 
 insert into group_permission (group_id, permission_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
 
-insert into tab_users (name, email, password, created_at, updated_at) values ('User One', 'name1@domain.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('User Two', 'name2@domain.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('User Three', 'name3@domain.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('User Four', 'name4@domain.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('User Five', 'name5@domain.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('User One', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('User Two', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('User Three', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('User Four', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('User Five', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
 
