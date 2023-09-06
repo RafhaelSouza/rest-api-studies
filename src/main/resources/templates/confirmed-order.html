@@ -11,17 +11,17 @@
       <#list order.items as item>
       <tr>
         <td style="padding: 10px 0">${item.amount}x ${item.product.name}</td>
-        <td style="width: 30px">${item.totalPrice}</td>
+        <td style="width: 30px">${item.totalPrice?string.currency}</td>
       </tr>
       </#list>
 
     <tr>
       <td style="padding: 10px 0">Shipping Costs</td>
-      <td>${order.shippingCosts}</td>
+      <td>${order.shippingCosts?string.currency}</td>
     </tr>
     <tr style="font-weight: bold">
       <td style="padding: 10px 0">Total</td>
-      <td>${order.totalPrice}</td>
+      <td>${order.totalPrice?string.currency}</td>
     </tr>
     </table>
 
