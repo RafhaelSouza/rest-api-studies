@@ -8,12 +8,10 @@ import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.internet.MimeMessage;
 
-@Service
 public class SmtpEmailSendingService implements EmailSendingService {
 
 	@Autowired
@@ -44,7 +42,7 @@ public class SmtpEmailSendingService implements EmailSendingService {
 		}
 	}
 
-	private String templateProcess(Message message) {
+	protected String templateProcess(Message message) {
 		try {
 			Template template = freemarkerConfig.getTemplate(message.getBody());
 

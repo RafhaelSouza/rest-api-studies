@@ -17,5 +17,11 @@ public class EmailProperties {
 
 	@NotNull
 	private String sender;
+
+	private Implementation impl = Implementation.FAKE;
+
+	public enum Implementation {
+		SMTP, FAKE
+	}
 	
 }
