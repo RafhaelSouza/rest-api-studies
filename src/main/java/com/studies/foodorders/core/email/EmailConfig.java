@@ -2,6 +2,7 @@ package com.studies.foodorders.core.email;
 
 import com.studies.foodorders.domain.services.email.EmailSendingService;
 import com.studies.foodorders.infrastructure.services.FakeEmailSendingService;
+import com.studies.foodorders.infrastructure.services.SandBoxEmailSendingService;
 import com.studies.foodorders.infrastructure.services.SmtpEmailSendingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,8 @@ public class EmailConfig {
 				return new FakeEmailSendingService();
 			case SMTP:
 				return new SmtpEmailSendingService();
+			case SANDBOX:
+				return new SandBoxEmailSendingService();
 			default:
 				return null;
 		}

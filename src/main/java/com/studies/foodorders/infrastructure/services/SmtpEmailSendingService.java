@@ -10,47 +10,53 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 public class SmtpEmailSendingService implements EmailSendingService {
 
-	@Autowired
-	private JavaMailSender mailSender;
-	
-	@Autowired
-	private EmailProperties emailProperties;
+    @Autowired
+    private JavaMailSender mailSender;
 
-	@Autowired
-	private Configuration freemarkerConfig;
-	
-	@Override
-	public void send(Message message) {
-		try {
-			String body = templateProcess(message);
+    @Autowired
+    private EmailProperties emailProperties;
 
-			MimeMessage mimeMessage = mailSender.createMimeMessage();
-			
-			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
-			helper.setFrom(emailProperties.getSender());
-			helper.setTo(message.getRecipients().toArray(new String[0]));
-			helper.setSubject(message.getSubject());
-			helper.setText(body, true);
-			
-			mailSender.send(mimeMessage);
-		} catch (Exception e) {
-			throw new EmailException("Unable to send email", e);
-		}
-	}
+    @Autowired
+    private Configuration freemarkerConfig;
 
-	protected String templateProcess(Message message) {
-		try {
-			Template template = freemarkerConfig.getTemplate(message.getBody());
+    @Override
+    public void send(Message message) {
+        try {
+            MimeMessage mimeMessage = createMimeMessage(message);
+            mailSender.send(mimeMessage);
+        } catch (Exception e) {
+            throw new EmailException("Unable to send email", e);
+        }
+    }
 
-			return FreeMarkerTemplateUtils.processTemplateIntoString(
-					template, message.getModels());
-		} catch (Exception e) {
-			throw new EmailException("Unable to assemble email template", e);
-		}
-	}
+    protected MimeMessage createMimeMessage(Message message) throws MessagingException {
+        String body = templateProcess(message);
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+        helper.setFrom(emailProperties.getSender());
+        helper.setTo(message.getRecipients().toArray(new String[0]));
+        helper.setSubject(message.getSubject());
+        helper.setText(body, true);
+
+        return mimeMessage;
+    }
+
+    protected String templateProcess(Message message) {
+        try {
+            Template template = freemarkerConfig.getTemplate(message.getBody());
+
+            return FreeMarkerTemplateUtils.processTemplateIntoString(
+                    template, message.getModels());
+        } catch (Exception e) {
+            throw new EmailException("Unable to assemble email template", e);
+        }
+    }
 
 }
