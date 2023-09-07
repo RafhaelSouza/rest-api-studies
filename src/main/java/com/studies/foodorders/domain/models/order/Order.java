@@ -1,6 +1,7 @@
 package com.studies.foodorders.domain.models.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.studies.foodorders.domain.events.CancelledOrderEvent;
 import com.studies.foodorders.domain.events.ConfirmedOrderEvent;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.models.localization.Address;
@@ -121,6 +122,8 @@ public class Order extends AbstractAggregateRoot<Order> implements Serializable 
     public void cancel() {
         setStatus(OrderStatus.CANCELLED);
         setCanceledAt(OffsetDateTime.now());
+
+        registerEvent(new CancelledOrderEvent(this));
     }
 
     public void deliver() {

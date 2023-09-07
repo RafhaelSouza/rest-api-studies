@@ -29,6 +29,8 @@ public class OrderFlowService {
     public void cancel(String orderCode) {
         Order order = orderService.findIfExists(orderCode);
         order.cancel();
+
+        orderRepository.save(order);
     }
 
     @Transactional
