@@ -1,6 +1,7 @@
 package com.studies.foodorders.domain.services.order;
 
 import com.studies.foodorders.domain.models.order.Order;
+import com.studies.foodorders.domain.repositories.order.OrderRepository;
 import com.studies.foodorders.domain.services.email.EmailSendingService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,11 +11,10 @@ public class OrderFlowService {
 
     private OrderService orderService;
 
-    private EmailSendingService emailSendingService;
+    private OrderRepository orderRepository;
 
-    public OrderFlowService(OrderService orderService, EmailSendingService emailSendingService) {
+    public OrderFlowService(OrderService orderService) {
         this.orderService = orderService;
-        this.emailSendingService = emailSendingService;
     }
 
     @Transactional
@@ -22,14 +22,8 @@ public class OrderFlowService {
         Order order = orderService.findIfExists(orderCode);
         order.confirm();
 
-        var message = EmailSendingService.Message.builder()
-                .subject(order.getRestaurant().getName() + " - Confirmed Order")
-                .body("confirmed-order.html")
-                .model("order", order)
-                .recipient(order.getClient().getEmail())
-                .build();
-
-        emailSendingService.send(message);
+        // In order to Spring to call events it is necessary call a repository from the aggregate
+        orderRepository.save(order);
     }
 
     @Transactional

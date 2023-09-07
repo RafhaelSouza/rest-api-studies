@@ -1,6 +1,7 @@
 package com.studies.foodorders.domain.models.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.studies.foodorders.domain.events.ConfirmedOrderEvent;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.models.localization.Address;
 import com.studies.foodorders.domain.models.order.enumerations.OrderStatus;
@@ -12,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,10 +24,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "tab_orders")
-public class Order implements Serializable {
+public class Order extends AbstractAggregateRoot<Order> implements Serializable {
 
     private static final long serialVersionUID = 6122106143932613290L;
 
@@ -112,6 +114,8 @@ public class Order implements Serializable {
     public void confirm() {
         setStatus(OrderStatus.CONFIRMED);
         setConfirmedAt(OffsetDateTime.now());
+
+        registerEvent(new ConfirmedOrderEvent(this));
     }
 
     public void cancel() {
