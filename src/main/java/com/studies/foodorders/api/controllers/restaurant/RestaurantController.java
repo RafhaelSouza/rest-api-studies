@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.net.HttpHeaders;
 import com.studies.foodorders.api.converter.restaurant.RestaurantModelConverter;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
 import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
@@ -14,6 +15,7 @@ import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
@@ -54,15 +56,18 @@ public class RestaurantController {
 
     @JsonView({ RestaurantView.Summary.class })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RestaurantModel> list() {
-        return restaurantModelConverter.toCollectionModel(restaurantService.list());
+    public ResponseEntity<List<RestaurantModel>> list() {
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                .body(restaurantModelConverter.toCollectionModel(restaurantService.list()));
     }
 
-    @JsonView({ RestaurantView.IdAndName.class })
+    /*@JsonView({ RestaurantView.IdAndName.class })
     @GetMapping(params = "projection=id-and-name")
     public List<RestaurantModel> listIdAndName() {
         return list();
-    }
+    }*/
 
     @GetMapping("/{id}")
     public RestaurantModel find(@PathVariable Long id) {
