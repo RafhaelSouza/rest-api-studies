@@ -1,12 +1,27 @@
-function restaurantsList() {
+function findPaymentWay() {
   $.ajax({
-    url: "http://localhost:8080/restaurants",
+    url: "http://localhost:8080/payment-ways",
     type: "get",
 
     success: function(response) {
-      $("#my-content").text(JSON.stringify(response));
+      tableFill(response);
     }
   });
 }
 
-$("#my-button").click(restaurantsList);
+function tableFill(paymentWays) {
+  $("#my-table tbody tr").remove();
+
+  $.each(paymentWays, function(i, paymentWay) {
+    var line = $("<tr>");
+
+    line.append(
+      $("<td>").text(paymentWay.id),
+      $("<td>").text(paymentWay.description)
+    );
+
+    line.appendTo("#my-table");
+  });
+}
+
+$("#btn-find").click(findPaymentWay);
