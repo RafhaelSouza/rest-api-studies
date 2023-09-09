@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/restaurants")
 public class RestaurantController {
@@ -60,7 +59,6 @@ public class RestaurantController {
         return restaurantModelConverter.toCollectionModel(restaurantService.list());
     }
 
-    //@CrossOrigin
     @JsonView({ RestaurantView.IdAndName.class })
     @GetMapping(params = "projection=id-and-name")
     public List<RestaurantModel> listIdAndName() {
