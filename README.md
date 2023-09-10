@@ -22,7 +22,7 @@
 
 ✔️ Uploading and downloading files (Local and Amazon S3)
 
-✖️️ Sending transactional emails (Apache FreeMarker)
+✔️ Sending transactional emails (Apache FreeMarker)
 
 ✖️️ Cache and HTTP (ETags)
 
