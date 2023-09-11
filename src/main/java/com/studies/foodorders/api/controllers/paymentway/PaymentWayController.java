@@ -33,9 +33,13 @@ public class PaymentWayController {
                 .body(paymentWays);
     }
 
-    @GetMapping("/id}")
-    public PaymentWayModel find(@PathVariable Long id) {
-        return paymentWayModelConverter.toModel(paymentWayService.findIfExists(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<PaymentWayModel> find(@PathVariable Long id) {
+        PaymentWayModel paymentWay = paymentWayModelConverter.toModel(paymentWayService.findIfExists(id));
+
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(paymentWay);
     }
 
     @PostMapping
