@@ -6,11 +6,14 @@ import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.services.paymentway.PaymentWayService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/payment-ways")
@@ -22,8 +25,12 @@ public class PaymentWayController {
     private PaymentWayModelConverter paymentWayModelConverter;
 
     @GetMapping
-    public List<PaymentWayModel> list() {
-        return paymentWayModelConverter.toCollectionModel(paymentWayService.list());
+    public ResponseEntity<List<PaymentWayModel>> list() {
+        List<PaymentWayModel> paymentWays = paymentWayModelConverter.toCollectionModel(paymentWayService.list());
+
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(paymentWays);
     }
 
     @GetMapping("/id}")
