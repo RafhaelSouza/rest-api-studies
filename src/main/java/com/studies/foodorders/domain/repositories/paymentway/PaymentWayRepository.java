@@ -13,4 +13,7 @@ public interface PaymentWayRepository extends JpaRepository<PaymentWay, Long> {
     @Query("select max(updatedAt) from PaymentWay")
     OffsetDateTime getUpdateAt();
 
+    @Query("select updatedAt from PaymentWay where id = :id")
+    OffsetDateTime getUpdateAtById(Long id);
+
 }

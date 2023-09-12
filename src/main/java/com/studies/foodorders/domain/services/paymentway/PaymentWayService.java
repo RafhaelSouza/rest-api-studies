@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,14 @@ public class PaymentWayService {
 
     public List<PaymentWay> list() {
         return paymentWayRepository.findAll();
+    }
+
+    public OffsetDateTime getUpdateAt() {
+        return paymentWayRepository.getUpdateAt();
+    }
+
+    public OffsetDateTime getUpdateAtById(Long id) {
+        return paymentWayRepository.getUpdateAtById(id);
     }
 
     public Optional<PaymentWay> find(Long id) {

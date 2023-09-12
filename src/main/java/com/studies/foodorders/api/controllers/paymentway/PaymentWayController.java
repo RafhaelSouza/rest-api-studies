@@ -10,8 +10,11 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import javax.validation.Valid;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +28,19 @@ public class PaymentWayController {
     private PaymentWayModelConverter paymentWayModelConverter;
 
     @GetMapping
-    public ResponseEntity<List<PaymentWayModel>> list() {
+    public ResponseEntity<List<PaymentWayModel>> list(ServletWebRequest request) {
+        ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+        String eTag = "0";
+
+        OffsetDateTime paymentWayUpdateAt = paymentWayService.getUpdateAt();
+
+        if (paymentWayUpdateAt != null)
+            eTag = String.valueOf(paymentWayUpdateAt.toEpochSecond());
+
+        if (request.checkNotModified(eTag))
+            return null;
+
         List<PaymentWayModel> paymentWays = paymentWayModelConverter.toCollectionModel(paymentWayService.list());
 
         return ResponseEntity.ok()
@@ -37,15 +52,29 @@ public class PaymentWayController {
                 //.cacheControl(CacheControl.noCache())
                 // No cache is made (It's possible add a request header called Cache-Control: no-cache)
                 //.cacheControl(CacheControl.noStore())
+                .eTag(eTag)
                 .body(paymentWays);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentWayModel> find(@PathVariable Long id) {
+    public ResponseEntity<PaymentWayModel> find(@PathVariable Long id, ServletWebRequest request) {
+        ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+        String eTag = "0";
+
+        OffsetDateTime paymentWayUpdateAt = paymentWayService.getUpdateAtById(id);
+
+        if (paymentWayUpdateAt != null)
+            eTag = String.valueOf(paymentWayUpdateAt.toEpochSecond());
+
+        if (request.checkNotModified(eTag))
+            return null;
+
         PaymentWayModel paymentWay = paymentWayModelConverter.toModel(paymentWayService.findIfExists(id));
 
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .eTag(eTag)
                 .body(paymentWay);
     }
 
