@@ -29,7 +29,14 @@ public class PaymentWayController {
         List<PaymentWayModel> paymentWays = paymentWayModelConverter.toCollectionModel(paymentWayService.list());
 
         return ResponseEntity.ok()
-                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                // Only browser can make cache
+                //.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())
+                // Any server can make cache and it is default
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+                // It's checked all cached information with the responses
+                //.cacheControl(CacheControl.noCache())
+                // No cache is made (It's possible add a request header called Cache-Control: no-cache)
+                //.cacheControl(CacheControl.noStore())
                 .body(paymentWays);
     }
 
