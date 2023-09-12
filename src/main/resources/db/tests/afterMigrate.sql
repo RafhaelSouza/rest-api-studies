@@ -62,9 +62,9 @@ values ('Uncle Sams Diner', 11, 4, current_timestamp at time zone 'utc', current
 insert into tab_restaurants (name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
 values ('Marys Bar', 6, 4, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true);
 
-insert into tab_payment_ways (description) values ('Credit Card');
-insert into tab_payment_ways (description) values ('Debit Card');
-insert into tab_payment_ways (description) values ('Cash');
+insert into tab_payment_ways (description, updated_at) values ('Credit Card', current_timestamp at time zone 'utc');
+insert into tab_payment_ways (description, updated_at) values ('Debit Card', current_timestamp at time zone 'utc');
+insert into tab_payment_ways (description, updated_at) values ('Cash', current_timestamp at time zone 'utc');
 
 insert into tab_permissions (name, description) values ('SEARCH_KITCHEN', 'Allow to search kitchens');
 insert into tab_permissions (name, description) values ('UPDATE_KITCHEN', 'Allow to update kitchens');

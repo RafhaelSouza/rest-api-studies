@@ -2,9 +2,11 @@ package com.studies.foodorders.domain.models.paymentway;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -21,5 +23,9 @@ public class PaymentWay implements Serializable {
 
     @Column(nullable = false)
     private String description;
+
+    @UpdateTimestamp
+    @Column(columnDefinition = "timestamp")
+    private OffsetDateTime updatedAt;
 
 }
