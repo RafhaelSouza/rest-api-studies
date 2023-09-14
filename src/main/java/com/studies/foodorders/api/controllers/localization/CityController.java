@@ -9,6 +9,7 @@ import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.services.localization.CityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,14 +37,18 @@ public class CityController {
 
     @ApiOperation("Find a city by id")
     @GetMapping("/{id}")
-    public CityModel find(@PathVariable Long id) {
+    public CityModel find(
+            @ApiParam(value = "City id", example = "1")
+            @PathVariable Long id) {
         return cityModelConverter.toModel(cityService.findIfExists(id));
     }
 
     @ApiOperation("Register a city")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CityModel save(@RequestBody @Valid CityInput cityInput) {
+    public CityModel save(
+            @ApiParam(name = "Request body", value = "Representation of a new city")
+            @RequestBody @Valid CityInput cityInput) {
         try {
             City city = cityModelConverter.toDomainObject(cityInput);
             return cityModelConverter.toModel(cityService.save(city));
@@ -54,7 +59,12 @@ public class CityController {
 
     @ApiOperation("Update a city")
     @PutMapping("/{id}")
-    public CityModel update(@PathVariable Long id, @RequestBody @Valid CityInput cityInput) {
+    public CityModel update(
+            @ApiParam(value = "City id", example = "1")
+            @PathVariable Long id,
+
+            @ApiParam(name = "Request Body", value = "Representation of a city with the new values")
+            @RequestBody @Valid CityInput cityInput) {
         try {
             City currentCity = cityService.findIfExists(id);
             cityModelConverter.copyToDomainObject(cityInput, currentCity);
@@ -67,7 +77,9 @@ public class CityController {
     @ApiOperation("Delete a city")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(
+            @ApiParam(value = "City id", example = "1")
+            @PathVariable Long id) {
         cityService.delete(id);
     }
 
