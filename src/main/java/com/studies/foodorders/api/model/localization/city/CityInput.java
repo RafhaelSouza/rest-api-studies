@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.model.localization.city;
 
 import com.studies.foodorders.api.model.localization.state.StateInput;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class CityInput {
 
+    @ApiModelProperty(example = "Indiana")
     @NotBlank
     private String name;
 
