@@ -8,6 +8,7 @@ import com.studies.foodorders.domain.models.security.Group;
 import com.studies.foodorders.domain.services.security.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,21 +24,21 @@ public class GroupController implements GroupControllerOpenApi {
 	@Autowired
 	private GroupModelConverter groupModelConverter;
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GroupModel> list() {
 		List<Group> allGroups = groupService.list();
 		
 		return groupModelConverter.toCollectionModel(allGroups);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GroupModel find(@PathVariable Long id) {
 		Group group = groupService.findIfExists(id);
 		
 		return groupModelConverter.toModel(group);
 	}
 	
-	@PostMapping
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public GroupModel save(@RequestBody @Valid GroupInput groupInput) {
 		Group group = groupModelConverter.toDomainObject(groupInput);
@@ -47,7 +48,7 @@ public class GroupController implements GroupControllerOpenApi {
 		return groupModelConverter.toModel(group);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GroupModel update(@PathVariable Long id,
 			@RequestBody @Valid GroupInput groupInput) {
 		Group currentGroup = groupService.findIfExists(id);

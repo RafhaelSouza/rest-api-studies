@@ -33,12 +33,12 @@ public class CityController implements CityControllerOpenApi {
         return cityModelConverter.toCollectionModel(cityService.list());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel find(@PathVariable Long id) {
         return cityModelConverter.toModel(cityService.findIfExists(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CityModel save(@RequestBody @Valid CityInput cityInput) {
         try {
@@ -49,7 +49,7 @@ public class CityController implements CityControllerOpenApi {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel update(@PathVariable Long id, @RequestBody @Valid CityInput cityInput) {
         try {
             City currentCity = cityService.findIfExists(id);
