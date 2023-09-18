@@ -1,5 +1,6 @@
 package com.studies.foodorders.api.controllers.security;
 
+import com.studies.foodorders.api.controllers.openapi.GroupControllerOpenApi;
 import com.studies.foodorders.api.converter.security.GroupModelConverter;
 import com.studies.foodorders.api.model.security.group.GroupInput;
 import com.studies.foodorders.api.model.security.group.GroupModel;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/groups")
-public class GroupController {
+public class GroupController implements GroupControllerOpenApi {
 
 	@Autowired
 	private GroupService groupService;

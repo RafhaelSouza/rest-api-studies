@@ -40,6 +40,6 @@ public interface CityControllerOpenApi {
             @ApiResponse(code = 204, message = "Deleted city"),
             @ApiResponse(code = 404, message = "City not found", response = ApiError.class)
     })
-    void delete( @ApiParam(value = "City id", example = "1") Long id);
+    void delete(@ApiParam(value = "City id", example = "1") Long id);
 
 }
