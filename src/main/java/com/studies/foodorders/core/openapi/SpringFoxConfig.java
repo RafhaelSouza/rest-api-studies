@@ -3,9 +3,11 @@ package com.studies.foodorders.core.openapi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.studies.foodorders.api.exceptionhandler.ApiError;
+import com.studies.foodorders.core.openapi.model.PageableModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,6 +44,7 @@ public class SpringFoxConfig {
 				.globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
 				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
 				.additionalModels(typeResolver.resolve(ApiError.class))
+				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cities", "Manage Cities"),
 						new Tag("Groups", "Manage User Groups"));
