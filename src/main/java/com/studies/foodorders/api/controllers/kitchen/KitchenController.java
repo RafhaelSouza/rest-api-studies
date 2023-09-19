@@ -3,6 +3,7 @@ package com.studies.foodorders.api.controllers.kitchen;
 import com.studies.foodorders.api.converter.kitchen.KitchenModelConverter;
 import com.studies.foodorders.api.model.kitchen.KitchenInput;
 import com.studies.foodorders.api.model.kitchen.KitchenModel;
+import com.studies.foodorders.api.openapi.controllers.KitchenControllerOpenApi;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/kitchens")
-public class KitchenController {
+public class KitchenController implements KitchenControllerOpenApi {
 
     @Autowired
     private KitchenService kitchenService;
@@ -40,19 +41,19 @@ public class KitchenController {
         return new PageImpl<>(kitchensModel, pageable, kitchensPage.getTotalElements());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel find(@PathVariable Long id) {
         return kitchenModelConverter.toModel(kitchenService.findIfExists(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public KitchenModel save(@RequestBody @Valid KitchenInput kitchenInput) {
         Kitchen kitchen = kitchenModelConverter.toDomainObject(kitchenInput);
         return kitchenModelConverter.toModel(kitchenService.save(kitchen));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel update(@PathVariable Long id, @RequestBody @Valid KitchenInput kitchenInput) {
         Kitchen currentKitchen = kitchenService.findIfExists(id);
         kitchenModelConverter.copyToDomainObject(kitchenInput, currentKitchen);
