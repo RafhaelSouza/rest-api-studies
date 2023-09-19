@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.controllers.openapi;
+package com.studies.foodorders.api.openapi.controllers;
 
 import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.localization.city.CityInput;

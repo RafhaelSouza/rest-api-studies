@@ -3,7 +3,7 @@ package com.studies.foodorders.core.openapi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.studies.foodorders.api.exceptionhandler.ApiError;
-import com.studies.foodorders.core.openapi.model.PageableModelOpenApi;
+import com.studies.foodorders.api.openapi.models.PageableModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

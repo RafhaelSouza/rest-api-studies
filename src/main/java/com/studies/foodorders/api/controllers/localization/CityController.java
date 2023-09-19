@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.localization;
 
-import com.studies.foodorders.api.controllers.openapi.CityControllerOpenApi;
+import com.studies.foodorders.api.openapi.controllers.CityControllerOpenApi;
 import com.studies.foodorders.api.converter.city.CityModelConverter;
 import com.studies.foodorders.api.model.localization.city.CityInput;
 import com.studies.foodorders.api.model.localization.city.CityModel;

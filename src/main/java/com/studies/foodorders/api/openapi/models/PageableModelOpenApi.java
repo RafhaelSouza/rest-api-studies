@@ -1,4 +1,4 @@
-package com.studies.foodorders.core.openapi.model;
+package com.studies.foodorders.api.openapi.models;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
