@@ -5,14 +5,11 @@ import com.studies.foodorders.api.model.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.ServletWebRequest;
 
-import javax.validation.Valid;
 import java.util.List;
 
-@Api(tags = "Payment Way")
+@Api(tags = "Payment Ways")
 public interface PaymentWayControllerOpenApi {
 
     @ApiOperation("List of payment ways")
