@@ -13,6 +13,8 @@ import com.studies.foodorders.domain.models.security.User;
 import com.studies.foodorders.domain.repositories.order.OrderRepository;
 import com.studies.foodorders.domain.services.order.OrderService;
 import com.studies.foodorders.infrastructure.repositories.restaurant.specifications.OrderSpecs;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -42,6 +44,10 @@ public class OrderController {
     @Autowired
     private OrderSummaryModelConverter orderSummaryModelConverter;
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Names of properties to filter on the response, separated by commas",
+                    name = "fields", paramType = "query", type = "string")
+    })
     @GetMapping
     public Page<OrderSummaryModel> searchBy(@PageableDefault(size = 5) Pageable pageable, OrderFilter filters) {
         pageable = castPageable(pageable);
@@ -54,6 +60,10 @@ public class OrderController {
         return new PageImpl<>(ordersSummaryModel, pageable, ordersPage.getTotalElements());
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Names of properties to filter on the response, separated by commas",
+                    name = "fields", paramType = "query", type = "string")
+    })
     @GetMapping("/{orderCode}")
     public OrderModel find(@PathVariable String orderCode) {
         return orderModelConverter.toModel(orderService.findIfExists(orderCode));
