@@ -5,20 +5,16 @@ import com.studies.foodorders.api.converter.restaurant.RestaurantModelConverter;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
 import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
 import com.studies.foodorders.api.model.restaurant.view.RestaurantView;
-import com.studies.foodorders.api.openapi.models.RestaurantBasicModelOpenApi;
+import com.studies.foodorders.api.openapi.controllers.RestaurantControllerOpenApi;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.CityNotFoundException;
 import com.studies.foodorders.domain.exceptions.KitchenNotFoundException;
 import com.studies.foodorders.domain.exceptions.RestaurantNotFoundException;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants")
-public class RestaurantController {
+public class RestaurantController implements RestaurantControllerOpenApi {
 
     @Autowired
     private RestaurantService restaurantService;
@@ -38,7 +34,7 @@ public class RestaurantController {
     @Autowired
     private RestaurantModelConverter restaurantModelConverter;
 
-    @GetMapping
+    /*@GetMapping
     public MappingJacksonValue list(@RequestParam(required = false) String projection) {
         List<Restaurant> restaurants = restaurantService.list();
         List<RestaurantModel> restaurantsModel = restaurantModelConverter.toCollectionModel(restaurants);
@@ -54,34 +50,27 @@ public class RestaurantController {
         }
 
         return restaurantsWrapper;
-    }
+    }*/
 
-    @ApiOperation(value = "List of restaurants", response = RestaurantBasicModelOpenApi.class)
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "Order projection name", allowableValues = "id-and-name",
-                    name = "projection", paramType = "query", type = "string")
-    })
     @JsonView({ RestaurantView.Summary.class })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RestaurantModel> list() {
-
         return restaurantModelConverter.toCollectionModel(restaurantService.list());
     }
 
-    @ApiOperation(value = "List of restaurants", hidden = true)
     @JsonView({ RestaurantView.IdAndName.class })
     @GetMapping(params = "projection=id-and-name")
     public List<RestaurantModel> listIdAndName() {
         return list();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestaurantModel find(@PathVariable Long id) {
         Restaurant restaurant = restaurantService.findIfExists(id);
         return restaurantModelConverter.toModel(restaurant);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantModel save(@RequestBody @Valid RestaurantInput restaurantInput) {
         try {
@@ -92,7 +81,7 @@ public class RestaurantController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestaurantModel update(@PathVariable Long id, @RequestBody @Valid RestaurantInput restaurantInput) {
 
         Restaurant currentRestaurant = restaurantService.findIfExists(id);
