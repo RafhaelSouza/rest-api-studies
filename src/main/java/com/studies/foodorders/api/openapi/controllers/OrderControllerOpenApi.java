@@ -27,12 +27,12 @@ public interface OrderControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Order not found", response = ApiError.class)
     })
-    OrderModel find(@ApiParam(value = "Order id", example = "cee92b85-1456-43d7-842f-93be0d57b954") String orderCode);
+    OrderModel find(@ApiParam(value = "Order id", example = "cee92b85-1456-43d7-842f-93be0d57b954", required = true) String orderCode);
 
     @ApiOperation("Register an order")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Registered order")
     })
-    OrderModel add(@ApiParam(name = "Request body", value = "Representation of a new order") OrderInput orderInput);
+    OrderModel add(@ApiParam(name = "Request body", value = "Representation of a new order", required = true) OrderInput orderInput);
 
 }

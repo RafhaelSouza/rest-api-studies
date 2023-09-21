@@ -18,27 +18,27 @@ public interface GroupControllerOpenApi {
             @ApiResponse(code = 400, message = "Invalid group id", response = ApiError.class),
             @ApiResponse(code = 404, message = "Groups not found", response = ApiError.class)
     })
-    GroupModel find(@ApiParam(value = "Group id", example = "1") Long id);
+    GroupModel find(@ApiParam(value = "Group id", example = "1", required = true) Long id);
 
     @ApiOperation("Register a group")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Registered group")
     })
-    GroupModel save(@ApiParam(name = "Request body", value = "Representation of a new group") GroupInput groupInput);
+    GroupModel save(@ApiParam(name = "Request body", value = "Representation of a new group", required = true) GroupInput groupInput);
 
     @ApiOperation("Update a group")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Updated group"),
             @ApiResponse(code = 404, message = "Group not found", response = ApiError.class)
     })
-    GroupModel update(@ApiParam(value = "Group id", example = "1") Long id,
-                      @ApiParam(name = "Request Body", value = "Representation of a group with the new values") GroupInput groupInput);
+    GroupModel update(@ApiParam(value = "Group id", example = "1", required = true) Long id,
+                      @ApiParam(name = "Request Body", value = "Representation of a group with the new values", required = true) GroupInput groupInput);
 
     @ApiOperation("Delete a group")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Deleted group"),
             @ApiResponse(code = 404, message = "Group not found", response = ApiError.class)
     })
-    void delete(@ApiParam(value = "Group id", example = "1") Long id);
+    void delete(@ApiParam(value = "Group id", example = "1", required = true) Long id);
 
 }

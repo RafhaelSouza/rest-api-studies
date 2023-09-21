@@ -18,27 +18,27 @@ public interface KitchenControllerOpenApi {
             @ApiResponse(code = 400, message = "Invalid kitchen id", response = ApiError.class),
             @ApiResponse(code = 404, message = "Kitchen not found", response = ApiError.class)
     })
-    KitchenModel find(@ApiParam(value = "Kitchen id", example = "1") Long id);
+    KitchenModel find(@ApiParam(value = "Kitchen id", example = "1", required = true) Long id);
 
     @ApiOperation("Register a kitchen")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Registered kitchen")
     })
-    KitchenModel save(@ApiParam(name = "Request body", value = "Representation of a new kitchen") KitchenInput kitchenInput);
+    KitchenModel save(@ApiParam(name = "Request body", value = "Representation of a new kitchen", required = true) KitchenInput kitchenInput);
 
     @ApiOperation("Update a kitchen")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Updated kitchen"),
             @ApiResponse(code = 404, message = "Kitchen not found", response = ApiError.class)
     })
-    KitchenModel update(@ApiParam(value = "Kitchen id", example = "1") Long id,
-                        @ApiParam(name = "Request Body", value = "Representation of a kitchen with the new values") KitchenInput kitchenInput);
+    KitchenModel update(@ApiParam(value = "Kitchen id", example = "1", required = true) Long id,
+                        @ApiParam(name = "Request Body", value = "Representation of a kitchen with the new values", required = true) KitchenInput kitchenInput);
 
     @ApiOperation("Delete a kitchen")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Deleted kitchen"),
             @ApiResponse(code = 404, message = "Kitchen not found", response = ApiError.class)
     })
-    void delete(@ApiParam(value = "Kitchen id", example = "1") Long id);
+    void delete(@ApiParam(value = "Kitchen id", example = "1", required = true) Long id);
 
 }
