@@ -19,10 +19,10 @@ public class RestaurantModel {
     @JsonView({ RestaurantView.Summary.class, RestaurantView.IdAndName.class })
     private String name;
 
-    @JsonView({ RestaurantView.Summary.class, RestaurantView.IdAndName.class })
+    @JsonView({ RestaurantView.Summary.class })
     private BigDecimal shippingCosts;
 
-    @JsonView({ RestaurantView.Summary.class, RestaurantView.IdAndName.class })
+    @JsonView({ RestaurantView.Summary.class })
     private KitchenModel kitchen;
 
     private Boolean active;

@@ -5,12 +5,16 @@ import com.studies.foodorders.api.converter.restaurant.RestaurantModelConverter;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
 import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
 import com.studies.foodorders.api.model.restaurant.view.RestaurantView;
+import com.studies.foodorders.api.openapi.models.RestaurantBasicModelOpenApi;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.CityNotFoundException;
 import com.studies.foodorders.domain.exceptions.KitchenNotFoundException;
 import com.studies.foodorders.domain.exceptions.RestaurantNotFoundException;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,6 +56,11 @@ public class RestaurantController {
         return restaurantsWrapper;
     }
 
+    @ApiOperation(value = "List of restaurants", response = RestaurantBasicModelOpenApi.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Order projection name", allowableValues = "id-and-name",
+                    name = "projection", paramType = "query", type = "string")
+    })
     @JsonView({ RestaurantView.Summary.class })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RestaurantModel> list() {
@@ -59,6 +68,7 @@ public class RestaurantController {
         return restaurantModelConverter.toCollectionModel(restaurantService.list());
     }
 
+    @ApiOperation(value = "List of restaurants", hidden = true)
     @JsonView({ RestaurantView.IdAndName.class })
     @GetMapping(params = "projection=id-and-name")
     public List<RestaurantModel> listIdAndName() {
