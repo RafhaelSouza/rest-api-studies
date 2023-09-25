@@ -3,6 +3,7 @@ package com.studies.foodorders.api.controllers.restaurant;
 import com.studies.foodorders.api.converter.product.ProductPhotoModelConverter;
 import com.studies.foodorders.api.model.product.ProductPhotoInput;
 import com.studies.foodorders.api.model.product.ProductPhotoModel;
+import com.studies.foodorders.api.openapi.controllers.RestaurantProductPhotoControllerOpenApi;
 import com.studies.foodorders.domain.exceptions.NotFoundEntityException;
 import com.studies.foodorders.domain.models.product.Product;
 import com.studies.foodorders.domain.models.product.ProductPhoto;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/products/{productId}/photo")
-public class RestaurantProductPhotoController {
+public class RestaurantProductPhotoController implements RestaurantProductPhotoControllerOpenApi {
 
     @Autowired
     private ProductService productService;
@@ -48,7 +49,7 @@ public class RestaurantProductPhotoController {
         return converter.toModel(productPhoto);
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.ALL_VALUE)
     public ResponseEntity<?> findPhoto(@PathVariable Long restaurantId,
                                                          @PathVariable Long productId,
                                                          @RequestHeader(name = "accept") String acceptHeader)
@@ -79,7 +80,7 @@ public class RestaurantProductPhotoController {
 
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId,
                                          @PathVariable Long productId,
                                          @Valid ProductPhotoInput productPhotoInput) throws IOException {
