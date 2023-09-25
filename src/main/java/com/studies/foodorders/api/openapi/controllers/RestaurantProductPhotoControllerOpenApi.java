@@ -6,6 +6,7 @@ import com.studies.foodorders.api.model.product.ProductPhotoModel;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -33,7 +34,8 @@ public interface RestaurantProductPhotoControllerOpenApi {
     })
     ProductPhotoModel updatePhoto(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId,
                                   @ApiParam(value = "Product id", example = "1", required = true) Long productId,
-                                  @ApiParam(name = "Request body", value = "Representation of a new product photo", required = true) ProductPhotoInput productPhotoInput)
+                                  @ApiParam(name = "Request body", value = "Representation of a new product photo", required = true) ProductPhotoInput productPhotoInput,
+                                  @ApiParam(value = "Product photo file (maximum 500KB, JPG and PNG only)", required = true) MultipartFile file)
             throws IOException;
 
     @ApiOperation("Deletes a restaurant's product photo")

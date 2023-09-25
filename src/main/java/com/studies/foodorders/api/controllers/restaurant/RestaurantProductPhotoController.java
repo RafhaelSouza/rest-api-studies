@@ -83,11 +83,12 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId,
                                          @PathVariable Long productId,
-                                         @Valid ProductPhotoInput productPhotoInput) throws IOException {
+                                         @Valid ProductPhotoInput productPhotoInput,
+                                         @RequestPart MultipartFile file) throws IOException {
 
         Product product = productService.findIfExists(restaurantId, productId);
 
-        MultipartFile file = productPhotoInput.getFile();
+        //MultipartFile file = productPhotoInput.getFile();
 
         ProductPhoto productPhoto = new ProductPhoto();
         productPhoto.setProduct(product);
