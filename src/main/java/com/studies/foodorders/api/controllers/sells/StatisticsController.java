@@ -1,5 +1,6 @@
 package com.studies.foodorders.api.controllers.sells;
 
+import com.studies.foodorders.api.openapi.controllers.StatisticsControllerOpenApi;
 import com.studies.foodorders.domain.filter.DailySellsFilter;
 import com.studies.foodorders.domain.models.order.dto.DailySells;
 import com.studies.foodorders.domain.repositories.sells.SellsReportRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/statistics")
-public class StatisticsController {
+public class StatisticsController implements StatisticsControllerOpenApi {
 
 	@Autowired
 	private SellsRepositoryQueries sellsRepositoryQueries;

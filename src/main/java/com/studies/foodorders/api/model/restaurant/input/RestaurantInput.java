@@ -2,6 +2,7 @@ package com.studies.foodorders.api.model.restaurant.input;
 
 import com.studies.foodorders.api.model.kitchen.KitchenIdInput;
 import com.studies.foodorders.api.model.localization.address.AddressInput;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,9 +16,11 @@ import java.math.BigDecimal;
 @Getter
 public class RestaurantInput {
 
+    @ApiModelProperty(example = "Thai Gourmet", required = true)
     @NotBlank
     private String name;
 
+    @ApiModelProperty(example = "5.00", required = true)
     @NotNull
     @PositiveOrZero
     private BigDecimal shippingCosts;

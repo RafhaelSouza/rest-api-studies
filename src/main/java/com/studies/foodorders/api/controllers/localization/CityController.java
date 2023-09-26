@@ -1,5 +1,6 @@
 package com.studies.foodorders.api.controllers.localization;
 
+import com.studies.foodorders.api.openapi.controllers.CityControllerOpenApi;
 import com.studies.foodorders.api.converter.city.CityModelConverter;
 import com.studies.foodorders.api.model.localization.city.CityInput;
 import com.studies.foodorders.api.model.localization.city.CityModel;
@@ -7,6 +8,7 @@ import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.StateNotFoundException;
 import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.services.localization.CityService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-public class CityController {
+@Api(tags = "Cities")
+@RestController
+@RequestMapping(value = "/cities")
+public class CityController implements CityControllerOpenApi {
 
     @Autowired
     private CityService cityService;
@@ -28,12 +33,12 @@ public class CityController {
         return cityModelConverter.toCollectionModel(cityService.list());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel find(@PathVariable Long id) {
         return cityModelConverter.toModel(cityService.findIfExists(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CityModel save(@RequestBody @Valid CityInput cityInput) {
         try {
@@ -44,7 +49,7 @@ public class CityController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel update(@PathVariable Long id, @RequestBody @Valid CityInput cityInput) {
         try {
             City currentCity = cityService.findIfExists(id);

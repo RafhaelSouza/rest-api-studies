@@ -5,6 +5,7 @@ import com.studies.foodorders.api.converter.order.OrderSummaryModelConverter;
 import com.studies.foodorders.api.model.order.OrderInput;
 import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
+import com.studies.foodorders.api.openapi.controllers.OrderControllerOpenApi;
 import com.studies.foodorders.core.data.PageableCast;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.filter.OrderFilter;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -28,7 +30,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/orders")
-public class OrderController {
+public class OrderController implements OrderControllerOpenApi {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -42,7 +44,7 @@ public class OrderController {
     @Autowired
     private OrderSummaryModelConverter orderSummaryModelConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<OrderSummaryModel> searchBy(@PageableDefault(size = 5) Pageable pageable, OrderFilter filters) {
         pageable = castPageable(pageable);
 
@@ -54,12 +56,12 @@ public class OrderController {
         return new PageImpl<>(ordersSummaryModel, pageable, ordersPage.getTotalElements());
     }
 
-    @GetMapping("/{orderCode}")
+    @GetMapping(path = "/{orderCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderModel find(@PathVariable String orderCode) {
         return orderModelConverter.toModel(orderService.findIfExists(orderCode));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public OrderModel add(@Valid @RequestBody OrderInput orderInput) {
         try {

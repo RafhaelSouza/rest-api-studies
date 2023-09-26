@@ -1,13 +1,17 @@
 package com.studies.foodorders.api.model.localization.state;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
 
 @Setter
 @Getter
 public class StateInput {
 
-    private Long id;
+    @ApiModelProperty(example = "Indiana")
+    @NotBlank
     private String name;
 
 }

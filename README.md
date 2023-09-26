@@ -24,9 +24,9 @@
 
 ✔️ Sending transactional emails (Apache FreeMarker)
 
-✖️️ Cache and HTTP (ETags)
+✔️ Cache and HTTP (ETags)
 
-✖️ OpenAPI Documentation (Swagger e SpringFox)
+✔️ OpenAPI Documentation (Swagger e SpringFox)
 
 ✖️ HATEOAS and Discoverability
 
