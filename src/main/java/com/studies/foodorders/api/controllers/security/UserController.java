@@ -5,10 +5,12 @@ import com.studies.foodorders.api.model.security.user.PasswordInput;
 import com.studies.foodorders.api.model.security.user.UserInput;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import com.studies.foodorders.api.model.security.user.UserWithPasswordInput;
+import com.studies.foodorders.api.openapi.controllers.UserControllerOpenApi;
 import com.studies.foodorders.domain.models.security.User;
 import com.studies.foodorders.domain.services.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
-public class UserController {
+public class UserController implements UserControllerOpenApi {
 
     @Autowired
     private UserService userService;
@@ -24,21 +26,21 @@ public class UserController {
     @Autowired
     private UserModelConverter userModelConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserModel> list() {
         List<User> allUsers = userService.list();
 
         return userModelConverter.toCollectionModel(allUsers);
     }
 
-    @GetMapping("/{id}")
-    public UserModel find(@PathVariable Long id) {
-        User user = userService.findIfExists(id);
+    @GetMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserModel find(@PathVariable Long userId) {
+        User user = userService.findIfExists(userId);
 
         return userModelConverter.toModel(user);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserModel save(@RequestBody @Valid UserWithPasswordInput userWithPasswordInput) {
         User user = userModelConverter.toDomainObject(userWithPasswordInput);
@@ -47,20 +49,20 @@ public class UserController {
         return userModelConverter.toModel(user);
     }
 
-    @PutMapping("/{id}")
-    public UserModel update(@PathVariable Long id,
+    @PutMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserModel update(@PathVariable Long userId,
                                   @RequestBody @Valid UserInput userInput) {
-        User currentUser = userService.findIfExists(id);
+        User currentUser = userService.findIfExists(userId);
         userModelConverter.copyToDomainObject(userInput, currentUser);
         currentUser = userService.save(currentUser);
 
         return userModelConverter.toModel(currentUser);
     }
 
-    @PutMapping("/{id}/password")
+    @PutMapping("/{userId}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updatePassord(@PathVariable Long id, @RequestBody @Valid PasswordInput password) {
-        userService.updatePassword(id, password.getCurrentPassword(), password.getNewPassword());
+    public void updatePassord(@PathVariable Long userId, @RequestBody @Valid PasswordInput password) {
+        userService.updatePassword(userId, password.getCurrentPassword(), password.getNewPassword());
     }
 
 }
