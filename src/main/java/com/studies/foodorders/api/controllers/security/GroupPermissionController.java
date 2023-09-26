@@ -2,17 +2,19 @@ package com.studies.foodorders.api.controllers.security;
 
 import com.studies.foodorders.api.converter.security.PermissionModelConverter;
 import com.studies.foodorders.api.model.security.permission.PermissionModel;
+import com.studies.foodorders.api.openapi.controllers.GroupPermissionControllerOpenApi;
 import com.studies.foodorders.domain.models.security.Group;
 import com.studies.foodorders.domain.services.security.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/groups/{groupId}/permissions")
-public class GroupPermissionController {
+public class GroupPermissionController implements GroupPermissionControllerOpenApi {
 
     @Autowired
     private GroupService groupService;
@@ -20,7 +22,7 @@ public class GroupPermissionController {
     @Autowired
     private PermissionModelConverter permissionModelConverter;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PermissionModel> list(@PathVariable Long groupId) {
         Group group = groupService.findIfExists(groupId);
 

@@ -16,7 +16,7 @@ public interface GroupControllerOpenApi {
     @ApiOperation("Find a group by id")
     @ApiResponses({
             @ApiResponse(code = 400, message = "Invalid group id", response = ApiError.class),
-            @ApiResponse(code = 404, message = "Groups not found", response = ApiError.class)
+            @ApiResponse(code = 404, message = "Group not found", response = ApiError.class)
     })
     GroupModel find(@ApiParam(value = "Group id", example = "1", required = true) Long id);
 
