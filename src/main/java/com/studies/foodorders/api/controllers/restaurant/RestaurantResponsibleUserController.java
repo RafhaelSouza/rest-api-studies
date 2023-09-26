@@ -2,16 +2,18 @@ package com.studies.foodorders.api.controllers.restaurant;
 
 import com.studies.foodorders.api.converter.security.UserModelConverter;
 import com.studies.foodorders.api.model.security.user.UserModel;
+import com.studies.foodorders.api.openapi.controllers.RestaurantResponsibleUserControllerOpenApi;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/restaurants/{restaurantId}/responsible")
-public class RestaurantResponsibleUserController {
+public class RestaurantResponsibleUserController implements RestaurantResponsibleUserControllerOpenApi {
 
     private RestaurantService restaurantService;
 
@@ -22,7 +24,7 @@ public class RestaurantResponsibleUserController {
         this.userModelConverter = userModelConverter;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
 
