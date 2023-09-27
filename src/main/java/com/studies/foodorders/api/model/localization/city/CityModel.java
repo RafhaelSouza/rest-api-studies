@@ -14,9 +14,9 @@ public class CityModel {
     @ApiModelProperty(value = "City id", example = "1")
     private Long id;
 
-    @ApiModelProperty(example = "Greenfield")
+    @ApiModelProperty(example = "Los Angeles")
     private String name;
 
-    private StateModel stateModel;
+    private StateModel state;
 
 }

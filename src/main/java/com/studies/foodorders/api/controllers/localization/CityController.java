@@ -1,9 +1,10 @@
 package com.studies.foodorders.api.controllers.localization;
 
-import com.studies.foodorders.api.openapi.controllers.CityControllerOpenApi;
 import com.studies.foodorders.api.converter.city.CityModelConverter;
+import com.studies.foodorders.api.helpers.ResourceUriHelper;
 import com.studies.foodorders.api.model.localization.city.CityInput;
 import com.studies.foodorders.api.model.localization.city.CityModel;
+import com.studies.foodorders.api.openapi.controllers.CityControllerOpenApi;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.StateNotFoundException;
 import com.studies.foodorders.domain.models.localization.City;
@@ -43,7 +44,11 @@ public class CityController implements CityControllerOpenApi {
     public CityModel save(@RequestBody @Valid CityInput cityInput) {
         try {
             City city = cityModelConverter.toDomainObject(cityInput);
-            return cityModelConverter.toModel(cityService.save(city));
+            CityModel cityModel = cityModelConverter.toModel(cityService.save(city));
+
+            ResourceUriHelper.addUriInResponseHeader(cityModel.getId());
+
+            return cityModel;
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }

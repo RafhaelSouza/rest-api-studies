@@ -4,14 +4,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
-public class StateInput {
+public class StateIdInput {
 
-    @ApiModelProperty(example = "California")
-    @NotBlank
-    private String name;
+    @ApiModelProperty(example = "1", required = true)
+    @NotNull
+    private Long id;
 
 }

@@ -15,7 +15,7 @@ public class StateModel {
     @ApiModelProperty(example = "1")
     private Long id;
 
-    @ApiModelProperty(example = "Indiana")
+    @ApiModelProperty(example = "California")
     @NotBlank
     private String name;
 

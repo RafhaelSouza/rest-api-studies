@@ -34,29 +34,29 @@ alter sequence tab_users_seq restart with 1;
 alter sequence tab_orders_seq restart with 1;
 alter sequence tab_order_items_seq restart with 1;
 
-insert into tab_kitchens (name) values ('thai');
-insert into tab_kitchens (name) values ('indian');
-insert into tab_kitchens (name) values ('argentina');
-insert into tab_kitchens (name) values ('brazilian');
+insert into tab_kitchens (name) values ('Thai');
+insert into tab_kitchens (name) values ('Indian');
+insert into tab_kitchens (name) values ('Argentina');
+insert into tab_kitchens (name) values ('Brazilian');
 
-insert into tab_states (name) values ('california');
-insert into tab_states (name) values ('florida');
-insert into tab_states (name) values ('texas');
+insert into tab_states (name) values ('California');
+insert into tab_states (name) values ('Florida');
+insert into tab_states (name) values ('Texas');
 
-insert into tab_cities (name, state_id) values ('san francisco', 1);
-insert into tab_cities (name, state_id) values ('san jose', 1);
-insert into tab_cities (name, state_id) values ('miami', 2);
-insert into tab_cities (name, state_id) values ('pensacola', 2);
-insert into tab_cities (name, state_id) values ('austin', 3);
+insert into tab_cities (name, state_id) values ('San Francisco', 1);
+insert into tab_cities (name, state_id) values ('San Jose', 1);
+insert into tab_cities (name, state_id) values ('Miami', 2);
+insert into tab_cities (name, state_id) values ('Pensacola', 2);
+insert into tab_cities (name, state_id) values ('Austin', 3);
 
 insert into tab_restaurants (name, shipping_costs, kitchen_id, created_at, updated_at, active, opened, address_city_id, address_postalcode, address_street, address_number, address_district)
-values ('thai gourmet', 10, 1, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true, 1, '11111-222', 'fifth Avenue', '1000', 'downtown');
+values ('Thai Gourmet', 10, 1, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true, 1, '11111-222', 'fifth Avenue', '1000', 'downtown');
 insert into tab_restaurants (name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
-values ('thai delivery', 9.50, 1, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true);
+values ('Thai Delivery', 9.50, 1, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true);
 insert into tab_restaurants (name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
-values ('tuk tuk indian food', 15, 2, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true);
+values ('Tuk Tuk Indian Food', 15, 2, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true);
 insert into tab_restaurants (name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
-values ('java steakhouse', 12, 3, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true);
+values ('Java Steakhouse', 12, 3, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true);
 insert into tab_restaurants (name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
 values ('Uncle Sams Diner', 11, 4, current_timestamp at time zone 'utc', current_timestamp at time zone 'utc', true, true);
 insert into tab_restaurants (name, shipping_costs, kitchen_id, created_at, updated_at, active, opened)
