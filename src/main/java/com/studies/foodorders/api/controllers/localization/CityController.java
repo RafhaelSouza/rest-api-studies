@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Api(tags = "Cities")
 @RestController
@@ -40,14 +41,14 @@ public class CityController implements CityControllerOpenApi {
     public CityModel find(@PathVariable Long id) {
         CityModel cityModel = cityModelConverter.toModel(cityService.findIfExists(id));
 
-        cityModel.add(linkTo(CityController.class)
-                .slash(cityModel.getId()).withSelfRel());
+        cityModel.add(linkTo(methodOn(CityController.class)
+                .find(cityModel.getId())).withSelfRel());
 
-        cityModel.add(linkTo(CityController.class)
-                .withRel("cities"));
+        cityModel.add(linkTo(methodOn(CityController.class)
+                .list()).withRel("cities"));
 
-        cityModel.getState().add(linkTo(StateController.class)
-                .slash(cityModel.getState().getId()).withSelfRel());
+        cityModel.getState().add(linkTo(methodOn(StateController.class)
+                .find(cityModel.getState().getId())).withSelfRel());
 
         return cityModel;
     }
