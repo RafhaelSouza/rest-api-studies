@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.security;
 
-import com.studies.foodorders.api.converter.security.PermissionModelConverter;
+import com.studies.foodorders.api.assemblers.security.PermissionModelConverter;
 import com.studies.foodorders.api.model.security.permission.PermissionModel;
 import com.studies.foodorders.api.openapi.controllers.GroupPermissionControllerOpenApi;
 import com.studies.foodorders.domain.models.security.Group;

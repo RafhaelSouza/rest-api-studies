@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.security;
 
-import com.studies.foodorders.api.converter.security.UserModelConverter;
+import com.studies.foodorders.api.assemblers.security.UserModelConverter;
 import com.studies.foodorders.api.model.security.user.PasswordInput;
 import com.studies.foodorders.api.model.security.user.UserInput;
 import com.studies.foodorders.api.model.security.user.UserModel;

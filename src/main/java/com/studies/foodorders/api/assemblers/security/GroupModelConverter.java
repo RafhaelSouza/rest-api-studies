@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.converter.security;
+package com.studies.foodorders.api.assemblers.security;
 
 import com.studies.foodorders.api.model.security.group.GroupInput;
 import com.studies.foodorders.api.model.security.group.GroupModel;

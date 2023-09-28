@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.converter.product;
+package com.studies.foodorders.api.assemblers.product;
 
 import com.studies.foodorders.api.model.product.ProductInput;
 import com.studies.foodorders.api.model.product.ProductModel;

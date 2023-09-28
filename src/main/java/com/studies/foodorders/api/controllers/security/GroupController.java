@@ -1,7 +1,7 @@
 package com.studies.foodorders.api.controllers.security;
 
 import com.studies.foodorders.api.openapi.controllers.GroupControllerOpenApi;
-import com.studies.foodorders.api.converter.security.GroupModelConverter;
+import com.studies.foodorders.api.assemblers.security.GroupModelConverter;
 import com.studies.foodorders.api.model.security.group.GroupInput;
 import com.studies.foodorders.api.model.security.group.GroupModel;
 import com.studies.foodorders.domain.models.security.Group;

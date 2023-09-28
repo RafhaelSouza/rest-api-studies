@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.studies.foodorders.api.converter.security.UserModelConverter;
+import com.studies.foodorders.api.assemblers.security.UserModelConverter;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import com.studies.foodorders.api.openapi.controllers.RestaurantResponsibleUserControllerOpenApi;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;

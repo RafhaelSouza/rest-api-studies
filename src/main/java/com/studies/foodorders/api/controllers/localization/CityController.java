@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.localization;
 
-import com.studies.foodorders.api.converter.city.CityModelConverter;
+import com.studies.foodorders.api.assemblers.city.CityModelAssembler;
 import com.studies.foodorders.api.helpers.ResourceUriHelper;
 import com.studies.foodorders.api.model.localization.city.CityInput;
 import com.studies.foodorders.api.model.localization.city.CityModel;
@@ -17,10 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Api(tags = "Cities")
 @RestController
@@ -31,52 +27,24 @@ public class CityController implements CityControllerOpenApi {
     private CityService cityService;
 
     @Autowired
-    private CityModelConverter cityModelConverter;
+    private CityModelAssembler cityModelAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CityModel> list() {
-        List<CityModel> cityModels = cityModelConverter.toCollectionModel(cityService.list());
-
-        cityModels.forEach(cityModel -> {
-            cityModel.add(linkTo(methodOn(CityController.class)
-                    .find(cityModel.getId())).withSelfRel());
-
-            cityModel.add(linkTo(methodOn(CityController.class)
-                    .list()).withRel("cities"));
-
-            cityModel.getState().add(linkTo(methodOn(StateController.class)
-                    .find(cityModel.getState().getId())).withSelfRel());
-        });
-
-        CollectionModel<CityModel> cityModelCollection = CollectionModel.of(cityModels);
-
-        cityModelCollection.add(linkTo(CityController.class).withSelfRel());
-
-        return cityModelCollection;
+        return cityModelAssembler.toCollectionModel(cityService.list());
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel find(@PathVariable Long id) {
-        CityModel cityModel = cityModelConverter.toModel(cityService.findIfExists(id));
-
-        cityModel.add(linkTo(methodOn(CityController.class)
-                .find(cityModel.getId())).withSelfRel());
-
-        cityModel.add(linkTo(methodOn(CityController.class)
-                .list()).withRel("cities"));
-
-        cityModel.getState().add(linkTo(methodOn(StateController.class)
-                .find(cityModel.getState().getId())).withSelfRel());
-
-        return cityModel;
+        return cityModelAssembler.toModel(cityService.findIfExists(id));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CityModel save(@RequestBody @Valid CityInput cityInput) {
         try {
-            City city = cityModelConverter.toDomainObject(cityInput);
-            CityModel cityModel = cityModelConverter.toModel(cityService.save(city));
+            City city = cityModelAssembler.toDomainObject(cityInput);
+            CityModel cityModel = cityModelAssembler.toModel(cityService.save(city));
 
             ResourceUriHelper.addUriInResponseHeader(cityModel.getId());
 
@@ -90,8 +58,8 @@ public class CityController implements CityControllerOpenApi {
     public CityModel update(@PathVariable Long id, @RequestBody @Valid CityInput cityInput) {
         try {
             City currentCity = cityService.findIfExists(id);
-            cityModelConverter.copyToDomainObject(cityInput, currentCity);
-            return cityModelConverter.toModel(cityService.save(currentCity));
+            cityModelAssembler.copyToDomainObject(cityInput, currentCity);
+            return cityModelAssembler.toModel(cityService.save(currentCity));
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }

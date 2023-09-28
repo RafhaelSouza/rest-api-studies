@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.studies.foodorders.api.converter.product.ProductModelConverter;
+import com.studies.foodorders.api.assemblers.product.ProductModelConverter;
 import com.studies.foodorders.api.model.product.ProductInput;
 import com.studies.foodorders.api.model.product.ProductModel;
 import com.studies.foodorders.api.openapi.controllers.RestaurantProductControllerOpenApi;

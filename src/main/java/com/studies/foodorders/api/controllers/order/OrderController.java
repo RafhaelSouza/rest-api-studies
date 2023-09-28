@@ -1,7 +1,7 @@
 package com.studies.foodorders.api.controllers.order;
 
-import com.studies.foodorders.api.converter.order.OrderModelConverter;
-import com.studies.foodorders.api.converter.order.OrderSummaryModelConverter;
+import com.studies.foodorders.api.assemblers.order.OrderModelConverter;
+import com.studies.foodorders.api.assemblers.order.OrderSummaryModelConverter;
 import com.studies.foodorders.api.model.order.OrderInput;
 import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.api.model.order.OrderSummaryModel;

@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.studies.foodorders.api.converter.paymentway.PaymentWayModelConverter;
+import com.studies.foodorders.api.assemblers.paymentway.PaymentWayModelConverter;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import com.studies.foodorders.api.openapi.controllers.RestaurantPaymentWayControllerOpenApi;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;

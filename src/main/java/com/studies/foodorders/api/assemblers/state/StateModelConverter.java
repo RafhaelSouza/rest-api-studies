@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.converter.state;
+package com.studies.foodorders.api.assemblers.state;
 
 import com.studies.foodorders.api.model.localization.state.StateInput;
 import com.studies.foodorders.api.model.localization.state.StateModel;

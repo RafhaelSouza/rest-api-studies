@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.kitchen;
 
-import com.studies.foodorders.api.converter.kitchen.KitchenModelConverter;
+import com.studies.foodorders.api.assemblers.kitchen.KitchenModelConverter;
 import com.studies.foodorders.api.model.kitchen.KitchenInput;
 import com.studies.foodorders.api.model.kitchen.KitchenModel;
 import com.studies.foodorders.api.openapi.controllers.KitchenControllerOpenApi;

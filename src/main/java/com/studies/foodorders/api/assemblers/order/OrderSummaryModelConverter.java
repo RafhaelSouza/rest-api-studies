@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.converter.order;
+package com.studies.foodorders.api.assemblers.order;
 
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
 import com.studies.foodorders.domain.models.order.Order;

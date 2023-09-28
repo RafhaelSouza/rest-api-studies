@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.converter.kitchen;
+package com.studies.foodorders.api.assemblers.kitchen;
 
 import com.studies.foodorders.api.model.kitchen.KitchenInput;
 import com.studies.foodorders.api.model.kitchen.KitchenModel;

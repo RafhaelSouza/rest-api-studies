@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.localization;
 
-import com.studies.foodorders.api.converter.state.StateModelConverter;
+import com.studies.foodorders.api.assemblers.state.StateModelConverter;
 import com.studies.foodorders.api.model.localization.state.StateInput;
 import com.studies.foodorders.api.model.localization.state.StateModel;
 import com.studies.foodorders.api.openapi.controllers.StateControllerOpenApi;

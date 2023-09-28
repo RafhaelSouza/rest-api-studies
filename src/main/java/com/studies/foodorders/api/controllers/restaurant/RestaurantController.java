@@ -1,7 +1,7 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.studies.foodorders.api.converter.restaurant.RestaurantModelConverter;
+import com.studies.foodorders.api.assemblers.restaurant.RestaurantModelConverter;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
 import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
 import com.studies.foodorders.api.model.restaurant.view.RestaurantView;

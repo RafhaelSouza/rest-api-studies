@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.converter.paymentway;
+package com.studies.foodorders.api.assemblers.paymentway;
 
 import com.studies.foodorders.api.model.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
