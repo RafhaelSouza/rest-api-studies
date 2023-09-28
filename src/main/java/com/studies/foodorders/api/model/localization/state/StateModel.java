@@ -4,19 +4,17 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
+import org.springframework.hateoas.RepresentationModel;
 
 @ApiModel(value = "State", description = "State representation")
 @Setter
 @Getter
-public class StateModel {
+public class StateModel extends RepresentationModel<StateModel> {
 
     @ApiModelProperty(example = "1")
     private Long id;
 
     @ApiModelProperty(example = "California")
-    @NotBlank
     private String name;
 
 }

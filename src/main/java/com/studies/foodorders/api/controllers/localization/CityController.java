@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 @Api(tags = "Cities")
 @RestController
 @RequestMapping(value = "/cities")
@@ -36,7 +38,18 @@ public class CityController implements CityControllerOpenApi {
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel find(@PathVariable Long id) {
-        return cityModelConverter.toModel(cityService.findIfExists(id));
+        CityModel cityModel = cityModelConverter.toModel(cityService.findIfExists(id));
+
+        cityModel.add(linkTo(CityController.class)
+                .slash(cityModel.getId()).withSelfRel());
+
+        cityModel.add(linkTo(CityController.class)
+                .withRel("cities"));
+
+        cityModel.getState().add(linkTo(StateController.class)
+                .slash(cityModel.getState().getId()).withSelfRel());
+
+        return cityModel;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
