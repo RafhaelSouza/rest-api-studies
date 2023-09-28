@@ -11,6 +11,7 @@ import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.services.localization.CityService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,25 @@ public class CityController implements CityControllerOpenApi {
     private CityModelConverter cityModelConverter;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CityModel> list() {
-        return cityModelConverter.toCollectionModel(cityService.list());
+    public CollectionModel<CityModel> list() {
+        List<CityModel> cityModels = cityModelConverter.toCollectionModel(cityService.list());
+
+        cityModels.forEach(cityModel -> {
+            cityModel.add(linkTo(methodOn(CityController.class)
+                    .find(cityModel.getId())).withSelfRel());
+
+            cityModel.add(linkTo(methodOn(CityController.class)
+                    .list()).withRel("cities"));
+
+            cityModel.getState().add(linkTo(methodOn(StateController.class)
+                    .find(cityModel.getState().getId())).withSelfRel());
+        });
+
+        CollectionModel<CityModel> cityModelCollection = CollectionModel.of(cityModels);
+
+        cityModelCollection.add(linkTo(CityController.class).withSelfRel());
+
+        return cityModelCollection;
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
