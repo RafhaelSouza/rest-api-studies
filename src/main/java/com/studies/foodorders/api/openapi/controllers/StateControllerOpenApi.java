@@ -4,14 +4,13 @@ import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.localization.state.StateInput;
 import com.studies.foodorders.api.model.localization.state.StateModel;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "States")
 public interface StateControllerOpenApi {
 
     @ApiOperation("List of states")
-    List<StateModel> list();
+    CollectionModel<StateModel> list();
 
     @ApiOperation("Find a state by id")
     @ApiResponses({
