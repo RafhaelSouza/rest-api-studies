@@ -4,14 +4,14 @@ import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.kitchen.KitchenInput;
 import com.studies.foodorders.api.model.kitchen.KitchenModel;
 import io.swagger.annotations.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 @Api(tags = "Kitchens")
 public interface KitchenControllerOpenApi {
 
     @ApiOperation("List of kitchens")
-    Page<KitchenModel> list(Pageable pageable);
+    PagedModel<KitchenModel> list(Pageable pageable);
 
     @ApiOperation("Find a kitchen by id")
     @ApiResponses({
