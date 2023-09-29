@@ -3,8 +3,7 @@ package com.studies.foodorders.api.openapi.controllers;
 import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Restaurants")
 public interface RestaurantResponsibleUserControllerOpenApi {
@@ -13,7 +12,7 @@ public interface RestaurantResponsibleUserControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Restaurant not found", response = ApiError.class)
     })
-    List<UserModel> list(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId);
+    CollectionModel<UserModel> list(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId);
 
     @ApiOperation("Restaurant association with responsible user")
     @ApiResponses({

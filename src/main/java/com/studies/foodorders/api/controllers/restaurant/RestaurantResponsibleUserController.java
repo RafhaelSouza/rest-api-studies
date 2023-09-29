@@ -1,15 +1,14 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.studies.foodorders.api.assemblers.security.UserModelConverter;
+import com.studies.foodorders.api.assemblers.security.UserModelAssembler;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import com.studies.foodorders.api.openapi.controllers.RestaurantResponsibleUserControllerOpenApi;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/restaurants/{restaurantId}/responsible")
@@ -17,18 +16,18 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
 
     private RestaurantService restaurantService;
 
-    private UserModelConverter userModelConverter;
+    private UserModelAssembler userModelAssembler;
 
-    public RestaurantResponsibleUserController(RestaurantService restaurantService, UserModelConverter userModelConverter) {
+    public RestaurantResponsibleUserController(RestaurantService restaurantService, UserModelAssembler userModelAssembler) {
         this.restaurantService = restaurantService;
-        this.userModelConverter = userModelConverter;
+        this.userModelAssembler = userModelAssembler;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserModel> list(@PathVariable Long restaurantId) {
+    public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
 
-        return userModelConverter.toCollectionModel(restaurant.getResponsible());
+        return userModelAssembler.toCollectionModel(restaurant.getResponsible());
     }
 
     @PutMapping("/{userId}")

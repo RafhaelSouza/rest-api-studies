@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.security;
 
-import com.studies.foodorders.api.assemblers.security.UserModelConverter;
+import com.studies.foodorders.api.assemblers.security.UserModelAssembler;
 import com.studies.foodorders.api.model.security.user.PasswordInput;
 import com.studies.foodorders.api.model.security.user.UserInput;
 import com.studies.foodorders.api.model.security.user.UserModel;
@@ -9,6 +9,7 @@ import com.studies.foodorders.api.openapi.controllers.UserControllerOpenApi;
 import com.studies.foodorders.domain.models.security.User;
 import com.studies.foodorders.domain.services.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,39 +25,39 @@ public class UserController implements UserControllerOpenApi {
     private UserService userService;
 
     @Autowired
-    private UserModelConverter userModelConverter;
+    private UserModelAssembler userModelAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserModel> list() {
+    public CollectionModel<UserModel> list() {
         List<User> allUsers = userService.list();
 
-        return userModelConverter.toCollectionModel(allUsers);
+        return userModelAssembler.toCollectionModel(allUsers);
     }
 
     @GetMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserModel find(@PathVariable Long userId) {
         User user = userService.findIfExists(userId);
 
-        return userModelConverter.toModel(user);
+        return userModelAssembler.toModel(user);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserModel save(@RequestBody @Valid UserWithPasswordInput userWithPasswordInput) {
-        User user = userModelConverter.toDomainObject(userWithPasswordInput);
+        User user = userModelAssembler.toDomainObject(userWithPasswordInput);
         user = userService.save(user);
 
-        return userModelConverter.toModel(user);
+        return userModelAssembler.toModel(user);
     }
 
     @PutMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserModel update(@PathVariable Long userId,
                                   @RequestBody @Valid UserInput userInput) {
         User currentUser = userService.findIfExists(userId);
-        userModelConverter.copyToDomainObject(userInput, currentUser);
+        userModelAssembler.copyToDomainObject(userInput, currentUser);
         currentUser = userService.save(currentUser);
 
-        return userModelConverter.toModel(currentUser);
+        return userModelAssembler.toModel(currentUser);
     }
 
     @PutMapping("/{userId}/password")
