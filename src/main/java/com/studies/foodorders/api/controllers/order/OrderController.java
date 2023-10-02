@@ -6,6 +6,7 @@ import com.studies.foodorders.api.model.order.OrderInput;
 import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
 import com.studies.foodorders.api.openapi.controllers.OrderControllerOpenApi;
+import com.studies.foodorders.core.data.PageWrapper;
 import com.studies.foodorders.core.data.PageableCast;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.filter.OrderFilter;
@@ -49,12 +50,11 @@ public class OrderController implements OrderControllerOpenApi {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<OrderSummaryModel> searchBy(@PageableDefault(size = 5) Pageable pageable, OrderFilter filters) {
-        pageable = castPageable(pageable);
+        Pageable castPageable = castPageable(pageable);
 
-        Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(filters), pageable);
+        Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(filters), castPageable);
 
-        /*List<OrderSummaryModel> ordersSummaryModel = orderSummaryModelAssembler
-                .toCollectionModel(ordersPage.getContent());*/
+        ordersPage = new PageWrapper<>(ordersPage, pageable);
 
         return pagedResourcesAssembler.toModel(ordersPage, orderSummaryModelAssembler);
     }
