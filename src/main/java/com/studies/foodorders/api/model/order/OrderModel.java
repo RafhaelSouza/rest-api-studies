@@ -7,14 +7,17 @@ import com.studies.foodorders.api.model.security.user.UserModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+@Relation(collectionRelation = "orders")
 @Setter
 @Getter
-public class OrderModel {
+public class OrderModel extends RepresentationModel<OrderModel> {
 
     @ApiModelProperty(example = "cee92b85-1456-43d7-842f-93be0d57b954")
     private String code;
