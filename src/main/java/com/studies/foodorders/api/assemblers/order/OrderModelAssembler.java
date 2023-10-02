@@ -11,6 +11,10 @@ import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.domain.models.order.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +39,14 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
         OrderModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(linkTo(OrderController.class).withRel("orders"));
+        TemplateVariables pageVariables = new TemplateVariables(
+                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
+
+        String ordersUrl = linkTo(OrderController.class).toUri().toString();
+
+        orderModel.add(new Link(UriTemplate.of(ordersUrl, pageVariables), "orders"));
 
         orderModel.getRestaurant().add(linkTo(methodOn(RestaurantController.class)
                 .find(order.getRestaurant().getId())).withSelfRel());
