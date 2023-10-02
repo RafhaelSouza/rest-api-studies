@@ -6,15 +6,12 @@ import com.studies.foodorders.api.controllers.paymentway.PaymentWayController;
 import com.studies.foodorders.api.controllers.restaurant.RestaurantController;
 import com.studies.foodorders.api.controllers.restaurant.RestaurantProductController;
 import com.studies.foodorders.api.controllers.security.UserController;
+import com.studies.foodorders.api.links.OrderLinks;
 import com.studies.foodorders.api.model.order.OrderInput;
 import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.domain.models.order.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.TemplateVariable;
-import org.springframework.hateoas.TemplateVariables;
-import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +27,9 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private OrderLinks orderLinks;
+
     public OrderModelAssembler() {
         super(OrderController.class, OrderModel.class);
     }
@@ -39,20 +39,7 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
         OrderModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
-        TemplateVariables pageVariables = new TemplateVariables(
-                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
-
-        TemplateVariables filterVariables = new TemplateVariables(
-                new TemplateVariable("clientId", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("restaurantId", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("creationDateStart", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("creationDateEnd", TemplateVariable.VariableType.REQUEST_PARAM));
-
-        String ordersUrl = linkTo(OrderController.class).toUri().toString();
-
-        orderModel.add(new Link(UriTemplate.of(ordersUrl, pageVariables.concat(filterVariables)), "orders"));
+        orderModel.add(orderLinks.linkToOrders());
 
         orderModel.getRestaurant().add(linkTo(methodOn(RestaurantController.class)
                 .find(order.getRestaurant().getId())).withSelfRel());
