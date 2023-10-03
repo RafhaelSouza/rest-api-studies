@@ -11,8 +11,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 @Component
 public class StateModelAssembler extends RepresentationModelAssemblerSupport<State, StateModel> {
 
@@ -39,7 +37,7 @@ public class StateModelAssembler extends RepresentationModelAssemblerSupport<Sta
     @Override
     public CollectionModel<StateModel> toCollectionModel(Iterable<? extends State> entities) {
         return super.toCollectionModel(entities)
-                .add(linkTo(StateController.class).withSelfRel());
+                .add(stateLinks.linkToStates());
     }
 
     public State toDomainObject(StateInput stateInput) {

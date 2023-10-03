@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.model.order;
 
-import com.studies.foodorders.api.model.restaurant.RestaurantSummaryModel;
+import com.studies.foodorders.api.model.restaurant.RestaurantIdAndNameModel;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -34,7 +34,7 @@ public class OrderSummaryModel extends RepresentationModel<OrderSummaryModel> {
     @ApiModelProperty(example = "2023-09-20T08:57:04Z")
     private OffsetDateTime createdAt;
 
-    private RestaurantSummaryModel restaurant;
+    private RestaurantIdAndNameModel restaurant;
     private UserModel client;
 
 }

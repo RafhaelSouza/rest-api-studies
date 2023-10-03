@@ -1,4 +1,4 @@
-package com.studies.foodorders.api.model.kitchen;
+package com.studies.foodorders.api.model.restaurant;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -6,17 +6,15 @@ import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-@Relation(collectionRelation = "kitchens")
+@Relation(collectionRelation = "restaurants")
 @Setter
 @Getter
-public class KitchenModel extends RepresentationModel<KitchenModel> {
+public class RestaurantIdAndNameModel extends RepresentationModel<RestaurantIdAndNameModel> {
 
     @ApiModelProperty(example = "1")
-    //@JsonView({ RestaurantView.Summary.class })
     private Long id;
 
-    @ApiModelProperty(example = "Italian")
-    //@JsonView({ RestaurantView.Summary.class })
+    @ApiModelProperty(example = "Java Steakhouse")
     private String name;
 
 }

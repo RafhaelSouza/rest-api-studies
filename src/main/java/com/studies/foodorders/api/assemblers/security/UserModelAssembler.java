@@ -11,8 +11,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 @Component
 public class UserModelAssembler extends RepresentationModelAssemblerSupport<User, UserModel> {
 
@@ -42,7 +40,7 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
 	@Override
 	public CollectionModel<UserModel> toCollectionModel(Iterable<? extends User> entities) {
 		return super.toCollectionModel(entities)
-				.add(linkTo(UserController.class).withSelfRel());
+				.add(userLinks.linkToUsers());
 	}
 
 	public User toDomainObject(UserInput userInput) {

@@ -2,7 +2,7 @@ package com.studies.foodorders.api.model.order;
 
 import com.studies.foodorders.api.model.localization.address.AddressModel;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
-import com.studies.foodorders.api.model.restaurant.RestaurantSummaryModel;
+import com.studies.foodorders.api.model.restaurant.RestaurantIdAndNameModel;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -46,7 +46,7 @@ public class OrderModel extends RepresentationModel<OrderModel> {
     @ApiModelProperty(example = "2023-09-20T09:57:04Z")
     private OffsetDateTime canceledAt;
 
-    private RestaurantSummaryModel restaurant;
+    private RestaurantIdAndNameModel restaurant;
     private UserModel client;
     private PaymentWayModel paymentWay;
     private AddressModel deliveryAddress;
