@@ -4,6 +4,7 @@ import com.studies.foodorders.api.openapi.controllers.OrderFlowControllerOpenApi
 import com.studies.foodorders.domain.services.order.OrderFlowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,20 +16,26 @@ public class OrderFlowController implements OrderFlowControllerOpenApi {
 
     @PutMapping("/confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirm(@PathVariable String orderCode) {
+    public ResponseEntity<Void> confirm(@PathVariable String orderCode) {
         orderFlowService.confirm(orderCode);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancel(@PathVariable String orderCode) {
+    public ResponseEntity<Void> cancel(@PathVariable String orderCode) {
         orderFlowService.cancel(orderCode);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/deliver")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deliver(@PathVariable String orderCode) {
+    public ResponseEntity<Void> deliver(@PathVariable String orderCode) {
         orderFlowService.deliver(orderCode);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
