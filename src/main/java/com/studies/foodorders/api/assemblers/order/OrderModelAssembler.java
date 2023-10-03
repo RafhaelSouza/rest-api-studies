@@ -48,11 +48,14 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
 
         orderModel.add(orderLinks.linkToOrders());
 
-        orderModel.add(orderLinks.linkToOrderConfirmation(String.valueOf(order.getCode()), "confirm"));
+        if (order.itCanBeConfirmed())
+            orderModel.add(orderLinks.linkToOrderConfirmation(String.valueOf(order.getCode()), "confirm"));
 
-        orderModel.add(orderLinks.linkToOrderCancellation(String.valueOf(order.getCode()), "cancel"));
+        if (order.itCanBeCancelled())
+            orderModel.add(orderLinks.linkToOrderCancellation(String.valueOf(order.getCode()), "cancel"));
 
-        orderModel.add(orderLinks.linkToOrderDeliver(String.valueOf(order.getCode()), "deliver"));
+        if (order.itCanBeDelivered())
+            orderModel.add(orderLinks.linkToOrderDeliver(String.valueOf(order.getCode()), "deliver"));
 
         orderModel.getRestaurant().add(restaurantLinks.linkToRestaurant(order.getRestaurant().getId()));
 

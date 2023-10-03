@@ -22,6 +22,10 @@ public enum OrderStatus {
         return description;
     }
 
+    public boolean itCanChangeTo(OrderStatus newStatus) {
+        return !itCanNotChangeTo(newStatus);
+    }
+
     public boolean itCanNotChangeTo(OrderStatus newStatus) {
         return !newStatus.previousOrderStatus.contains(this);
     }
