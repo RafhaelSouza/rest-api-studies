@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.assemblers.state;
 
 import com.studies.foodorders.api.controllers.localization.StateController;
+import com.studies.foodorders.api.links.StateLinks;
 import com.studies.foodorders.api.model.localization.state.StateInput;
 import com.studies.foodorders.api.model.localization.state.StateModel;
 import com.studies.foodorders.domain.models.localization.State;
@@ -18,6 +19,9 @@ public class StateModelAssembler extends RepresentationModelAssemblerSupport<Sta
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private StateLinks stateLinks;
+
     public StateModelAssembler() {
         super(StateController.class, StateModel.class);
     }
@@ -27,7 +31,7 @@ public class StateModelAssembler extends RepresentationModelAssemblerSupport<Sta
         StateModel stateModel = createModelWithId(state.getId(), state);
         modelMapper.map(state, stateModel);
 
-        stateModel.add(linkTo(StateController.class).withRel("states"));
+        stateModel.add(stateLinks.linkToStates("states"));
 
         return stateModel;
     }

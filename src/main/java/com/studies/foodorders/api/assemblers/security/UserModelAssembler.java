@@ -1,7 +1,7 @@
 package com.studies.foodorders.api.assemblers.security;
 
 import com.studies.foodorders.api.controllers.security.UserController;
-import com.studies.foodorders.api.controllers.security.UserGroupController;
+import com.studies.foodorders.api.links.UserLinks;
 import com.studies.foodorders.api.model.security.user.UserInput;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import com.studies.foodorders.domain.models.security.User;
@@ -12,13 +12,15 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class UserModelAssembler extends RepresentationModelAssemblerSupport<User, UserModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
+
+	@Autowired
+	private UserLinks userLinks;
 
 	public UserModelAssembler() {
 		super(UserController.class, UserModel.class);
@@ -30,10 +32,9 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
 
 		modelMapper.map(user, userModel);
 
-		userModel.add(linkTo(UserController.class).withRel("users"));
+		userModel.add(userLinks.linkToUsers("users"));
 
-		userModel.add(linkTo(methodOn(UserGroupController.class)
-				.list(user.getId())).withRel("user-group"));
+		userModel.add(userLinks.linkToUserGroups(user.getId(),"user-group"));
 
 		return userModel;
 	}

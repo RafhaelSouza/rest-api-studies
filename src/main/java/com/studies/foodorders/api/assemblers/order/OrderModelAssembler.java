@@ -1,12 +1,7 @@
 package com.studies.foodorders.api.assemblers.order;
 
-import com.studies.foodorders.api.controllers.localization.CityController;
 import com.studies.foodorders.api.controllers.order.OrderController;
-import com.studies.foodorders.api.controllers.paymentway.PaymentWayController;
-import com.studies.foodorders.api.controllers.restaurant.RestaurantController;
-import com.studies.foodorders.api.controllers.restaurant.RestaurantProductController;
-import com.studies.foodorders.api.controllers.security.UserController;
-import com.studies.foodorders.api.links.OrderLinks;
+import com.studies.foodorders.api.links.*;
 import com.studies.foodorders.api.model.order.OrderInput;
 import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.domain.models.order.Order;
@@ -18,9 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Component
 public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Order, OrderModel> {
 
@@ -29,6 +21,21 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
 
     @Autowired
     private OrderLinks orderLinks;
+
+    @Autowired
+    private RestaurantLinks restaurantLinks;
+
+    @Autowired
+    private UserLinks userLinks;
+
+    @Autowired
+    private PaymentWayLinks paymentWayLinks;
+
+    @Autowired
+    private CityLinks cityLinks;
+
+    @Autowired
+    private ProductLinks productLinks;
 
     public OrderModelAssembler() {
         super(OrderController.class, OrderModel.class);
@@ -41,22 +48,16 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
 
         orderModel.add(orderLinks.linkToOrders());
 
-        orderModel.getRestaurant().add(linkTo(methodOn(RestaurantController.class)
-                .find(order.getRestaurant().getId())).withSelfRel());
+        orderModel.getRestaurant().add(restaurantLinks.linkToRestaurant(order.getRestaurant().getId()));
 
-        orderModel.getClient().add(linkTo(methodOn(UserController.class)
-                .find(order.getClient().getId())).withSelfRel());
+        orderModel.getClient().add(userLinks.linkToUser(order.getClient().getId()));
 
-        orderModel.getPaymentWay().add(linkTo(methodOn(PaymentWayController.class)
-                .find(order.getPaymentWay().getId(), null)).withSelfRel());
+        orderModel.getPaymentWay().add(paymentWayLinks.linkToPaymentWay(order.getPaymentWay().getId()));
 
-        orderModel.getDeliveryAddress().getCity().add(linkTo(methodOn(CityController.class)
-                .find(order.getDeliveryAddress().getCity().getId())).withSelfRel());
+        orderModel.getDeliveryAddress().getCity().add(cityLinks.linkToCity(order.getDeliveryAddress().getCity().getId()));
 
         orderModel.getItems().forEach(item -> {
-            item.add(linkTo(methodOn(RestaurantProductController.class)
-                    .find(orderModel.getRestaurant().getId(), item.getProductId()))
-                    .withRel("product"));
+            item.add(productLinks.linkToProduct(orderModel.getRestaurant().getId(), item.getProductId(), "product"));
         });
 
         return orderModel;

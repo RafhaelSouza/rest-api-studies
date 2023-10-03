@@ -1,8 +1,9 @@
 package com.studies.foodorders.api.assemblers.order;
 
 import com.studies.foodorders.api.controllers.order.OrderController;
-import com.studies.foodorders.api.controllers.restaurant.RestaurantController;
-import com.studies.foodorders.api.controllers.security.UserController;
+import com.studies.foodorders.api.links.OrderLinks;
+import com.studies.foodorders.api.links.RestaurantLinks;
+import com.studies.foodorders.api.links.UserLinks;
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
 import com.studies.foodorders.domain.models.order.Order;
 import org.modelmapper.ModelMapper;
@@ -13,14 +14,20 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Component
 public class OrderSummaryModelAssembler extends RepresentationModelAssemblerSupport<Order, OrderSummaryModel> {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private OrderLinks orderLinks;
+
+    @Autowired
+    private RestaurantLinks restaurantLinks;
+
+    @Autowired
+    private UserLinks userLinks;
 
     public OrderSummaryModelAssembler() {
         super(OrderController.class, OrderSummaryModel.class);
@@ -31,13 +38,11 @@ public class OrderSummaryModelAssembler extends RepresentationModelAssemblerSupp
         OrderSummaryModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(linkTo(OrderController.class).withRel("orders"));
+        orderModel.add(orderLinks.linkToOrders());
 
-        orderModel.getRestaurant().add(linkTo(methodOn(RestaurantController.class)
-                .find(order.getRestaurant().getId())).withSelfRel());
+        orderModel.getRestaurant().add(restaurantLinks.linkToRestaurant(order.getRestaurant().getId()));
 
-        orderModel.getClient().add(linkTo(methodOn(UserController.class)
-                .find(order.getClient().getId())).withSelfRel());
+        orderModel.getClient().add(userLinks.linkToUser(order.getClient().getId()));
 
         return orderModel;
     }

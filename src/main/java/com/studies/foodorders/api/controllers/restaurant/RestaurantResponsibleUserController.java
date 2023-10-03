@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
 import com.studies.foodorders.api.assemblers.security.UserModelAssembler;
+import com.studies.foodorders.api.links.RestaurantLinks;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import com.studies.foodorders.api.openapi.controllers.RestaurantResponsibleUserControllerOpenApi;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
@@ -10,9 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @RestController
 @RequestMapping(value = "/restaurants/{restaurantId}/responsible")
 public class RestaurantResponsibleUserController implements RestaurantResponsibleUserControllerOpenApi {
@@ -21,9 +19,14 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
 
     private UserModelAssembler userModelAssembler;
 
-    public RestaurantResponsibleUserController(RestaurantService restaurantService, UserModelAssembler userModelAssembler) {
+    private RestaurantLinks restaurantLinks;
+
+    public RestaurantResponsibleUserController(RestaurantService restaurantService,
+                                               UserModelAssembler userModelAssembler,
+                                               RestaurantLinks restaurantLinks) {
         this.restaurantService = restaurantService;
         this.userModelAssembler = userModelAssembler;
+        this.restaurantLinks = restaurantLinks;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -32,7 +35,7 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
 
         return userModelAssembler.toCollectionModel(restaurant.getResponsible())
                 .removeLinks()
-                .add(linkTo(methodOn(RestaurantResponsibleUserController.class).list(restaurantId)).withSelfRel());
+                .add(restaurantLinks.linkToRestaurantResponsible(restaurantId));
     }
 
     @PutMapping("/{userId}")

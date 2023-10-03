@@ -1,7 +1,8 @@
 package com.studies.foodorders.api.assemblers.city;
 
 import com.studies.foodorders.api.controllers.localization.CityController;
-import com.studies.foodorders.api.controllers.localization.StateController;
+import com.studies.foodorders.api.links.CityLinks;
+import com.studies.foodorders.api.links.StateLinks;
 import com.studies.foodorders.api.model.localization.city.CityInput;
 import com.studies.foodorders.api.model.localization.city.CityModel;
 import com.studies.foodorders.domain.models.localization.City;
@@ -13,7 +14,6 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class CityModelAssembler extends RepresentationModelAssemblerSupport<City, CityModel> {
@@ -21,28 +21,25 @@ public class CityModelAssembler extends RepresentationModelAssemblerSupport<City
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CityLinks cityLinks;
+
+    @Autowired
+    private StateLinks stateLinks;
+
     public CityModelAssembler() {
         super(CityController.class, CityModel.class);
     }
 
     public CityModel toModel(City city) {
 
-        /*CityModel cityModel = modelMapper.map(city, CityModel.class);
-
-        cityModel.add(linkTo(methodOn(CityController.class)
-                .find(cityModel.getId())).withSelfRel());*/
-
-        // This approach replaces the implementation above
         CityModel cityModel = createModelWithId(city.getId(), city);
 
         modelMapper.map(city, cityModel);
 
-        cityModel.add(linkTo(methodOn(CityController.class)
-                .list()).withRel("cities"));
+        cityModel.add(cityLinks.linkToCities("cities"));
 
-        cityModel.getState().add(linkTo(methodOn(StateController.class)
-                .find(cityModel.getState().getId())).withSelfRel());
-
+        cityModel.getState().add(stateLinks.linkToState(cityModel.getState().getId()));
 
         return cityModel;
     }
