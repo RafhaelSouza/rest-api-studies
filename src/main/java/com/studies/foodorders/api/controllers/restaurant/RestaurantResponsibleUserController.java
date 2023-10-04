@@ -9,6 +9,7 @@ import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,21 +34,33 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
     public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
 
-        return userModelAssembler.toCollectionModel(restaurant.getResponsible())
+        CollectionModel<UserModel> usersModel = userModelAssembler.toCollectionModel(restaurant.getResponsible())
                 .removeLinks()
-                .add(restaurantLinks.linkToRestaurantResponsible(restaurantId));
+                .add(restaurantLinks.linkToRestaurantResponsible(restaurantId))
+                .add(restaurantLinks.linkToRestaurantResponsibleAssociation(restaurantId, "associate"));
+
+        usersModel.getContent().stream().forEach(userModel -> {
+            userModel.add(restaurantLinks.linkToRestaurantResponsibleDisassociation(
+                    restaurantId, userModel.getId(), "disassociate"));
+        });
+
+        return usersModel;
     }
 
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
+    public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
         restaurantService.associateResponsible(restaurantId, userId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {
+    public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {
         restaurantService.disassociateResponsible(restaurantId, userId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

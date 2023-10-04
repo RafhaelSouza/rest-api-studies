@@ -59,6 +59,17 @@ public class RestaurantLinks {
                 .list(restaurantId)).withRel(rel);
     }
 
+    public Link linkToRestaurantResponsibleAssociation(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantResponsibleUserController.class)
+                .associate(restaurantId, null)).withRel(rel);
+    }
+
+    public Link linkToRestaurantResponsibleDisassociation(Long restaurantId, Long userId, String rel) {
+
+        return linkTo(methodOn(RestaurantResponsibleUserController.class)
+                .disassociate(restaurantId, userId)).withRel(rel);
+    }
+
     public Link linkToRestaurantResponsible(Long restaurantId) {
         return linkToRestaurantResponsible(restaurantId, IanaLinkRelations.SELF.value());
     }
