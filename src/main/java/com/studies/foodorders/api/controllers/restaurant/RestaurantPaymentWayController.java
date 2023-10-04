@@ -32,7 +32,8 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 		CollectionModel<PaymentWayModel> paymentWaysModel =
 				paymentWayModelAssembler.toCollectionModel(restaurant.getPaymentWay())
 				.removeLinks()
-				.add(restaurantLinks.linkToRestaurantPaymentWays(restaurantId));
+				.add(restaurantLinks.linkToRestaurantPaymentWays(restaurantId))
+				.add(restaurantLinks.linkToRestaurantPaymentWayAssociation(restaurantId, "associate"));
 
 		paymentWaysModel.getContent().forEach(paymentWayModel -> {
 			paymentWayModel.add(restaurantLinks.linkToRestaurantPaymentWayDisassociation(
