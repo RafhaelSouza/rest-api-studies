@@ -33,9 +33,13 @@ public class RestaurantLinks {
         return linkToRestaurants(IanaLinkRelations.SELF.value());
     }
 
-    public Link linkToRestaurantPaymentWay(Long restaurantId, String rel) {
+    public Link linkToRestaurantPaymentWays(Long restaurantId, String rel) {
         return linkTo(methodOn(RestaurantPaymentWayController.class)
                 .list(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantPaymentWays(Long restaurantId) {
+        return linkToRestaurantPaymentWays(restaurantId, IanaLinkRelations.SELF.value());
     }
 
     public Link linkToRestaurantResponsible(Long restaurantId, String rel) {

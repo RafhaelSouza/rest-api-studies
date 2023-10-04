@@ -3,8 +3,7 @@ package com.studies.foodorders.api.openapi.controllers;
 import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Restaurants")
 public interface RestaurantPaymentWayControllerOpenApi {
@@ -13,7 +12,7 @@ public interface RestaurantPaymentWayControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Restaurant not found", response = ApiError.class)
     })
-    List<PaymentWayModel> list(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId);
+    CollectionModel<PaymentWayModel> list(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId);
 
     @ApiOperation("Restaurant association with payment method")
     @ApiResponses({

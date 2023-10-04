@@ -1,12 +1,13 @@
 package com.studies.foodorders.api.controllers.paymentway;
 
-import com.studies.foodorders.api.assemblers.paymentway.PaymentWayModelConverter;
+import com.studies.foodorders.api.assemblers.paymentway.PaymentWayModelAssembler;
 import com.studies.foodorders.api.model.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import com.studies.foodorders.api.openapi.controllers.PaymentWayControllerOpenApi;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.services.paymentway.PaymentWayService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +18,6 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import javax.validation.Valid;
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -27,10 +27,10 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
     @Autowired
     private PaymentWayService paymentWayService;
     @Autowired
-    private PaymentWayModelConverter paymentWayModelConverter;
+    private PaymentWayModelAssembler paymentWayModelAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PaymentWayModel>> list(ServletWebRequest request) {
+    public ResponseEntity<CollectionModel<PaymentWayModel>> list(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
         String eTag = "0";
@@ -43,7 +43,8 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
         if (request.checkNotModified(eTag))
             return null;
 
-        List<PaymentWayModel> paymentWays = paymentWayModelConverter.toCollectionModel(paymentWayService.list());
+        CollectionModel<PaymentWayModel> paymentWays =
+                paymentWayModelAssembler.toCollectionModel(paymentWayService.list());
 
         return ResponseEntity.ok()
                 // Only browser can make cache
@@ -72,7 +73,7 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
         if (request.checkNotModified(eTag))
             return null;
 
-        PaymentWayModel paymentWay = paymentWayModelConverter.toModel(paymentWayService.findIfExists(id));
+        PaymentWayModel paymentWay = paymentWayModelAssembler.toModel(paymentWayService.findIfExists(id));
 
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
@@ -83,9 +84,9 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentWayModel save(@RequestBody @Valid PaymentWayInput paymentWayInput) {
-        PaymentWay paymentWay = paymentWayModelConverter.toDomainObject(paymentWayInput);
+        PaymentWay paymentWay = paymentWayModelAssembler.toDomainObject(paymentWayInput);
 
-        return paymentWayModelConverter.toModel(paymentWayService.save(paymentWay));
+        return paymentWayModelAssembler.toModel(paymentWayService.save(paymentWay));
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -93,9 +94,9 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
                                   @RequestBody @Valid PaymentWayInput paymentWayInput) {
         PaymentWay currentPaymentWay = paymentWayService.findIfExists(id);
 
-        paymentWayModelConverter.copyToDomainObject(paymentWayInput, currentPaymentWay);
+        paymentWayModelAssembler.copyToDomainObject(paymentWayInput, currentPaymentWay);
 
-        return paymentWayModelConverter.toModel(paymentWayService.save(currentPaymentWay));
+        return paymentWayModelAssembler.toModel(paymentWayService.save(currentPaymentWay));
     }
 
     @DeleteMapping("/{id}")

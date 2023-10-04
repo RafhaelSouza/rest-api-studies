@@ -4,16 +4,15 @@ import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
-
-import java.util.List;
 
 @Api(tags = "Payment Ways")
 public interface PaymentWayControllerOpenApi {
 
     @ApiOperation("List of payment ways")
-    ResponseEntity<List<PaymentWayModel>> list(ServletWebRequest request);
+    ResponseEntity<CollectionModel<PaymentWayModel>> list(ServletWebRequest request);
 
     @ApiOperation("Find a payment way by id")
     @ApiResponses({

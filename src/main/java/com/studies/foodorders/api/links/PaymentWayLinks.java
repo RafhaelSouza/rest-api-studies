@@ -20,4 +20,12 @@ public class PaymentWayLinks {
         return linkToPaymentWay(paymentWayId, IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToPaymentWays(String rel) {
+        return linkTo(PaymentWayController.class).withRel(rel);
+    }
+
+    public Link linkToPaymentWays() {
+        return linkToPaymentWays(IanaLinkRelations.SELF.value());
+    }
+
 }
