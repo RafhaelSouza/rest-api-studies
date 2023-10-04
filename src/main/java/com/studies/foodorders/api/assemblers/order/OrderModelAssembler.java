@@ -46,7 +46,7 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
         OrderModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(orderLinks.linkToOrders());
+        orderModel.add(orderLinks.linkToOrders("orders"));
 
         if (order.itCanBeConfirmed())
             orderModel.add(orderLinks.linkToOrderConfirmation(String.valueOf(order.getCode()), "confirm"));

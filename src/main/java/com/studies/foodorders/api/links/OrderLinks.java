@@ -14,7 +14,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class OrderLinks {
 
-    public Link linkToOrders() {
+    public Link linkToOrders(String rel) {
         TemplateVariables filterVariables = new TemplateVariables(
                 new TemplateVariable("clientId", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("restaurantId", TemplateVariable.VariableType.REQUEST_PARAM),
@@ -23,7 +23,7 @@ public class OrderLinks {
 
         String ordersUrl = linkTo(OrderController.class).toUri().toString();
 
-        return new Link(UriTemplate.of(ordersUrl, CommonLinks.VARIABLES_PAGINATION.concat(filterVariables)), "orders");
+        return new Link(UriTemplate.of(ordersUrl, CommonLinks.VARIABLES_PAGINATION.concat(filterVariables)), rel);
     }
 
     public Link linkToOrderConfirmation(String orderCode, String rel) {

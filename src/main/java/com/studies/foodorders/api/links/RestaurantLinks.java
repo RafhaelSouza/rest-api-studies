@@ -5,6 +5,7 @@ import com.studies.foodorders.api.controllers.restaurant.RestaurantPaymentWayCon
 import com.studies.foodorders.api.controllers.restaurant.RestaurantResponsibleUserController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.UriTemplate;
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -23,7 +24,9 @@ public class RestaurantLinks {
     }
 
     public Link linkToRestaurants(String rel) {
-        return linkTo(RestaurantController.class).withRel(rel);
+        String restaurantsUrl = linkTo(RestaurantController.class).toUri().toString();
+
+        return new Link(UriTemplate.of(restaurantsUrl, CommonLinks.VARIABLES_PROJECTION), rel);
     }
 
     public Link linkToRestaurants() {

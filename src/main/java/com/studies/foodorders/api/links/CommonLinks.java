@@ -10,4 +10,7 @@ public class CommonLinks {
             new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
             new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
 
+    public static final TemplateVariables VARIABLES_PROJECTION = new TemplateVariables(
+            new TemplateVariable("projection", TemplateVariable.VariableType.REQUEST_PARAM));
+
 }
