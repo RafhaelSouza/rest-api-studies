@@ -44,4 +44,24 @@ public class RestaurantLinks {
         return linkToRestaurantResponsible(restaurantId, IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToRestaurantOpening(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .toOpen(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantClosing(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .toClose(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantActivation(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .activate(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantInactivation(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .inactivate(restaurantId)).withRel(rel);
+    }
+
 }
