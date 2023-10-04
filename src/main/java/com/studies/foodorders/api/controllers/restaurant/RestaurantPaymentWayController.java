@@ -9,6 +9,7 @@ import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,22 +28,34 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 	@GetMapping
 	public CollectionModel<PaymentWayModel> list(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findIfExists(restaurantId);
-		
-		return paymentWayModelAssembler.toCollectionModel(restaurant.getPaymentWay())
+
+		CollectionModel<PaymentWayModel> paymentWaysModel =
+				paymentWayModelAssembler.toCollectionModel(restaurant.getPaymentWay())
 				.removeLinks()
 				.add(restaurantLinks.linkToRestaurantPaymentWays(restaurantId));
+
+		paymentWaysModel.getContent().forEach(paymentWayModel -> {
+			paymentWayModel.add(restaurantLinks.linkToRestaurantPaymentWayDisassociation(
+					restaurantId, paymentWayModel.getId(), "disassociate"));
+		});
+
+		return paymentWaysModel;
 	}
 	
 	@PutMapping("/{paymentWayId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void associate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {
+	public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {
 		restaurantService.associatePaymentWay(restaurantId, paymentWayId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{paymentWayId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void disassociate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {
+	public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {
 		restaurantService.disassociatePaymentWay(restaurantId, paymentWayId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 }
