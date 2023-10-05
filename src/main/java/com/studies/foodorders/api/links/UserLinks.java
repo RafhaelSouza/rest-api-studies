@@ -38,4 +38,14 @@ public class UserLinks {
         return linkToUserGroups(userId, IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToUserGroupAssociate(Long userId, String rel) {
+        return linkTo(methodOn(UserGroupController.class)
+                .associate(userId, null)).withRel(rel);
+    }
+
+    public Link linkToUserGroupDisassociate(Long userId, Long groupId, String rel) {
+        return linkTo(methodOn(UserGroupController.class)
+                .disassociate(userId, groupId)).withRel(rel);
+    }
+
 }

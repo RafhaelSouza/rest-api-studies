@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.controllers.security;
 
 import com.studies.foodorders.api.assemblers.security.GroupModelAssembler;
+import com.studies.foodorders.api.links.UserLinks;
 import com.studies.foodorders.api.model.security.group.GroupModel;
 import com.studies.foodorders.api.openapi.controllers.UserGroupControllerOpenApi;
 import com.studies.foodorders.domain.models.security.User;
@@ -8,6 +9,7 @@ import com.studies.foodorders.domain.services.security.UserService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,29 +20,44 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 
     private GroupModelAssembler groupModelAssembler;
 
-    public UserGroupController(UserService userService, GroupModelAssembler groupModelAssembler) {
+    private UserLinks userLinks;
+
+    public UserGroupController(UserService userService, GroupModelAssembler groupModelAssembler, UserLinks userLinks) {
         this.userService = userService;
         this.groupModelAssembler = groupModelAssembler;
+        this.userLinks = userLinks;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<GroupModel> list(@PathVariable Long userId) {
         User user = userService.findIfExists(userId);
 
-        return groupModelAssembler.toCollectionModel(user.getGroups())
-                .removeLinks();
+        CollectionModel<GroupModel> groupsModel = groupModelAssembler.toCollectionModel(user.getGroups())
+                .removeLinks()
+                .add(userLinks.linkToUserGroupAssociate(userId, "associate"));
+
+        groupsModel.getContent().forEach(groupModel -> {
+            groupModel.add(userLinks.linkToUserGroupDisassociate(
+                    userId, groupModel.getId(), "disassociate"));
+        });
+
+        return groupsModel;
     }
 
     @PutMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associate(@PathVariable Long userId, @PathVariable Long groupId) {
+    public ResponseEntity<Void> associate(@PathVariable Long userId, @PathVariable Long groupId) {
         userService.groupAssociate(userId, groupId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desassociar(@PathVariable Long userId, @PathVariable Long groupId) {
+    public ResponseEntity<Void> disassociate(@PathVariable Long userId, @PathVariable Long groupId) {
         userService.groupDisassociate(userId, groupId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
