@@ -20,9 +20,23 @@ public class GroupLinks {
         return linkToGroups(IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToGroupPermissions(Long groupId) {
+        return linkToGroupPermissions(groupId, IanaLinkRelations.SELF.value());
+    }
+
     public Link linkToGroupPermissions(Long groupId, String rel) {
         return linkTo(methodOn(GroupPermissionController.class)
                 .list(groupId)).withRel(rel);
+    }
+
+    public Link linkToGroupPermissionAssociate(Long groupId, String rel) {
+        return linkTo(methodOn(GroupPermissionController.class)
+                .associate(groupId, null)).withRel(rel);
+    }
+
+    public Link linkToGroupPermissionDisassociate(Long groupId, Long permissionId, String rel) {
+        return linkTo(methodOn(GroupPermissionController.class)
+                .disassociate(groupId, permissionId)).withRel(rel);
     }
 
 }
