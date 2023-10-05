@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.links;
 
 import com.studies.foodorders.api.controllers.restaurant.RestaurantProductController;
+import com.studies.foodorders.api.controllers.restaurant.RestaurantProductPhotoController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,15 @@ public class ProductLinks {
 
     public Link linkToProducts(Long restaurantId) {
         return linkToProducts(restaurantId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToProductPhoto(Long restaurantId, Long productId, String rel) {
+        return linkTo(methodOn(RestaurantProductPhotoController.class)
+                .find(restaurantId, productId)).withRel(rel);
+    }
+
+    public Link linkToProductPhoto(Long restaurantId, Long productId) {
+        return linkToProductPhoto(restaurantId, productId, IanaLinkRelations.SELF.value());
     }
 
 }

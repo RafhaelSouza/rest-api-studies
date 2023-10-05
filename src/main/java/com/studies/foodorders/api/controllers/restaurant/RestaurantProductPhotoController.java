@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.studies.foodorders.api.assemblers.product.ProductPhotoModelConverter;
+import com.studies.foodorders.api.assemblers.product.ProductPhotoModelAssembler;
 import com.studies.foodorders.api.model.product.ProductPhotoInput;
 import com.studies.foodorders.api.model.product.ProductPhotoModel;
 import com.studies.foodorders.api.openapi.controllers.RestaurantProductPhotoControllerOpenApi;
@@ -39,14 +39,14 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
     private ProductPhotoStorageService photoStorageService;
 
     @Autowired
-    private ProductPhotoModelConverter converter;
+    private ProductPhotoModelAssembler productPhotoModelAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductPhotoModel find(@PathVariable Long restaurantId,
                                    @PathVariable Long productId) {
         ProductPhoto productPhoto = productPhotoService.findIfExists(restaurantId, productId);
 
-        return converter.toModel(productPhoto);
+        return productPhotoModelAssembler.toModel(productPhoto);
     }
 
     @GetMapping(produces = MediaType.ALL_VALUE)
@@ -99,7 +99,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 
         ProductPhoto savedProductPhoto = productPhotoService.save(productPhoto, file.getInputStream());
 
-        return converter.toModel(savedProductPhoto);
+        return productPhotoModelAssembler.toModel(savedProductPhoto);
 
     }
 

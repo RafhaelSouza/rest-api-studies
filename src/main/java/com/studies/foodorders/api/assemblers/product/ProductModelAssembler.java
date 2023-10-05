@@ -30,6 +30,8 @@ public class ProductModelAssembler extends RepresentationModelAssemblerSupport<P
         modelMapper.map(product, productModel);
 
         productModel.add(productLinks.linkToProducts(product.getRestaurant().getId(), "products"));
+        productModel.add(productLinks.linkToProductPhoto(product.getRestaurant().getId(),
+                product.getId(), "photo"));
 
         return productModel;
     }
