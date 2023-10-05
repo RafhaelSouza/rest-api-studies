@@ -3,8 +3,7 @@ package com.studies.foodorders.api.openapi.controllers;
 import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.security.group.GroupModel;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Users")
 public interface UserGroupControllerOpenApi {
@@ -13,7 +12,7 @@ public interface UserGroupControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "User not found", response = ApiError.class)
     })
-    List<GroupModel> list(@ApiParam(value = "User id", example = "1", required = true) Long userId);
+    CollectionModel<GroupModel> list(@ApiParam(value = "User id", example = "1", required = true) Long userId);
 
     @ApiOperation("Association with user group")
     @ApiResponses({
