@@ -1,11 +1,13 @@
 package com.studies.foodorders.api.controllers.sells;
 
+import com.studies.foodorders.api.links.StatisticLinks;
 import com.studies.foodorders.api.openapi.controllers.StatisticsControllerOpenApi;
 import com.studies.foodorders.domain.filter.DailySellsFilter;
 import com.studies.foodorders.domain.models.order.dto.DailySells;
 import com.studies.foodorders.domain.repositories.sells.SellsReportRepository;
 import com.studies.foodorders.domain.repositories.sells.SellsRepositoryQueries;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,18 @@ public class StatisticsController implements StatisticsControllerOpenApi {
 
 	@Autowired
 	private SellsReportRepository sellsReportRepository;
+
+	@Autowired
+	private StatisticLinks statisticLinks;
+
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public StatisticsModel statistics() {
+		var statisticsModel = new StatisticsModel();
+
+		statisticsModel.add(statisticLinks.linkToStatisticsSailySells("daily-sells"));
+
+		return statisticsModel;
+	}
 	
 	@GetMapping(path = "/daily-sells", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<DailySells> searchDailySales(DailySellsFilter filter) {
@@ -42,5 +56,7 @@ public class StatisticsController implements StatisticsControllerOpenApi {
 				.headers(headers)
 				.body(bytesPdf);
 	}
+
+	public static class StatisticsModel extends RepresentationModel<StatisticsModel> {}
 	
 }

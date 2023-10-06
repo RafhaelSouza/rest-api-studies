@@ -38,6 +38,9 @@ public class RootEntryPointController {
 	@Autowired
 	private PermissionLinks permissionLinks;
 
+	@Autowired
+	private StatisticLinks statisticLinks;
+
 	@GetMapping
 	public RootEntryPointModel root() {
 		var rootEntryPointModel = new RootEntryPointModel();
@@ -50,6 +53,7 @@ public class RootEntryPointController {
 		rootEntryPointModel.add(orderLinks.linkToOrders("orders"));
 		rootEntryPointModel.add(userLinks.linkToUsers("users"));
 		rootEntryPointModel.add(permissionLinks.linkToPermissions("permissions"));
+		rootEntryPointModel.add(statisticLinks.linkToStatistics("statistics"));
 
 		return rootEntryPointModel;
 	}
