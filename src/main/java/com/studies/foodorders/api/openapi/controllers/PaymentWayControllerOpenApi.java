@@ -3,6 +3,7 @@ package com.studies.foodorders.api.openapi.controllers;
 import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
+import com.studies.foodorders.api.openapi.models.PaymentWaysModelOpenApi;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,10 @@ import org.springframework.web.context.request.ServletWebRequest;
 @Api(tags = "Payment Ways")
 public interface PaymentWayControllerOpenApi {
 
-    @ApiOperation("List of payment ways")
+    @ApiOperation(value = "List of payment ways")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = PaymentWaysModelOpenApi.class)
+    })
     ResponseEntity<CollectionModel<PaymentWayModel>> list(ServletWebRequest request);
 
     @ApiOperation("Find a payment way by id")
