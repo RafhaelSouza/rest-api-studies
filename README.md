@@ -28,7 +28,7 @@
 
 ✔️ OpenAPI Documentation (Swagger e SpringFox)
 
-✖️ HATEOAS and Discoverability
+✔️ HATEOAS and Discoverability
 
 ✖️️️ Spring Security, OAuth2 e JWT (Opaque Tokens and Transparent Tokens)
 
