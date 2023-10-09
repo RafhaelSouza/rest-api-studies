@@ -5,7 +5,6 @@ import com.studies.foodorders.api.model.restaurant.RestaurantBasicModel;
 import com.studies.foodorders.api.model.restaurant.RestaurantIdAndNameModel;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
 import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
-import com.studies.foodorders.api.openapi.models.RestaurantBasicModelOpenApi;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ import java.util.List;
 @Api(tags = "Restaurants")
 public interface RestaurantControllerOpenApi {
 
-    @ApiOperation(value = "List of restaurants", response = RestaurantBasicModelOpenApi.class)
+    @ApiOperation(value = "List of restaurants")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "Order projection name", allowableValues = "id-and-name",
                     name = "projection", paramType = "query", type = "string")
