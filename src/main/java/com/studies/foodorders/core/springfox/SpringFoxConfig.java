@@ -5,13 +5,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.kitchen.KitchenModel;
 import com.studies.foodorders.api.model.localization.city.CityModel;
-import com.studies.foodorders.api.openapi.models.CitiesModelOpenApi;
-import com.studies.foodorders.api.openapi.models.KitchensModelOpenApi;
-import com.studies.foodorders.api.openapi.models.LinksModelOpenApi;
-import com.studies.foodorders.api.openapi.models.PageableModelOpenApi;
+import com.studies.foodorders.api.model.localization.state.StateModel;
+import com.studies.foodorders.api.model.order.OrderSummaryModel;
+import com.studies.foodorders.api.openapi.models.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
@@ -66,11 +66,17 @@ public class SpringFoxConfig {
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
 				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules.newRule(
+						typeResolver.resolve(Page.class, OrderSummaryModel.class),
+						OrdersSummaryModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(PagedModel.class, KitchenModel.class),
 						KitchensModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(CollectionModel.class, CityModel.class),
 						CitiesModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(
+						typeResolver.resolve(CollectionModel.class, StateModel.class),
+						StatesModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cities", "Manage Cities"),
 						new Tag("Groups", "Manage User Groups"),
