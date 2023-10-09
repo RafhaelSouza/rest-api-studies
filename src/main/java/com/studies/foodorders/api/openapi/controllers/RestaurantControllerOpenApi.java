@@ -8,6 +8,7 @@ import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public interface RestaurantControllerOpenApi {
     //@JsonView({ RestaurantView.Summary.class })
     CollectionModel<RestaurantBasicModel> list();
 
+    @ApiIgnore
     @ApiOperation(value = "List of restaurants", hidden = true)
     CollectionModel<RestaurantIdAndNameModel> listIdAndName();
 
