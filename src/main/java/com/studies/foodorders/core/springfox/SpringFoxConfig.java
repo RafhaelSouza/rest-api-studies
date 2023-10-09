@@ -8,6 +8,7 @@ import com.studies.foodorders.api.model.localization.city.CityModel;
 import com.studies.foodorders.api.model.localization.state.StateModel;
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
+import com.studies.foodorders.api.model.product.ProductModel;
 import com.studies.foodorders.api.model.security.group.GroupModel;
 import com.studies.foodorders.api.model.security.permission.PermissionModel;
 import com.studies.foodorders.api.openapi.models.*;
@@ -88,6 +89,9 @@ public class SpringFoxConfig {
 				.alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(CollectionModel.class, PermissionModel.class),
 						PermissionsModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(
+						typeResolver.resolve(CollectionModel.class, ProductModel.class),
+						ProductsModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cities", "Manage Cities"),
 						new Tag("Groups", "Manage User Groups"),
