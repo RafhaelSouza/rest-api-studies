@@ -30,7 +30,7 @@ public class KitchenModelAssembler extends RepresentationModelAssemblerSupport<K
 
         kitchenModel.add(kitchenLinks.linkToKitchens("kitchens"));
 
-        return modelMapper.map(kitchen, KitchenModel.class);
+        return kitchenModel;
     }
 
     public Kitchen toDomainObject(KitchenInput kitchenInput) {
