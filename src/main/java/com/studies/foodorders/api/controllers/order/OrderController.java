@@ -1,11 +1,12 @@
 package com.studies.foodorders.api.controllers.order;
 
-import com.studies.foodorders.api.converter.order.OrderModelConverter;
-import com.studies.foodorders.api.converter.order.OrderSummaryModelConverter;
+import com.studies.foodorders.api.assemblers.order.OrderModelAssembler;
+import com.studies.foodorders.api.assemblers.order.OrderSummaryModelAssembler;
 import com.studies.foodorders.api.model.order.OrderInput;
 import com.studies.foodorders.api.model.order.OrderModel;
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
 import com.studies.foodorders.api.openapi.controllers.OrderControllerOpenApi;
+import com.studies.foodorders.core.data.PageWrapper;
 import com.studies.foodorders.core.data.PageableCast;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.filter.OrderFilter;
@@ -16,16 +17,16 @@ import com.studies.foodorders.domain.services.order.OrderService;
 import com.studies.foodorders.infrastructure.repositories.restaurant.specifications.OrderSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,40 +40,42 @@ public class OrderController implements OrderControllerOpenApi {
     private OrderService orderService;
 
     @Autowired
-    private OrderModelConverter orderModelConverter;
+    private OrderModelAssembler orderModelAssembler;
 
     @Autowired
-    private OrderSummaryModelConverter orderSummaryModelConverter;
+    private OrderSummaryModelAssembler orderSummaryModelAssembler;
+
+    @Autowired
+    private PagedResourcesAssembler<Order> pagedResourcesAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<OrderSummaryModel> searchBy(@PageableDefault(size = 5) Pageable pageable, OrderFilter filters) {
-        pageable = castPageable(pageable);
+    public PagedModel<OrderSummaryModel> searchBy(@PageableDefault(size = 5) Pageable pageable, OrderFilter filters) {
+        Pageable castPageable = castPageable(pageable);
 
-        Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(filters), pageable);
+        Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(filters), castPageable);
 
-        List<OrderSummaryModel> ordersSummaryModel = orderSummaryModelConverter
-                .toCollectionModel(ordersPage.getContent());
+        ordersPage = new PageWrapper<>(ordersPage, pageable);
 
-        return new PageImpl<>(ordersSummaryModel, pageable, ordersPage.getTotalElements());
+        return pagedResourcesAssembler.toModel(ordersPage, orderSummaryModelAssembler);
     }
 
     @GetMapping(path = "/{orderCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderModel find(@PathVariable String orderCode) {
-        return orderModelConverter.toModel(orderService.findIfExists(orderCode));
+        return orderModelAssembler.toModel(orderService.findIfExists(orderCode));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public OrderModel add(@Valid @RequestBody OrderInput orderInput) {
         try {
-            Order newOrder = orderModelConverter.toDomainObject(orderInput);
+            Order newOrder = orderModelAssembler.toDomainObject(orderInput);
 
             newOrder.setClient(new User());
             newOrder.getClient().setId(1L);
 
             newOrder = orderService.makeOrder(newOrder);
 
-            return orderModelConverter.toModel(newOrder);
+            return orderModelAssembler.toModel(newOrder);
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }

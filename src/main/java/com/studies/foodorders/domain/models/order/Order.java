@@ -142,6 +142,18 @@ public class Order extends AbstractAggregateRoot<Order> implements Serializable 
         this.status = newStatus;
     }
 
+    public boolean itCanBeConfirmed() {
+        return getStatus().itCanChangeTo(OrderStatus.CONFIRMED);
+    }
+
+    public boolean itCanBeCancelled() {
+        return getStatus().itCanChangeTo(OrderStatus.CANCELLED);
+    }
+
+    public boolean itCanBeDelivered() {
+        return getStatus().itCanChangeTo(OrderStatus.DELIVERED);
+    }
+
     @PrePersist
     private void codeGenerate() {
         setCode(UUID.randomUUID());

@@ -6,14 +6,13 @@ import com.studies.foodorders.api.model.security.user.UserInput;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import com.studies.foodorders.api.model.security.user.UserWithPasswordInput;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Users")
 public interface UserControllerOpenApi {
 
     @ApiOperation("List of users")
-    List<UserModel> list();
+    CollectionModel<UserModel> list();
 
     @ApiOperation("Find a user by id")
     @ApiResponses({

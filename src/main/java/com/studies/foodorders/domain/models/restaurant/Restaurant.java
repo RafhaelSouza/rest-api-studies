@@ -102,6 +102,38 @@ public class Restaurant implements Serializable {
         setOpened(false);
     }
 
+    public boolean isOpened() {
+        return this.opened;
+    }
+
+    public boolean isClose() {
+        return !isOpened();
+    }
+
+    public boolean isInactive() {
+        return !isActive();
+    }
+
+    public boolean isActive() {
+        return this.active;
+    }
+
+    public boolean openingAllowed() {
+        return isActive() && isClose();
+    }
+
+    public boolean activationAllowed() {
+        return isInactive();
+    }
+
+    public boolean inactivationAllowed() {
+        return isActive();
+    }
+
+    public boolean closingAllowed() {
+        return isOpened();
+    }
+
     public boolean addPaymentWay(PaymentWay paymentWay) {
         return getPaymentWay().add(paymentWay);
     }

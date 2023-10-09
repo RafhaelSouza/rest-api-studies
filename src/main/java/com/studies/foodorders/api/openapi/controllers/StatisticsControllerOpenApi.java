@@ -10,8 +10,13 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+import static com.studies.foodorders.api.controllers.sells.StatisticsController.StatisticsModel;
+
 @Api(tags = "Statistics")
 public interface StatisticsControllerOpenApi {
+
+    @ApiOperation(value = "Statistics", hidden = true)
+    StatisticsModel statistics();
 
     @ApiOperation("Check daily sales statistics")
     @ApiImplicitParams({

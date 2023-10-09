@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class StateInput {
 
-    @ApiModelProperty(example = "Indiana")
+    @ApiModelProperty(example = "California")
     @NotBlank
     private String name;
 

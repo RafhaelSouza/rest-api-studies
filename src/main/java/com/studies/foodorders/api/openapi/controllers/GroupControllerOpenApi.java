@@ -4,14 +4,13 @@ import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.security.group.GroupInput;
 import com.studies.foodorders.api.model.security.group.GroupModel;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Groups")
 public interface GroupControllerOpenApi {
 
     @ApiOperation("List of groups")
-    List<GroupModel> list();
+    CollectionModel<GroupModel> list();
 
     @ApiOperation("Find a group by id")
     @ApiResponses({

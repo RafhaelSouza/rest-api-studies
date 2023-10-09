@@ -2,6 +2,28 @@ package com.studies.foodorders.api.openapi.models;
 
 import com.studies.foodorders.api.model.order.OrderSummaryModel;
 import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.hateoas.Links;
+
+import java.util.List;
 
 @ApiModel("OrdersSummaryModel")
-public class OrdersSummaryModelOpenApi extends PagedModelOpenApi<OrderSummaryModel> {}
+@Setter
+@Getter
+public class OrdersSummaryModelOpenApi {
+
+    private OrdersSummaryEmbeddedModelOpenApi _embedded;
+    private Links _links;
+    private PageModelOpenApi page;
+
+    @ApiModel("OrdersSummaryEmbeddedModel")
+    @Data
+    public class OrdersSummaryEmbeddedModelOpenApi {
+
+        private List<OrderSummaryModel> orders;
+
+    }
+
+}

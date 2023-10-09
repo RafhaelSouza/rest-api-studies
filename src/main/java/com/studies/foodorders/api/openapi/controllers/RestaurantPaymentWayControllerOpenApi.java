@@ -3,8 +3,8 @@ package com.studies.foodorders.api.openapi.controllers;
 import com.studies.foodorders.api.exceptionhandler.ApiError;
 import com.studies.foodorders.api.model.paymentway.PaymentWayModel;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Restaurants")
 public interface RestaurantPaymentWayControllerOpenApi {
@@ -13,7 +13,7 @@ public interface RestaurantPaymentWayControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Restaurant not found", response = ApiError.class)
     })
-    List<PaymentWayModel> list(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId);
+    CollectionModel<PaymentWayModel> list(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId);
 
     @ApiOperation("Restaurant association with payment method")
     @ApiResponses({
@@ -21,8 +21,8 @@ public interface RestaurantPaymentWayControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurant or payment method not found",
                     response = ApiError.class)
     })
-    void associate(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId,
-                   @ApiParam(value = "Payment Way id", example = "1", required = true) Long paymentWayId);
+    ResponseEntity<Void> associate(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId,
+                             @ApiParam(value = "Payment Way id", example = "1", required = true) Long paymentWayId);
 
     @ApiOperation("Disassociation of restaurant with payment method")
     @ApiResponses({
@@ -30,7 +30,7 @@ public interface RestaurantPaymentWayControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurant or payment method not found",
                     response = ApiError.class)
     })
-    void disassociate(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId,
+    ResponseEntity<Void> disassociate(@ApiParam(value = "Restaurant id", example = "1", required = true) Long restaurantId,
                       @ApiParam(value = "Payment Way id", example = "1", required = true) Long paymentWayId);
 
 }

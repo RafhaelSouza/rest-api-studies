@@ -1,15 +1,16 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.studies.foodorders.api.converter.security.UserModelConverter;
+import com.studies.foodorders.api.assemblers.security.UserModelAssembler;
+import com.studies.foodorders.api.links.RestaurantLinks;
 import com.studies.foodorders.api.model.security.user.UserModel;
 import com.studies.foodorders.api.openapi.controllers.RestaurantResponsibleUserControllerOpenApi;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/restaurants/{restaurantId}/responsible")
@@ -17,30 +18,49 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
 
     private RestaurantService restaurantService;
 
-    private UserModelConverter userModelConverter;
+    private UserModelAssembler userModelAssembler;
 
-    public RestaurantResponsibleUserController(RestaurantService restaurantService, UserModelConverter userModelConverter) {
+    private RestaurantLinks restaurantLinks;
+
+    public RestaurantResponsibleUserController(RestaurantService restaurantService,
+                                               UserModelAssembler userModelAssembler,
+                                               RestaurantLinks restaurantLinks) {
         this.restaurantService = restaurantService;
-        this.userModelConverter = userModelConverter;
+        this.userModelAssembler = userModelAssembler;
+        this.restaurantLinks = restaurantLinks;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserModel> list(@PathVariable Long restaurantId) {
+    public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
 
-        return userModelConverter.toCollectionModel(restaurant.getResponsible());
+        CollectionModel<UserModel> usersModel = userModelAssembler.toCollectionModel(restaurant.getResponsible())
+                .removeLinks()
+                .add(restaurantLinks.linkToRestaurantResponsible(restaurantId))
+                .add(restaurantLinks.linkToRestaurantResponsibleAssociation(restaurantId, "associate"));
+
+        usersModel.getContent().stream().forEach(userModel -> {
+            userModel.add(restaurantLinks.linkToRestaurantResponsibleDisassociation(
+                    restaurantId, userModel.getId(), "disassociate"));
+        });
+
+        return usersModel;
     }
 
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
+    public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
         restaurantService.associateResponsible(restaurantId, userId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {
+    public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {
         restaurantService.disassociateResponsible(restaurantId, userId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

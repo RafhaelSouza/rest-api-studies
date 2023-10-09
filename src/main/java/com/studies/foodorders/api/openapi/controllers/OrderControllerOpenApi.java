@@ -8,6 +8,7 @@ import com.studies.foodorders.domain.filter.OrderFilter;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 @Api(tags = "Orders")
 public interface OrderControllerOpenApi {
@@ -17,7 +18,7 @@ public interface OrderControllerOpenApi {
                     name = "fields", paramType = "query", type = "string")
     })
     @ApiOperation("Search of orders")
-    Page<OrderSummaryModel> searchBy(Pageable pageable, OrderFilter filters);
+    PagedModel<OrderSummaryModel> searchBy(Pageable pageable, OrderFilter filters);
 
     @ApiImplicitParams({
             @ApiImplicitParam(value = "Names of properties to filter on the response, separated by commas",

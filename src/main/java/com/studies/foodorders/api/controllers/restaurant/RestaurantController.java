@@ -1,10 +1,12 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.studies.foodorders.api.converter.restaurant.RestaurantModelConverter;
+import com.studies.foodorders.api.assemblers.restaurant.RestaurantBasicModelAssembler;
+import com.studies.foodorders.api.assemblers.restaurant.RestaurantIdAndNameModelAssembler;
+import com.studies.foodorders.api.assemblers.restaurant.RestaurantModelAssembler;
+import com.studies.foodorders.api.model.restaurant.RestaurantBasicModel;
+import com.studies.foodorders.api.model.restaurant.RestaurantIdAndNameModel;
 import com.studies.foodorders.api.model.restaurant.RestaurantModel;
 import com.studies.foodorders.api.model.restaurant.input.RestaurantInput;
-import com.studies.foodorders.api.model.restaurant.view.RestaurantView;
 import com.studies.foodorders.api.openapi.controllers.RestaurantControllerOpenApi;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.CityNotFoundException;
@@ -13,8 +15,10 @@ import com.studies.foodorders.domain.exceptions.RestaurantNotFoundException;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +36,13 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     private SmartValidator validator;
 
     @Autowired
-    private RestaurantModelConverter restaurantModelConverter;
+    private RestaurantModelAssembler restaurantModelAssembler;
+
+    @Autowired
+    private RestaurantBasicModelAssembler restaurantBasicModelAssembler;
+
+    @Autowired
+    private RestaurantIdAndNameModelAssembler restaurantIdAndNameModelAssembler;
 
     /*@GetMapping
     public MappingJacksonValue list(@RequestParam(required = false) String projection) {
@@ -52,30 +62,30 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return restaurantsWrapper;
     }*/
 
-    @JsonView({ RestaurantView.Summary.class })
+    //@JsonView({ RestaurantView.Summary.class })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RestaurantModel> list() {
-        return restaurantModelConverter.toCollectionModel(restaurantService.list());
+    public CollectionModel<RestaurantBasicModel> list() {
+        return restaurantBasicModelAssembler.toCollectionModel(restaurantService.list());
     }
 
-    @JsonView({ RestaurantView.IdAndName.class })
-    @GetMapping(params = "projection=id-and-name")
-    public List<RestaurantModel> listIdAndName() {
-        return list();
+    //@JsonView({ RestaurantView.IdAndName.class })
+    @GetMapping(params = "projection=id-and-name", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CollectionModel<RestaurantIdAndNameModel> listIdAndName() {
+        return restaurantIdAndNameModelAssembler.toCollectionModel(restaurantService.list());
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public RestaurantModel find(@PathVariable Long id) {
         Restaurant restaurant = restaurantService.findIfExists(id);
-        return restaurantModelConverter.toModel(restaurant);
+        return restaurantModelAssembler.toModel(restaurant);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantModel save(@RequestBody @Valid RestaurantInput restaurantInput) {
         try {
-            Restaurant restaurant = restaurantModelConverter.toDomainObject(restaurantInput);
-            return restaurantModelConverter.toModel(restaurantService.save(restaurant));
+            Restaurant restaurant = restaurantModelAssembler.toDomainObject(restaurantInput);
+            return restaurantModelAssembler.toModel(restaurantService.save(restaurant));
         } catch (KitchenNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
@@ -85,11 +95,11 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     public RestaurantModel update(@PathVariable Long id, @RequestBody @Valid RestaurantInput restaurantInput) {
 
         Restaurant currentRestaurant = restaurantService.findIfExists(id);
-        restaurantModelConverter.copyToDomainObject(restaurantInput, currentRestaurant);
+        restaurantModelAssembler.copyToDomainObject(restaurantInput, currentRestaurant);
         /*BeanUtils.copyProperties(restaurant, currentRestaurant,
                 "id", "createdAt", "paymentWay", "address");*/
         try {
-            return restaurantModelConverter.toModel(restaurantService.save(currentRestaurant));
+            return restaurantModelAssembler.toModel(restaurantService.save(currentRestaurant));
         } catch (KitchenNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
@@ -97,14 +107,18 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 
     @PutMapping("/{id}/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void activate(@PathVariable Long id) {
+    public ResponseEntity<Void> activate(@PathVariable Long id) {
         restaurantService.activate(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/inactivate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inactivate(@PathVariable Long id) {
+    public ResponseEntity<Void> inactivate(@PathVariable Long id) {
         restaurantService.inactivate(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/activations")
@@ -129,14 +143,18 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 
     @PutMapping("/{id}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void toOpen(@PathVariable Long id) {
+    public ResponseEntity<Void> toOpen(@PathVariable Long id) {
         restaurantService.toOpen(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void toClose(@PathVariable Long id) {
+    public ResponseEntity<Void> toClose(@PathVariable Long id) {
         restaurantService.toClose(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     /*@PatchMapping("/{id}")

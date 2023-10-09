@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.controllers.restaurant;
 
-import com.studies.foodorders.api.converter.product.ProductModelConverter;
+import com.studies.foodorders.api.assemblers.product.ProductModelAssembler;
+import com.studies.foodorders.api.links.ProductLinks;
 import com.studies.foodorders.api.model.product.ProductInput;
 import com.studies.foodorders.api.model.product.ProductModel;
 import com.studies.foodorders.api.openapi.controllers.RestaurantProductControllerOpenApi;
@@ -10,6 +11,7 @@ import com.studies.foodorders.domain.repositories.product.ProductRepository;
 import com.studies.foodorders.domain.services.product.ProductService;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -31,25 +33,33 @@ public class RestaurantProductController implements RestaurantProductControllerO
     private RestaurantService restaurantService;
 
     @Autowired
-    private ProductModelConverter productModelConverter;
+    private ProductModelAssembler productModelAssembler;
+
+    @Autowired
+    private ProductLinks productLinks;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProductModel> list(@PathVariable Long restaurantId,
-                                   @RequestParam(required = false) boolean includeInactives) {
+    public CollectionModel<ProductModel> list(@PathVariable Long restaurantId,
+                                              @RequestParam(required = false) Boolean includeInactives) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
 
+        List<Product> allProducts;
+
         if (includeInactives) {
-            return productModelConverter.toCollectionModel(productRepository.findAllByRestaurant(restaurant));
+            allProducts = productRepository.findAllByRestaurant(restaurant);
+        } else {
+            allProducts = productRepository.findActivesByRestaurant(restaurant);
         }
 
-        return productModelConverter.toCollectionModel(productRepository.findActivesByRestaurant(restaurant));
+        return productModelAssembler.toCollectionModel(allProducts)
+                .add(productLinks.linkToProducts(restaurantId));
     }
 
     @GetMapping(path = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductModel find(@PathVariable Long restaurantId, @PathVariable Long productId) {
         Product product = productService.findIfExists(restaurantId, productId);
 
-        return productModelConverter.toModel(product);
+        return productModelAssembler.toModel(product);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,12 +68,12 @@ public class RestaurantProductController implements RestaurantProductControllerO
                                   @RequestBody @Valid ProductInput productInput) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
 
-        Product product = productModelConverter.toDomainObject(productInput);
+        Product product = productModelAssembler.toDomainObject(productInput);
         product.setRestaurant(restaurant);
 
         product = productService.save(product);
 
-        return productModelConverter.toModel(product);
+        return productModelAssembler.toModel(product);
     }
 
     @PutMapping(path = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,11 +81,11 @@ public class RestaurantProductController implements RestaurantProductControllerO
                                   @RequestBody @Valid ProductInput productInput) {
         Product currentProduct = productService.findIfExists(restaurantId, productId);
 
-        productModelConverter.copyToDomainObject(productInput, currentProduct);
+        productModelAssembler.copyToDomainObject(productInput, currentProduct);
 
         currentProduct = productService.save(currentProduct);
 
-        return productModelConverter.toModel(currentProduct);
+        return productModelAssembler.toModel(currentProduct);
     }
 
 }
