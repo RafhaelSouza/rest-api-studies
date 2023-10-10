@@ -1,7 +1,7 @@
 package com.studies.foodorders.core.modelmapper;
 
-import com.studies.foodorders.api.model.localization.address.AddressModel;
-import com.studies.foodorders.api.model.order.OrderItemInput;
+import com.studies.foodorders.api.v1.models.localization.address.AddressModel;
+import com.studies.foodorders.api.v1.models.order.OrderItemInput;
 import com.studies.foodorders.domain.models.localization.Address;
 import com.studies.foodorders.domain.models.order.OrderItem;
 import org.modelmapper.ModelMapper;
