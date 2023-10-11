@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/groups/{groupId}/permissions")
+@RequestMapping(value = "/v1/groups/{groupId}/permissions")
 public class GroupPermissionController implements GroupPermissionControllerOpenApi {
 
     @Autowired

@@ -30,7 +30,7 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/orders")
+@RequestMapping(value = "/v1/orders")
 public class OrderController implements OrderControllerOpenApi {
 
     @Autowired

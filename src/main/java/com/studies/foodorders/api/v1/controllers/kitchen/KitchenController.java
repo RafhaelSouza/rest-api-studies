@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/kitchens")
+@RequestMapping("/v1/kitchens")
 public class KitchenController implements KitchenControllerOpenApi {
 
     @Autowired

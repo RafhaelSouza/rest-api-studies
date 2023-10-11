@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/restaurants/{restaurantId}/payment-ways")
+@RequestMapping(value = "/v1/restaurants/{restaurantId}/payment-ways")
 public class RestaurantPaymentWayController implements RestaurantPaymentWayControllerOpenApi {
 
 	@Autowired

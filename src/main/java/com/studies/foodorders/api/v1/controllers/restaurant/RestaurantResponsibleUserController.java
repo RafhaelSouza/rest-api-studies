@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/restaurants/{restaurantId}/responsible")
+@RequestMapping(value = "/v1/restaurants/{restaurantId}/responsible")
 public class RestaurantResponsibleUserController implements RestaurantResponsibleUserControllerOpenApi {
 
     private RestaurantService restaurantService;

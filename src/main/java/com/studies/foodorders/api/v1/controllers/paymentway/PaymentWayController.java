@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/payment-ways")
+@RequestMapping("/v1/payment-ways")
 public class PaymentWayController implements PaymentWayControllerOpenApi {
 
     @Autowired
