@@ -18,10 +18,10 @@ public class WebConfig implements WebMvcConfigurer {
 			.allowedMethods("*");
 	}
 
-	@Override
+	/*@Override
 	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 		configurer.defaultContentType(MediaTypeVersions.V2_APPLICATION_JSON);
-	}
+	}*/
 
 	@Bean
 	public Filter shallowEtagHeaderFilter() {

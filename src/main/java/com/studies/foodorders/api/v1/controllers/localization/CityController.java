@@ -5,7 +5,6 @@ import com.studies.foodorders.api.v1.assemblers.city.CityModelAssembler;
 import com.studies.foodorders.api.v1.models.localization.city.CityInput;
 import com.studies.foodorders.api.v1.models.localization.city.CityModel;
 import com.studies.foodorders.api.v1.openapi.controllers.CityControllerOpenApi;
-import com.studies.foodorders.core.web.MediaTypeVersions;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.StateNotFoundException;
 import com.studies.foodorders.domain.models.localization.City;
@@ -14,13 +13,14 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Api(tags = "Cities")
 @RestController
-@RequestMapping(value = "/cities")
+@RequestMapping(value = "/v1/cities")
 public class CityController implements CityControllerOpenApi {
 
     @Autowired
@@ -29,17 +29,17 @@ public class CityController implements CityControllerOpenApi {
     @Autowired
     private CityModelAssembler cityModelAssembler;
 
-    @GetMapping(produces = MediaTypeVersions.V1_APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CityModel> list() {
         return cityModelAssembler.toCollectionModel(cityService.list());
     }
 
-    @GetMapping(path = "/{id}", produces = MediaTypeVersions.V1_APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel find(@PathVariable Long id) {
         return cityModelAssembler.toModel(cityService.findIfExists(id));
     }
 
-    @PostMapping(produces = MediaTypeVersions.V1_APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CityModel save(@RequestBody @Valid CityInput cityInput) {
         try {
@@ -54,7 +54,7 @@ public class CityController implements CityControllerOpenApi {
         }
     }
 
-    @PutMapping(path = "/{id}", produces = MediaTypeVersions.V1_APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel update(@PathVariable Long id, @RequestBody @Valid CityInput cityInput) {
         try {
             City currentCity = cityService.findIfExists(id);

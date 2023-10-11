@@ -4,7 +4,6 @@ import com.studies.foodorders.api.helpers.ResourceUriHelper;
 import com.studies.foodorders.api.v2.assemblers.localization.CityModelAssemblerV2;
 import com.studies.foodorders.api.v2.models.localization.city.CityInputV2;
 import com.studies.foodorders.api.v2.models.localization.city.CityModelV2;
-import com.studies.foodorders.core.web.MediaTypeVersions;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.StateNotFoundException;
 import com.studies.foodorders.domain.models.localization.City;
@@ -13,13 +12,14 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Api(tags = "Cities")
 @RestController
-@RequestMapping(value = "/cities")
+@RequestMapping(value = "/v2/cities")
 public class CityControllerV2 {
 
     @Autowired
@@ -28,17 +28,17 @@ public class CityControllerV2 {
     @Autowired
     private CityModelAssemblerV2 cityModelAssembler;
 
-    @GetMapping(produces = MediaTypeVersions.V2_APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CityModelV2> list() {
         return cityModelAssembler.toCollectionModel(cityService.list());
     }
 
-    @GetMapping(path = "/{id}", produces = MediaTypeVersions.V2_APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModelV2 find(@PathVariable Long id) {
         return cityModelAssembler.toModel(cityService.findIfExists(id));
     }
 
-    @PostMapping(produces = MediaTypeVersions.V2_APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CityModelV2 save(@RequestBody @Valid CityInputV2 cityInput) {
         try {
@@ -53,7 +53,7 @@ public class CityControllerV2 {
         }
     }
 
-    @PutMapping(path = "/{id}", produces = MediaTypeVersions.V2_APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModelV2 update(@PathVariable Long id, @RequestBody @Valid CityInputV2 cityInput) {
         try {
             City currentCity = cityService.findIfExists(id);
@@ -62,6 +62,12 @@ public class CityControllerV2 {
         } catch (StateNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        cityService.delete(id);
     }
 
 }
