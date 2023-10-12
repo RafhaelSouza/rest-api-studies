@@ -36,6 +36,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return new KitchensXmlWrapper(kitchenService.list());
     }*/
 
+    @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<KitchenModel> list(@PageableDefault(size = 2) Pageable pageable) {
         Page<Kitchen> kitchensPage = kitchenService.list(pageable);
@@ -46,11 +47,13 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenPagedModel;
     }
 
+    @Deprecated
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel find(@PathVariable Long id) {
         return kitchenModelAssembler.toModel(kitchenService.findIfExists(id));
     }
 
+    @Deprecated
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public KitchenModel save(@RequestBody @Valid KitchenInput kitchenInput) {
@@ -58,6 +61,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenModelAssembler.toModel(kitchenService.save(kitchen));
     }
 
+    @Deprecated
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel update(@PathVariable Long id, @RequestBody @Valid KitchenInput kitchenInput) {
         Kitchen currentKitchen = kitchenService.findIfExists(id);
@@ -67,6 +71,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenModelAssembler.toModel(kitchenService.save(currentKitchen));
     }
 
+    @Deprecated
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

@@ -217,6 +217,8 @@ public class SpringFoxConfig {
 		return new ApiInfoBuilder()
 				.title("Order Food API")
 				.description("Open API")
+				.description("<strong>This version of the cities and kitchens API is deprecated and will be available up to mm/dd/YYYY."
+						+ "Use the most current version of the API.")
 				.version("1")
 				.contact(new Contact("Order Food", "https://www.domain.com", "contact@domain.com"))
 				.build();

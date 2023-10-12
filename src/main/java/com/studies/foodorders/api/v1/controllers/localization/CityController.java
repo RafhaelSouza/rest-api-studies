@@ -27,16 +27,19 @@ public class CityController implements CityControllerOpenApi {
     @Autowired
     private CityModelAssembler cityModelAssembler;
 
+    @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CityModel> list() {
         return cityModelAssembler.toCollectionModel(cityService.list());
     }
 
+    @Deprecated
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel find(@PathVariable Long id) {
         return cityModelAssembler.toModel(cityService.findIfExists(id));
     }
 
+    @Deprecated
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CityModel save(@RequestBody @Valid CityInput cityInput) {
@@ -52,6 +55,7 @@ public class CityController implements CityControllerOpenApi {
         }
     }
 
+    @Deprecated
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityModel update(@PathVariable Long id, @RequestBody @Valid CityInput cityInput) {
         try {
@@ -63,6 +67,7 @@ public class CityController implements CityControllerOpenApi {
         }
     }
 
+    @Deprecated
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
