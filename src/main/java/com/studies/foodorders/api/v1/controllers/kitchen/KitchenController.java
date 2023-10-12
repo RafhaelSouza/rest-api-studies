@@ -6,6 +6,7 @@ import com.studies.foodorders.api.v1.models.kitchen.KitchenModel;
 import com.studies.foodorders.api.v1.openapi.controllers.KitchenControllerOpenApi;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//@RestController
-//@RequestMapping("/v1/kitchens")
+@Slf4j
+@RestController
+@RequestMapping("/v1/kitchens")
 public class KitchenController implements KitchenControllerOpenApi {
 
     @Autowired
@@ -39,6 +41,8 @@ public class KitchenController implements KitchenControllerOpenApi {
     @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<KitchenModel> list(@PageableDefault(size = 2) Pageable pageable) {
+
+        log.info("Listing kitchens with pages of {} records...", pageable.getPageSize());
         Page<Kitchen> kitchensPage = kitchenService.list(pageable);
 
         PagedModel<KitchenModel> kitchenPagedModel = pagedResourcesAssembler
