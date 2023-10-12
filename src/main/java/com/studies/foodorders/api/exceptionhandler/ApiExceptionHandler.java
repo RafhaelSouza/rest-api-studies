@@ -7,6 +7,7 @@ import com.studies.foodorders.core.validation.ValidationException;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.NotFoundEntityException;
 import com.studies.foodorders.domain.exceptions.UsedEntityException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -102,11 +104,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUncaught(Exception e, WebRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ApiErrorType errorType = ApiErrorType.INTERNAL_SERVER_ERROR;
-        String detail = "Internal Server Error";
+        String detail = GENERIC_END_USER_MESSAGE;
 
-        e.printStackTrace();
+        log.error(e.getMessage(), e);
 
         ApiError error = createApiErrorBuilder(status, errorType, detail).build();
+
         return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
     }
 
