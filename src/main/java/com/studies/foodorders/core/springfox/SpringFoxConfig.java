@@ -14,6 +14,10 @@ import com.studies.foodorders.api.v1.models.security.group.GroupModel;
 import com.studies.foodorders.api.v1.models.security.permission.PermissionModel;
 import com.studies.foodorders.api.v1.models.security.user.UserModel;
 import com.studies.foodorders.api.v1.openapi.models.*;
+import com.studies.foodorders.api.v2.models.kitchen.KitchenModelV2;
+import com.studies.foodorders.api.v2.models.localization.city.CityModelV2;
+import com.studies.foodorders.api.v2.openapi.models.CitiesModelV2OpenApi;
+import com.studies.foodorders.api.v2.openapi.models.KitchensModelV2OpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -44,28 +48,23 @@ import java.util.function.Consumer;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SpringFoxConfig {
 
+	// http://localhost:8080/swagger-ui/index.html
+
 	@Bean
-	public Docket apiDocket() {
+	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
 
 		return new Docket(DocumentationType.OAS_30)
+				.groupName("v1")
 				.select()
 					.apis(RequestHandlerSelectors.basePackage("com.studies.foodorders.api"))
-					.paths(PathSelectors.any())
+					.paths(PathSelectors.ant("/v1/**"))
 					.build()
 				.useDefaultResponseMessages(false)
 				.globalResponses(HttpMethod.GET, globalGetResponseMessages())
 				.globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
 				.globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
 				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
-//				.globalRequestParameters(Collections.singletonList(
-//						new RequestParameterBuilder()
-//								.name("fields")
-//								.description("Names of properties to filter on the response, separated by commas")
-//								.in(ParameterType.QUERY)
-//								.required(true)
-//								.query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
-//								.build()))
 				.additionalModels(typeResolver.resolve(ApiError.class))
 				.ignoredParameterTypes(ServletWebRequest.class)
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
@@ -100,7 +99,7 @@ public class SpringFoxConfig {
 				.alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(CollectionModel.class, UserModel.class),
 						UsersModelOpenApi.class))
-				.apiInfo(apiInfo())
+				.apiInfo(apiInfoV1())
 				.tags(new Tag("Cities", "Manage Cities"),
 						new Tag("Groups", "Manage User Groups"),
 						new Tag("Kitchens", "Manage Kitchens"),
@@ -112,6 +111,36 @@ public class SpringFoxConfig {
 						new Tag("Users", "Manage Users"),
 						new Tag("Statistics", "Sell Statistics"),
 						new Tag("Permissions", "Manage Permissions"));
+	}
+
+	@Bean
+	public Docket apiDocketV2() {
+		var typeResolver = new TypeResolver();
+
+		return new Docket(DocumentationType.OAS_30)
+				.groupName("v2")
+				.select()
+				.apis(RequestHandlerSelectors.basePackage("com.studies.foodorders.api"))
+				.paths(PathSelectors.ant("/v2/**"))
+				.build()
+				.useDefaultResponseMessages(false)
+				.globalResponses(HttpMethod.GET, globalGetResponseMessages())
+				.globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
+				.globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
+				.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+				.additionalModels(typeResolver.resolve(ApiError.class))
+				.ignoredParameterTypes(ServletWebRequest.class)
+				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
+				.alternateTypeRules(AlternateTypeRules.newRule(
+						typeResolver.resolve(PagedModel.class, KitchenModelV2.class),
+						KitchensModelV2OpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(
+						typeResolver.resolve(CollectionModel.class, CityModelV2.class),
+						CitiesModelV2OpenApi.class))
+				.apiInfo(apiInfoV2())
+				.tags(new Tag("Cities", "Manage Cities"),
+						new Tag("Kitchens", "Manage Kitchens"));
 	}
 
 	@Bean
@@ -184,11 +213,20 @@ public class SpringFoxConfig {
 						q -> q.name("ApiError").namespace("com.studies.foodorders.api.exceptionhandler")))));
 	}
 
-	public ApiInfo apiInfo() {
+	public ApiInfo apiInfoV1() {
 		return new ApiInfoBuilder()
 				.title("Order Food API")
 				.description("Open API")
 				.version("1")
+				.contact(new Contact("Order Food", "https://www.domain.com", "contact@domain.com"))
+				.build();
+	}
+
+	public ApiInfo apiInfoV2() {
+		return new ApiInfoBuilder()
+				.title("Order Food API")
+				.description("Open API")
+				.version("2")
 				.contact(new Contact("Order Food", "https://www.domain.com", "contact@domain.com"))
 				.build();
 	}

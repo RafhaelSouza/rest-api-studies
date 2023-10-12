@@ -3,6 +3,7 @@ package com.studies.foodorders.api.v2.controllers.kitchen;
 import com.studies.foodorders.api.v2.assemblers.kitchen.KitchenModelAssemblerV2;
 import com.studies.foodorders.api.v2.models.kitchen.KitchenInputV2;
 import com.studies.foodorders.api.v2.models.kitchen.KitchenModelV2;
+import com.studies.foodorders.api.v2.openapi.controllers.KitchenControllerV2OpenApi;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v2/kitchens")
-public class KitchenControllerV2 {
+public class KitchenControllerV2 implements KitchenControllerV2OpenApi {
 
     @Autowired
     private KitchenService kitchenService;

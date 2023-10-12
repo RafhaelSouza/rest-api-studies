@@ -9,7 +9,6 @@ import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.StateNotFoundException;
 import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.services.localization.CityService;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Api(tags = "Cities")
 @RestController
 @RequestMapping(value = "/v1/cities")
 public class CityController implements CityControllerOpenApi {
