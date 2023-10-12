@@ -102,8 +102,8 @@ public class SpringFoxConfig {
 				.apiInfo(apiInfoV1())
 				.tags(
 						new Tag("Groups", "Manage User Groups"),
-						//new Tag("Cities", "Manage Cities"),
-						//new Tag("Kitchens", "Manage Kitchens"),
+						new Tag("Cities", "Manage Cities"),
+						new Tag("Kitchens", "Manage Kitchens"),
 						new Tag("Payment Ways", "Manage Payment Ways"),
 						new Tag("Orders", "Manage Orders"),
 						new Tag("Restaurants", "Manage Restaurants"),

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-//@RestController
-//@RequestMapping(value = "/v1/cities")
+@RestController
+@RequestMapping(value = "/v1/cities")
 public class CityController implements CityControllerOpenApi {
 
     @Autowired
