@@ -13,8 +13,8 @@ import javax.servlet.Filter;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-	@Autowired
-	private ApiRetirementHandler apiRetirementHandler;
+	//@Autowired
+	//private ApiRetirementHandler apiRetirementHandler;
 
 	@Autowired
 	private ApiDeprecationHandler apiDeprecationHandler;

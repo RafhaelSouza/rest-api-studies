@@ -7,7 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Component
+//@Component
 public class ApiRetirementHandler implements HandlerInterceptor {
 
 	@Override
