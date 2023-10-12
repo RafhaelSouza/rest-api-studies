@@ -30,6 +30,10 @@
 
 ✔️ HATEOAS and Discoverability
 
+✔️ API Versioning (Media Types e URIs)
+
+✖️️ Configuration and log management (Loggly)
+
 ✖️️️ Spring Security, OAuth2 e JWT (Opaque Tokens and Transparent Tokens)
 
 ✖️️ Cloud-native APIs
@@ -39,7 +43,3 @@
 ✖️️️ Deploy
 
 ✖️️ Amazon AWS (EC2, EKS, ECS, Fargate, ELB, ECR, RDS, S3, Systems Manager Parameter Store, Certificate manager), RedisLabs and PWS
-
-✖️️ Configuration and log management (Loggly)
-
-✖️️ API Versioning (Media Types e URIs)
