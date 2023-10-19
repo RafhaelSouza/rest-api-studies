@@ -58,7 +58,7 @@ function accessTokenGenerate(code) {
     },
 
     error: function(error) {
-      alert("Error generating access key");
+      alert("Error generating access token");
     }
   });
 }
