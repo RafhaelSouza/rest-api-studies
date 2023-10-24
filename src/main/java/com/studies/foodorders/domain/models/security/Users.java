@@ -16,7 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tab_users")
-public class User implements Serializable {
+public class Users implements Serializable {
 
     private static final long serialVersionUID = 8287152537168643618L;
 

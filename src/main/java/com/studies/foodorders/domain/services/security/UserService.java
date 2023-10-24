@@ -3,8 +3,8 @@ package com.studies.foodorders.domain.services.security;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.UserNotFoundException;
 import com.studies.foodorders.domain.models.security.Group;
-import com.studies.foodorders.domain.models.security.User;
-import com.studies.foodorders.domain.repositories.security.UserRepository;
+import com.studies.foodorders.domain.models.security.Users;
+import com.studies.foodorders.domain.repositories.security.UsersRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,66 +14,66 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
 
     private GroupService groupService;
 
-    public UserService(UserRepository userRepository, GroupService groupService) {
-        this.userRepository = userRepository;
+    public UserService(UsersRepository usersRepository, GroupService groupService) {
+        this.usersRepository = usersRepository;
         this.groupService = groupService;
     }
 
-    public List<User> list() {
-        return userRepository.findAll();
+    public List<Users> list() {
+        return usersRepository.findAll();
     }
 
-    public Optional<User> find(Long id) {
-        Optional<User> user = userRepository.findById(id);
+    public Optional<Users> find(Long id) {
+        Optional<Users> user = usersRepository.findById(id);
         return user;
     }
 
     @Transactional
-    public User save(User user) {
-        userRepository.detach(user);
-        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+    public Users save(Users users) {
+        usersRepository.detach(users);
+        Optional<Users> existingUser = usersRepository.findByEmail(users.getEmail());
 
-        if (existingUser.isPresent() && !existingUser.get().equals(user)) {
+        if (existingUser.isPresent() && !existingUser.get().equals(users)) {
             throw new BusinessException(
-                    String.format("There is already a user registered with the email %s", user.getEmail()));
+                    String.format("There is already a user registered with the email %s", users.getEmail()));
         }
 
-        return userRepository.save(user);
+        return usersRepository.save(users);
     }
 
     @Transactional
     public void updatePassword(Long id, String currentPassword, String newPassword) {
-        User user = findIfExists(id);
+        Users users = findIfExists(id);
 
-        if (user.passwordDoesNotMatch(currentPassword)) {
+        if (users.passwordDoesNotMatch(currentPassword)) {
             throw new BusinessException("Current password entered does not match the user's password.");
         }
 
-        user.setPassword(newPassword);
+        users.setPassword(newPassword);
     }
 
     @Transactional
     public void groupAssociate(Long userId, Long groupId) {
-        User user = findIfExists(userId);
+        Users users = findIfExists(userId);
         Group group = groupService.findIfExists(groupId);
 
-        user.addGroup(group);
+        users.addGroup(group);
     }
 
     @Transactional
     public void groupDisassociate(Long userId, Long groupId) {
-        User user = findIfExists(userId);
+        Users users = findIfExists(userId);
         Group group = groupService.findIfExists(groupId);
 
-        user.deleteGroup(group);
+        users.deleteGroup(group);
     }
 
-    public User findIfExists(Long id) {
-        return userRepository.findById(id)
+    public Users findIfExists(Long id) {
+        return usersRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 

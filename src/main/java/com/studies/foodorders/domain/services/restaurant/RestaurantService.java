@@ -6,7 +6,7 @@ import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
-import com.studies.foodorders.domain.models.security.User;
+import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.repositories.restaurant.RestaurantRepository;
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
 import com.studies.foodorders.domain.services.localization.CityService;
@@ -135,17 +135,17 @@ public class RestaurantService {
     @Transactional
     public void associateResponsible(Long restaurantId, Long userId) {
         Restaurant restaurant = findIfExists(restaurantId);
-        User user = userService.findIfExists(userId);
+        Users users = userService.findIfExists(userId);
 
-        restaurant.addResponsible(user);
+        restaurant.addResponsible(users);
     }
 
     @Transactional
     public void disassociateResponsible(Long restaurantId, Long userId) {
         Restaurant restaurant = findIfExists(restaurantId);
-        User user = userService.findIfExists(userId);
+        Users users = userService.findIfExists(userId);
 
-        restaurant.deleteResponsible(user);
+        restaurant.deleteResponsible(users);
     }
 
     public Restaurant findIfExists(Long id) {

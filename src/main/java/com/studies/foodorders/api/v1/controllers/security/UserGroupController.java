@@ -4,7 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.security.GroupModelAssembler;
 import com.studies.foodorders.api.v1.links.UserLinks;
 import com.studies.foodorders.api.v1.models.security.group.GroupModel;
 import com.studies.foodorders.api.v1.openapi.controllers.UserGroupControllerOpenApi;
-import com.studies.foodorders.domain.models.security.User;
+import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.services.security.UserService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -30,9 +30,9 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<GroupModel> list(@PathVariable Long userId) {
-        User user = userService.findIfExists(userId);
+        Users users = userService.findIfExists(userId);
 
-        CollectionModel<GroupModel> groupsModel = groupModelAssembler.toCollectionModel(user.getGroups())
+        CollectionModel<GroupModel> groupsModel = groupModelAssembler.toCollectionModel(users.getGroups())
                 .removeLinks()
                 .add(userLinks.linkToUserGroupAssociate(userId, "associate"));
 

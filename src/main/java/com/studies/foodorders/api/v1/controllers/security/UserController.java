@@ -6,7 +6,7 @@ import com.studies.foodorders.api.v1.models.security.user.UserInput;
 import com.studies.foodorders.api.v1.models.security.user.UserModel;
 import com.studies.foodorders.api.v1.models.security.user.UserWithPasswordInput;
 import com.studies.foodorders.api.v1.openapi.controllers.UserControllerOpenApi;
-import com.studies.foodorders.domain.models.security.User;
+import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.services.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -29,35 +29,35 @@ public class UserController implements UserControllerOpenApi {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UserModel> list() {
-        List<User> allUsers = userService.list();
+        List<Users> allUsers = userService.list();
 
         return userModelAssembler.toCollectionModel(allUsers);
     }
 
     @GetMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserModel find(@PathVariable Long userId) {
-        User user = userService.findIfExists(userId);
+        Users users = userService.findIfExists(userId);
 
-        return userModelAssembler.toModel(user);
+        return userModelAssembler.toModel(users);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserModel save(@RequestBody @Valid UserWithPasswordInput userWithPasswordInput) {
-        User user = userModelAssembler.toDomainObject(userWithPasswordInput);
-        user = userService.save(user);
+        Users users = userModelAssembler.toDomainObject(userWithPasswordInput);
+        users = userService.save(users);
 
-        return userModelAssembler.toModel(user);
+        return userModelAssembler.toModel(users);
     }
 
     @PutMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserModel update(@PathVariable Long userId,
                                   @RequestBody @Valid UserInput userInput) {
-        User currentUser = userService.findIfExists(userId);
-        userModelAssembler.copyToDomainObject(userInput, currentUser);
-        currentUser = userService.save(currentUser);
+        Users currentUsers = userService.findIfExists(userId);
+        userModelAssembler.copyToDomainObject(userInput, currentUsers);
+        currentUsers = userService.save(currentUsers);
 
-        return userModelAssembler.toModel(currentUser);
+        return userModelAssembler.toModel(currentUsers);
     }
 
     @PutMapping("/{userId}/password")
