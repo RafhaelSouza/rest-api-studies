@@ -85,6 +85,7 @@ insert into tab_groups (name, created_at, updated_at) values ('Manager', current
 insert into tab_groups (name, created_at, updated_at) values ('Seller', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_groups (name, created_at, updated_at) values ('Secretary', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_groups (name, created_at, updated_at) values ('Register', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_groups (name, created_at, updated_at) values ('Client', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 
 insert into group_permission (group_id, permission_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
 
@@ -92,6 +93,7 @@ insert into tab_users (name, email, password, created_at, updated_at) values ('M
 insert into tab_users (name, email, password, created_at, updated_at) values ('Seller User', 'rafhael.projetos+seller@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_users (name, email, password, created_at, updated_at) values ('Secretary User', 'rafhael.projetos+secretary@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_users (name, email, password, created_at, updated_at) values ('Register User', 'rafhael.projetos+register@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Client User', 'rafhael.projetos+client@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
 

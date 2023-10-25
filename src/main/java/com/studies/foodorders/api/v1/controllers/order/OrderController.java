@@ -8,6 +8,7 @@ import com.studies.foodorders.api.v1.models.order.OrderSummaryModel;
 import com.studies.foodorders.api.v1.openapi.controllers.OrderControllerOpenApi;
 import com.studies.foodorders.core.data.PageWrapper;
 import com.studies.foodorders.core.data.PageableCast;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.filter.OrderFilter;
 import com.studies.foodorders.domain.models.order.Order;
@@ -48,6 +49,9 @@ public class OrderController implements OrderControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Order> pagedResourcesAssembler;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<OrderSummaryModel> searchBy(@PageableDefault(size = 5) Pageable pageable, OrderFilter filters) {
         Pageable castPageable = castPageable(pageable);
@@ -71,7 +75,7 @@ public class OrderController implements OrderControllerOpenApi {
             Order newOrder = orderModelAssembler.toDomainObject(orderInput);
 
             newOrder.setClient(new Users());
-            newOrder.getClient().setId(1L);
+            newOrder.getClient().setId(apiSecurity.getUserId());
 
             newOrder = orderService.makeOrder(newOrder);
 
