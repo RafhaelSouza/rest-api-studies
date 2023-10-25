@@ -11,7 +11,7 @@ import com.studies.foodorders.domain.repositories.restaurant.RestaurantRepositor
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
 import com.studies.foodorders.domain.services.localization.CityService;
 import com.studies.foodorders.domain.services.paymentway.PaymentWayService;
-import com.studies.foodorders.domain.services.security.UserService;
+import com.studies.foodorders.domain.services.security.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -39,7 +39,7 @@ public class RestaurantService {
     private PaymentWayService paymentWayService;
 
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     public List<Restaurant> list() {
         return restaurantRepository.findAll();
@@ -135,7 +135,7 @@ public class RestaurantService {
     @Transactional
     public void associateResponsible(Long restaurantId, Long userId) {
         Restaurant restaurant = findIfExists(restaurantId);
-        Users users = userService.findIfExists(userId);
+        Users users = usersService.findIfExists(userId);
 
         restaurant.addResponsible(users);
     }
@@ -143,7 +143,7 @@ public class RestaurantService {
     @Transactional
     public void disassociateResponsible(Long restaurantId, Long userId) {
         Restaurant restaurant = findIfExists(restaurantId);
-        Users users = userService.findIfExists(userId);
+        Users users = usersService.findIfExists(userId);
 
         restaurant.deleteResponsible(users);
     }

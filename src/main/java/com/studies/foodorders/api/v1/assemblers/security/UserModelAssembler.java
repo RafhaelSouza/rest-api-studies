@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.v1.assemblers.security;
 
-import com.studies.foodorders.api.v1.controllers.security.UserController;
+import com.studies.foodorders.api.v1.controllers.security.UsersController;
 import com.studies.foodorders.api.v1.links.UserLinks;
 import com.studies.foodorders.api.v1.models.security.user.UserInput;
 import com.studies.foodorders.api.v1.models.security.user.UserModel;
@@ -21,7 +21,7 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
 	private UserLinks userLinks;
 
 	public UserModelAssembler() {
-		super(UserController.class, UserModel.class);
+		super(UsersController.class, UserModel.class);
 	}
 	
 	public UserModel toModel(Users users) {

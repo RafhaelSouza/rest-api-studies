@@ -5,6 +5,7 @@ import com.studies.foodorders.domain.exceptions.UserNotFoundException;
 import com.studies.foodorders.domain.models.security.Group;
 import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.repositories.security.UsersRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,15 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UsersService {
 
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
-    private GroupService groupService;
+    private final GroupService groupService;
 
-    public UserService(UsersRepository usersRepository, GroupService groupService) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UsersService(UsersRepository usersRepository, GroupService groupService, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.groupService = groupService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Users> list() {
@@ -38,8 +42,11 @@ public class UserService {
         Optional<Users> existingUser = usersRepository.findByEmail(users.getEmail());
 
         if (existingUser.isPresent() && !existingUser.get().equals(users)) {
-            throw new BusinessException(
-                    String.format("There is already a user registered with the email %s", users.getEmail()));
+            throw new BusinessException(String.format("There is already a user registered with the email %s", users.getEmail()));
+        }
+
+        if (users.isNew()) {
+            users.setPassword(passwordEncoder.encode(users.getPassword()));
         }
 
         return usersRepository.save(users);
@@ -49,11 +56,11 @@ public class UserService {
     public void updatePassword(Long id, String currentPassword, String newPassword) {
         Users users = findIfExists(id);
 
-        if (users.passwordDoesNotMatch(currentPassword)) {
+        if (!passwordEncoder.matches(currentPassword, users.getPassword())) {
             throw new BusinessException("Current password entered does not match the user's password.");
         }
 
-        users.setPassword(newPassword);
+        users.setPassword(passwordEncoder.encode(newPassword));
     }
 
     @Transactional

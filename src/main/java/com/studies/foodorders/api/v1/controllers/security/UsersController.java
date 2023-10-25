@@ -5,9 +5,9 @@ import com.studies.foodorders.api.v1.models.security.user.PasswordInput;
 import com.studies.foodorders.api.v1.models.security.user.UserInput;
 import com.studies.foodorders.api.v1.models.security.user.UserModel;
 import com.studies.foodorders.api.v1.models.security.user.UserWithPasswordInput;
-import com.studies.foodorders.api.v1.openapi.controllers.UserControllerOpenApi;
+import com.studies.foodorders.api.v1.openapi.controllers.UsersControllerOpenApi;
 import com.studies.foodorders.domain.models.security.Users;
-import com.studies.foodorders.domain.services.security.UserService;
+import com.studies.foodorders.domain.services.security.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -19,24 +19,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/v1/users")
-public class UserController implements UserControllerOpenApi {
+public class UsersController implements UsersControllerOpenApi {
 
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     @Autowired
     private UserModelAssembler userModelAssembler;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UserModel> list() {
-        List<Users> allUsers = userService.list();
+        List<Users> allUsers = usersService.list();
 
         return userModelAssembler.toCollectionModel(allUsers);
     }
 
     @GetMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserModel find(@PathVariable Long userId) {
-        Users users = userService.findIfExists(userId);
+        Users users = usersService.findIfExists(userId);
 
         return userModelAssembler.toModel(users);
     }
@@ -45,7 +45,7 @@ public class UserController implements UserControllerOpenApi {
     @ResponseStatus(HttpStatus.CREATED)
     public UserModel save(@RequestBody @Valid UserWithPasswordInput userWithPasswordInput) {
         Users users = userModelAssembler.toDomainObject(userWithPasswordInput);
-        users = userService.save(users);
+        users = usersService.save(users);
 
         return userModelAssembler.toModel(users);
     }
@@ -53,9 +53,9 @@ public class UserController implements UserControllerOpenApi {
     @PutMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserModel update(@PathVariable Long userId,
                                   @RequestBody @Valid UserInput userInput) {
-        Users currentUsers = userService.findIfExists(userId);
+        Users currentUsers = usersService.findIfExists(userId);
         userModelAssembler.copyToDomainObject(userInput, currentUsers);
-        currentUsers = userService.save(currentUsers);
+        currentUsers = usersService.save(currentUsers);
 
         return userModelAssembler.toModel(currentUsers);
     }
@@ -63,7 +63,7 @@ public class UserController implements UserControllerOpenApi {
     @PutMapping("/{userId}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassord(@PathVariable Long userId, @RequestBody @Valid PasswordInput password) {
-        userService.updatePassword(userId, password.getCurrentPassword(), password.getNewPassword());
+        usersService.updatePassword(userId, password.getCurrentPassword(), password.getNewPassword());
     }
 
 }
