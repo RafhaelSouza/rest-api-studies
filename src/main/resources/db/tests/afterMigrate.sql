@@ -68,6 +68,21 @@ insert into tab_payment_ways (description, updated_at) values ('Cash', current_t
 
 insert into tab_permissions (name, description) values ('SEARCH_KITCHEN', 'Allow to search kitchens');
 insert into tab_permissions (name, description) values ('UPDATE_KITCHEN', 'Allow to update kitchens');
+insert into tab_permissions (name, description) values ('SEARCH_PAYMENT_WAYS', 'Allow to search payment ways');
+insert into tab_permissions (name, description) values ('UPDATE_PAYMENT_WAYS', 'Allow to update payment ways');
+insert into tab_permissions (name, description) values ('SEARCH_CITIES', 'Allow to search cities');
+insert into tab_permissions (name, description) values ('UPDATE_CITIES', 'Allow to update cities');
+insert into tab_permissions (name, description) values ('SEARCH_STATES', 'Allow to search states');
+insert into tab_permissions (name, description) values ('UPDATE_STATES', 'Allow to update states');
+insert into tab_permissions (name, description) values ('SEARCH_USERS', 'Allow to search users');
+insert into tab_permissions (name, description) values ('UPDATE_USERS', 'Allow to update users');
+insert into tab_permissions (name, description) values ('SEARCH_RESTAURANTS', 'Allow to search restaurants');
+insert into tab_permissions (name, description) values ('UPDATE_RESTAURANTS', 'Allow to create, update or manage restaurants');
+insert into tab_permissions (name, description) values ('SEARCH_PRODUCTS', 'Allow to search products');
+insert into tab_permissions (name, description) values ('UPDATE_PRODUCTS', 'Allow to update products');
+insert into tab_permissions (name, description) values ('SEARCH_ORDERS', 'Allow to search orders');
+insert into tab_permissions (name, description) values ('MANAGE_ORDERS', 'Allow manage orders');
+insert into tab_permissions (name, description) values ('GENERATE_REPORTS', 'Allow generate reports');
 
 insert into restaurant_payment_way (restaurant_id, paymentway_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3), (4, 1), (4, 2), (5, 1), (5, 2), (6, 3);
 
@@ -87,7 +102,22 @@ insert into tab_groups (name, created_at, updated_at) values ('Secretary', curre
 insert into tab_groups (name, created_at, updated_at) values ('Register', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_groups (name, created_at, updated_at) values ('Client', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 
-insert into group_permission (group_id, permission_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
+-- Adds all permissions to the manager's group
+insert into group_permission (group_id, permission_id) select 1, id from tab_permissions;
+
+-- add permissions to the seller's group
+insert into group_permission (group_id, permission_id) select 2, id from tab_permissions where name ilike 'search%';
+
+insert into group_permission (group_id, permission_id) values (2, 14);
+
+-- add permissions to the secretary group
+insert into group_permission (group_id, permission_id) select 3, id from tab_permissions where name ilike 'search%';
+
+-- add permissions to the registering group
+insert into group_permission (group_id, permission_id) select 4, id from tab_permissions where name ilike '%_restaurants' or name ilike '%_products';
+
+-- add permissions to the client group
+insert into group_permission (group_id, permission_id) select 5, id from tab_permissions where name ilike '%_orders%';
 
 insert into tab_users (name, email, password, created_at, updated_at) values ('Manager User', 'rafhael.projetos+manager@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_users (name, email, password, created_at, updated_at) values ('Seller User', 'rafhael.projetos+seller@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
@@ -95,7 +125,7 @@ insert into tab_users (name, email, password, created_at, updated_at) values ('S
 insert into tab_users (name, email, password, created_at, updated_at) values ('Register User', 'rafhael.projetos+register@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_users (name, email, password, created_at, updated_at) values ('Client User', 'rafhael.projetos+client@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 
-insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
+insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4), (5, 5);
 
 insert into restaurant_responsible_user (user_id, restaurant_id) values (1, 5), (3, 5);
 
