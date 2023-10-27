@@ -16,6 +16,8 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,6 +45,8 @@ public class KitchenController implements KitchenControllerOpenApi {
     @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<KitchenModel> list(@PageableDefault(size = 2) Pageable pageable) {
+
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
 
         log.info("Listing kitchens with pages of {} records...", pageable.getPageSize());
         Page<Kitchen> kitchensPage = kitchenService.list(pageable);
