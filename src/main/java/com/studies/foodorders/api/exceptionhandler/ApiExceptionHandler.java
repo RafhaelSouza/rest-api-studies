@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -156,7 +157,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         } else if (rootCause instanceof PropertyBindingException) {
             return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
         }
-        ApiErrorType errorType = ApiErrorType.INCOMPREENSIBLE_MESSAGE;
+        ApiErrorType errorType = ApiErrorType.INCOMPREHENSIBLE_MESSAGE;
         String detail = "Bad Formatted Json Or Invalid Request";
         ApiError error = createApiErrorBuilder(status, errorType, detail)
                 .userMessage(GENERIC_END_USER_MESSAGE)
@@ -169,7 +170,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                                 HttpStatus status, WebRequest request) {
         String path = joinPath(e.getPath());
         ApiErrorType errorType = ApiErrorType.INVALID_REQUEST;
-        String detail = String.format("Property %s received invalid value %. % is expected.",
+        String detail = String.format("Property %s received invalid value %s. %s is expected.",
                 path, e.getValue(), e.getTargetType().getSimpleName());
         ApiError apiError = createApiErrorBuilder(status, errorType, detail)
                                 .userMessage(GENERIC_END_USER_MESSAGE)
@@ -202,6 +203,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleEntidadeNaoEncontrada(AccessDeniedException ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ApiErrorType errorType = ApiErrorType.ACCESS_DENIED;
+        String detail = ex.getMessage();
+
+        ApiError error = createApiErrorBuilder(status, errorType, detail)
+                .userMessage(detail)
+                .userMessage("You do not have permission to perform this operation.")
+                .build();
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(NotFoundEntityException.class)
