@@ -23,5 +23,19 @@ public @interface CheckSecurity {
 		@interface AllowSearch { }
 		
 	}
+
+	@interface Restaurants {
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_RESTAURANTS')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowUpdate { }
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowSearch { }
+
+	}
 	
 }

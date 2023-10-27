@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.security.UserModelAssembler;
 import com.studies.foodorders.api.v1.links.RestaurantLinks;
 import com.studies.foodorders.api.v1.models.security.user.UserModel;
 import com.studies.foodorders.api.v1.openapi.controllers.RestaurantResponsibleUserControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.hateoas.CollectionModel;
@@ -30,6 +31,7 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
         this.restaurantLinks = restaurantLinks;
     }
 
+    @CheckSecurity.Restaurants.AllowSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
@@ -47,6 +49,7 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
         return usersModel;
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
@@ -55,6 +58,7 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {

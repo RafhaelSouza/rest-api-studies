@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.product.ProductPhotoModelAssembl
 import com.studies.foodorders.api.v1.models.product.ProductPhotoInput;
 import com.studies.foodorders.api.v1.models.product.ProductPhotoModel;
 import com.studies.foodorders.api.v1.openapi.controllers.RestaurantProductPhotoControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.exceptions.NotFoundEntityException;
 import com.studies.foodorders.domain.models.product.Product;
 import com.studies.foodorders.domain.models.product.ProductPhoto;
@@ -41,6 +42,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
     @Autowired
     private ProductPhotoModelAssembler productPhotoModelAssembler;
 
+    @CheckSecurity.Restaurants.AllowSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductPhotoModel find(@PathVariable Long restaurantId,
                                    @PathVariable Long productId) {
@@ -49,6 +51,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
         return productPhotoModelAssembler.toModel(productPhoto);
     }
 
+    @CheckSecurity.Restaurants.AllowSearch
     @GetMapping(produces = MediaType.ALL_VALUE)
     public ResponseEntity<?> findPhoto(@PathVariable Long restaurantId,
                                                          @PathVariable Long productId,
@@ -80,6 +83,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId,
                                          @PathVariable Long productId,
@@ -103,6 +107,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long restaurantId,

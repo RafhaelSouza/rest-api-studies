@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.paymentway.PaymentWayModelAssemb
 import com.studies.foodorders.api.v1.links.RestaurantLinks;
 import com.studies.foodorders.api.v1.models.paymentway.PaymentWayModel;
 import com.studies.foodorders.api.v1.openapi.controllers.RestaurantPaymentWayControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 
 	@Autowired
 	private RestaurantLinks restaurantLinks;
-	
+
+	@CheckSecurity.Restaurants.AllowSearch
 	@GetMapping
 	public CollectionModel<PaymentWayModel> list(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findIfExists(restaurantId);
@@ -42,7 +44,8 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 
 		return paymentWaysModel;
 	}
-	
+
+	@CheckSecurity.Restaurants.AllowUpdate
 	@PutMapping("/{paymentWayId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {
@@ -51,6 +54,7 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.Restaurants.AllowUpdate
 	@DeleteMapping("/{paymentWayId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {
