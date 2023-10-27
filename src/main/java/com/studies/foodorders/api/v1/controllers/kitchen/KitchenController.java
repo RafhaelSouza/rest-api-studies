@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.kitchen.KitchenModelAssembler;
 import com.studies.foodorders.api.v1.models.kitchen.KitchenInput;
 import com.studies.foodorders.api.v1.models.kitchen.KitchenModel;
 import com.studies.foodorders.api.v1.openapi.controllers.KitchenControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,7 +39,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return new KitchensXmlWrapper(kitchenService.list());
     }*/
 
-    @PreAuthorize("isAuthenticated()")
+    @CheckSecurity.Kitchens.AllowSearch
     @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<KitchenModel> list(@PageableDefault(size = 2) Pageable pageable) {
@@ -53,14 +53,14 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenPagedModel;
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @CheckSecurity.Kitchens.AllowSearch
     @Deprecated
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel find(@PathVariable Long id) {
         return kitchenModelAssembler.toModel(kitchenService.findIfExists(id));
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_KITCHEN')")
+    @CheckSecurity.Kitchens.AllowUpdate
     @Deprecated
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -69,7 +69,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenModelAssembler.toModel(kitchenService.save(kitchen));
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_KITCHEN')")
+    @CheckSecurity.Kitchens.AllowUpdate
     @Deprecated
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel update(@PathVariable Long id, @RequestBody @Valid KitchenInput kitchenInput) {
@@ -80,7 +80,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenModelAssembler.toModel(kitchenService.save(currentKitchen));
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_KITCHEN')")
+    @CheckSecurity.Kitchens.AllowUpdate
     @Deprecated
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
