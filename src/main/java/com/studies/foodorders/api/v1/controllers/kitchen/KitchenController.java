@@ -16,7 +16,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +40,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return new KitchensXmlWrapper(kitchenService.list());
     }*/
 
-    @CheckSecurity.Kitchens.AllowSearch
+    @CheckSecurity.Kitchens.AllowToSearch
     @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<KitchenModel> list(@PageableDefault(size = 2) Pageable pageable) {
@@ -57,14 +56,14 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenPagedModel;
     }
 
-    @CheckSecurity.Kitchens.AllowSearch
+    @CheckSecurity.Kitchens.AllowToSearch
     @Deprecated
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel find(@PathVariable Long id) {
         return kitchenModelAssembler.toModel(kitchenService.findIfExists(id));
     }
 
-    @CheckSecurity.Kitchens.AllowUpdate
+    @CheckSecurity.Kitchens.AllowToUpdate
     @Deprecated
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -73,7 +72,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenModelAssembler.toModel(kitchenService.save(kitchen));
     }
 
-    @CheckSecurity.Kitchens.AllowUpdate
+    @CheckSecurity.Kitchens.AllowToUpdate
     @Deprecated
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel update(@PathVariable Long id, @RequestBody @Valid KitchenInput kitchenInput) {
@@ -84,7 +83,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenModelAssembler.toModel(kitchenService.save(currentKitchen));
     }
 
-    @CheckSecurity.Kitchens.AllowUpdate
+    @CheckSecurity.Kitchens.AllowToUpdate
     @Deprecated
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

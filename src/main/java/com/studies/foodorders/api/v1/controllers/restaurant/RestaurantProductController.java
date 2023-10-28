@@ -39,7 +39,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
     @Autowired
     private ProductLinks productLinks;
 
-    @CheckSecurity.Restaurants.AllowSearch
+    @CheckSecurity.Restaurants.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProductModel> list(@PathVariable Long restaurantId,
                                               @RequestParam(required = false) Boolean includeInactives) {
@@ -57,7 +57,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
                 .add(productLinks.linkToProducts(restaurantId));
     }
 
-    @CheckSecurity.Restaurants.AllowSearch
+    @CheckSecurity.Restaurants.AllowToSearch
     @GetMapping(path = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductModel find(@PathVariable Long restaurantId, @PathVariable Long productId) {
         Product product = productService.findIfExists(restaurantId, productId);
@@ -65,7 +65,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowToManageRestaurantOperation
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ProductModel save(@PathVariable Long restaurantId,
@@ -80,7 +80,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowToManageRestaurantOperation
     @PutMapping(path = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductModel update(@PathVariable Long restaurantId, @PathVariable Long productId,
                                   @RequestBody @Valid ProductInput productInput) {

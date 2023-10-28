@@ -42,7 +42,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
     @Autowired
     private ProductPhotoModelAssembler productPhotoModelAssembler;
 
-    @CheckSecurity.Restaurants.AllowSearch
+    @CheckSecurity.Restaurants.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductPhotoModel find(@PathVariable Long restaurantId,
                                    @PathVariable Long productId) {
@@ -51,7 +51,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
         return productPhotoModelAssembler.toModel(productPhoto);
     }
 
-    @CheckSecurity.Restaurants.AllowSearch
+    @CheckSecurity.Restaurants.AllowToSearch
     @GetMapping(produces = MediaType.ALL_VALUE)
     public ResponseEntity<?> findPhoto(@PathVariable Long restaurantId,
                                                          @PathVariable Long productId,
@@ -83,7 +83,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId,
                                          @PathVariable Long productId,
@@ -107,7 +107,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long restaurantId,

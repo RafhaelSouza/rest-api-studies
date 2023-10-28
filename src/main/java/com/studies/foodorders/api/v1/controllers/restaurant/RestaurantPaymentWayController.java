@@ -26,7 +26,7 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 	@Autowired
 	private RestaurantLinks restaurantLinks;
 
-	@CheckSecurity.Restaurants.AllowSearch
+	@CheckSecurity.Restaurants.AllowToSearch
 	@GetMapping
 	public CollectionModel<PaymentWayModel> list(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findIfExists(restaurantId);
@@ -45,7 +45,7 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 		return paymentWaysModel;
 	}
 
-	@CheckSecurity.Restaurants.AllowUpdate
+	@CheckSecurity.Restaurants.AllowToManageRestaurantOperation
 	@PutMapping("/{paymentWayId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {
@@ -54,7 +54,7 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 		return ResponseEntity.noContent().build();
 	}
 
-	@CheckSecurity.Restaurants.AllowUpdate
+	@CheckSecurity.Restaurants.AllowToManageRestaurantOperation
 	@DeleteMapping("/{paymentWayId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {

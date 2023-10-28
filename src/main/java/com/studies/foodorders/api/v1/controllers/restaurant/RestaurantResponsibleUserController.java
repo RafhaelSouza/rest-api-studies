@@ -31,7 +31,7 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
         this.restaurantLinks = restaurantLinks;
     }
 
-    @CheckSecurity.Restaurants.AllowSearch
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
@@ -49,7 +49,7 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
         return usersModel;
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowToManageRestaurantOperation
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
@@ -58,7 +58,7 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
         return ResponseEntity.noContent().build();
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowToManageRestaurantOperation
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {

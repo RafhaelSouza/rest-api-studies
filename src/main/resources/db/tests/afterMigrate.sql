@@ -127,7 +127,7 @@ insert into tab_users (name, email, password, created_at, updated_at) values ('C
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4), (5, 5);
 
-insert into restaurant_responsible_user (user_id, restaurant_id) values (1, 5), (3, 5);
+insert into restaurant_responsible_user (user_id, restaurant_id) values (2, 1), (2, 2), (2, 3), (2, 4), (2, 5);
 
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                     address_street, address_number, address_complement, address_district,

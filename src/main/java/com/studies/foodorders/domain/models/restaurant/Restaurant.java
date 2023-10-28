@@ -79,8 +79,8 @@ public class Restaurant implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "restaurant_responsible_user",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<Users> responsible = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurant")

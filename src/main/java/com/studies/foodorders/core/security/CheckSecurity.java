@@ -15,12 +15,12 @@ public @interface CheckSecurity {
 		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_KITCHEN')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		@interface AllowUpdate { }
+		@interface AllowToUpdate { }
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		@interface AllowSearch { }
+		@interface AllowToSearch { }
 		
 	}
 
@@ -29,12 +29,19 @@ public @interface CheckSecurity {
 		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_RESTAURANTS')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		@interface AllowUpdate { }
+		@interface AllowToManageRestaurant { }
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and "
+				+ "(hasAuthority('UPDATE_RESTAURANTS') or "
+				+ "@apiSecurity.manageRestaurant(#restaurantId))")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToManageRestaurantOperation { }
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		@interface AllowSearch { }
+		@interface AllowToSearch { }
 
 	}
 	
