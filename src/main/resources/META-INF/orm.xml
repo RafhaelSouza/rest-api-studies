@@ -2,24 +2,34 @@
 <entity-mappings
         xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
         version="2.2">
 
     <named-query name="Restaurant.searchByName">
         <query>
             from Restaurant
-            where name like concat('%', :name, '%')
-            and kitchen.id = :d
+                where name like concat('%', :name, '%')
+                and kitchen.id = :d
         </query>
     </named-query>
 
     <named-query name="Restaurant.isRestaurantResponsible">
         <query>
             select case when count(rest) > 0 then true else false end
-            from Restaurant rest
-            join rest.responsible resp
-            where rest.id = :restaurantId
-            and resp.id = :userId
+                from Restaurant rest
+                    join rest.responsible resp
+                        where rest.id = :restaurantId
+                            and resp.id = :userId
+        </query>
+    </named-query>
+
+    <named-query name="Order.isOrderManagedBy">
+        <query>
+            select case when count(ord) > 0 then true else false end
+                from Order ord
+                    join ord.restaurant rest
+                    join rest.responsible resp
+                        where ord.code = :orderCode
+                            and resp.id = :userId
         </query>
     </named-query>
 

@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.v1.controllers.order;
 
 import com.studies.foodorders.api.v1.openapi.controllers.OrderFlowControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.services.order.OrderFlowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ public class OrderFlowController implements OrderFlowControllerOpenApi {
 
     private final OrderFlowService orderFlowService;
 
+    @CheckSecurity.Orders.AllowToManageOrders
     @PutMapping("/confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> confirm(@PathVariable String orderCode) {
@@ -22,6 +24,7 @@ public class OrderFlowController implements OrderFlowControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Orders.AllowToManageOrders
     @PutMapping("/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> cancel(@PathVariable String orderCode) {
@@ -30,6 +33,7 @@ public class OrderFlowController implements OrderFlowControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Orders.AllowToManageOrders
     @PutMapping("/deliver")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deliver(@PathVariable String orderCode) {

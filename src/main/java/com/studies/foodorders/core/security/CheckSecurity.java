@@ -63,6 +63,17 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		@interface AllowToSearch { }
 
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('MANAGE_ORDERS') or "
+				+ "@apiSecurity.manageOrderRestaurant(#orderCode))")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToManageOrders { }
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToAdd { }
+
 	}
 	
 }

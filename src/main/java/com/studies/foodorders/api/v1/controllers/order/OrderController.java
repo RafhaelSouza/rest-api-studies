@@ -71,6 +71,7 @@ public class OrderController implements OrderControllerOpenApi {
         return orderModelAssembler.toModel(orderService.findIfExists(orderCode));
     }
 
+    @CheckSecurity.Orders.AllowToAdd
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public OrderModel add(@Valid @RequestBody OrderInput orderInput) {
