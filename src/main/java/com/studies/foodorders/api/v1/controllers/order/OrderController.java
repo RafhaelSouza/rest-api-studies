@@ -9,6 +9,7 @@ import com.studies.foodorders.api.v1.openapi.controllers.OrderControllerOpenApi;
 import com.studies.foodorders.core.data.PageWrapper;
 import com.studies.foodorders.core.data.PageableCast;
 import com.studies.foodorders.core.security.ApiSecurity;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.filter.OrderFilter;
 import com.studies.foodorders.domain.models.order.Order;
@@ -63,6 +64,7 @@ public class OrderController implements OrderControllerOpenApi {
         return pagedResourcesAssembler.toModel(ordersPage, orderSummaryModelAssembler);
     }
 
+    @CheckSecurity.Orders.AllowToFind
     @GetMapping(path = "/{orderCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderModel find(@PathVariable String orderCode) {
         return orderModelAssembler.toModel(orderService.findIfExists(orderCode));

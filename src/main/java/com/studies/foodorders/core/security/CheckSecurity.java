@@ -1,5 +1,6 @@
 package com.studies.foodorders.core.security;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.Retention;
@@ -42,6 +43,18 @@ public @interface CheckSecurity {
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }
+
+	}
+
+	@interface Orders {
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PostAuthorize("hasAuthority('SEARCH_ORDERS') or "
+				+ "@apiSecurity.getUserId() == returnObject.client.id or "
+				+ "@apiSecurity.manageRestaurant(returnObject.restaurant.id)")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToFind { }
 
 	}
 	

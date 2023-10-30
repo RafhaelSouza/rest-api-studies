@@ -117,22 +117,25 @@ insert into group_permission (group_id, permission_id) select 3, id from tab_per
 insert into group_permission (group_id, permission_id) select 4, id from tab_permissions where name ilike '%_restaurants' or name ilike '%_products';
 
 -- add permissions to the client group
-insert into group_permission (group_id, permission_id) select 5, id from tab_permissions where name ilike '%_orders%';
+-- insert into group_permission (group_id, permission_id) select 5, id from tab_permissions where name ilike '%_orders%';
 
 insert into tab_users (name, email, password, created_at, updated_at) values ('Manager User', 'rafhael.projetos+manager@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_users (name, email, password, created_at, updated_at) values ('Seller User', 'rafhael.projetos+seller@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_users (name, email, password, created_at, updated_at) values ('Secretary User', 'rafhael.projetos+secretary@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_users (name, email, password, created_at, updated_at) values ('Register User', 'rafhael.projetos+register@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('Client User', 'rafhael.projetos+client@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Client User One', 'rafhael.projetos+client1@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Client User Two', 'rafhael.projetos+client2@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Restaurant Owner One', 'rafhael.projetos+owner1@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Restaurant Owner Two', 'rafhael.projetos+owner2@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4), (5, 5);
 
-insert into restaurant_responsible_user (user_id, restaurant_id) values (2, 1), (2, 2), (2, 3), (2, 4), (2, 5);
+insert into restaurant_responsible_user (user_id, restaurant_id) values (7, 1), (7, 2), (7, 3), (8, 4), (8, 5);
 
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                     address_street, address_number, address_complement, address_district,
 	                status, created_at, partial_price, shipping_costs, total_price)
-values ('d4aed75c-44bd-4ec5-a303-ee20a0f88e32', 1, 1, 1, 1, '11111-111', 'First Avenue', '100', 'Apt 101', 'Downtown',
+values ('d4aed75c-44bd-4ec5-a303-ee20a0f88e32', 1, 2, 1, 1, '11111-111', 'First Avenue', '100', 'Apt 101', 'Downtown',
         'CREATED', current_timestamp at time zone 'utc', 298.90, 10, 308.90);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
@@ -144,7 +147,7 @@ values (1, 2, 2, 110, 220, 'More spicy, please', current_timestamp at time zone 
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                             address_street, address_number, address_complement, address_district,
                             status, created_at, partial_price, shipping_costs, total_price)
-values ('cee92b85-1456-43d7-842f-93be0d57b954', 4, 1, 2, 1, '22222-111', 'Second Avenue', '500', 'First block', 'Downtown',
+values ('cee92b85-1456-43d7-842f-93be0d57b954', 4, 3, 2, 1, '22222-111', 'Second Avenue', '500', 'First block', 'Downtown',
         'CREATED', current_timestamp at time zone 'utc', 79, 0, 79);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
@@ -153,7 +156,7 @@ values (2, 6, 1, 79, 79, 'Well done steak', current_timestamp at time zone 'utc'
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                             address_street, address_number, address_complement, address_district,
                             status, created_at, partial_price, shipping_costs, total_price)
-values ('12a0af35-759d-43d2-bdfa-6cd85e3354bf', 4, 1, 2, 1, '33333-222', 'Third Avenue', '505', 'Second block', 'Downtown',
+values ('12a0af35-759d-43d2-bdfa-6cd85e3354bf', 4, 4, 2, 1, '33333-222', 'Third Avenue', '505', 'Second block', 'Downtown',
         'DELIVERED', current_timestamp at time zone 'utc', 120, 30, 150);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
@@ -162,7 +165,7 @@ values (3, 2, 1, 120, 120, null, current_timestamp at time zone 'utc');
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                             address_street, address_number, address_complement, address_district,
                             status, created_at, partial_price, shipping_costs, total_price)
-values ('960bc0ee-d04a-4729-a0f2-df01bd488f1c', 4, 1, 2, 1, '44444-333', 'Fourth Avenue', '510', 'Third block', 'Downtown',
+values ('960bc0ee-d04a-4729-a0f2-df01bd488f1c', 4, 5, 2, 1, '44444-333', 'Fourth Avenue', '510', 'Third block', 'Downtown',
         'DELIVERED', current_timestamp at time zone 'utc', 174.4, 5, 179.4);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
