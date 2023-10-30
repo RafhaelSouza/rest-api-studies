@@ -56,6 +56,13 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		@interface AllowToFind { }
 
+		@PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('SEARCH_ORDERS') or "
+				+ "@apiSecurity.getUserId() == #filters.clientId or"
+				+ "@apiSecurity.manageRestaurant(#filters.restaurantId))")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToSearch { }
+
 	}
 	
 }

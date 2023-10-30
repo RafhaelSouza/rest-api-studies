@@ -53,6 +53,7 @@ public class OrderController implements OrderControllerOpenApi {
     @Autowired
     private ApiSecurity apiSecurity;
 
+    @CheckSecurity.Orders.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<OrderSummaryModel> searchBy(@PageableDefault(size = 5) Pageable pageable, OrderFilter filters) {
         Pageable castPageable = castPageable(pageable);
