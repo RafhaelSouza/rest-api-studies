@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.security.GroupModelAssembler;
 import com.studies.foodorders.api.v1.links.UserLinks;
 import com.studies.foodorders.api.v1.models.security.group.GroupModel;
 import com.studies.foodorders.api.v1.openapi.controllers.UserGroupControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.services.security.UsersService;
 import org.springframework.hateoas.CollectionModel;
@@ -28,6 +29,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
         this.userLinks = userLinks;
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<GroupModel> list(@PathVariable Long userId) {
         Users users = usersService.findIfExists(userId);
@@ -44,6 +46,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
         return groupsModel;
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToUpdate
     @PutMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associate(@PathVariable Long userId, @PathVariable Long groupId) {
@@ -52,6 +55,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToUpdate
     @DeleteMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> disassociate(@PathVariable Long userId, @PathVariable Long groupId) {

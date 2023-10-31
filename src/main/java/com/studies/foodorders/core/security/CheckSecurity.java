@@ -117,5 +117,31 @@ public @interface CheckSecurity {
 		@interface AllowToUpdate { }
 
 	}
+
+	@interface UsersGroupsPermissions {
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('SEARCH_USERS_GROUPS_PERMISSIONS')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToSearch { }
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and "
+				+ "@apiSecurity.getUserId() == #userId")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToUpdateOwnPassword { }
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('UPDATE_USERS_GROUPS_PERMISSIONS') or "
+				+ "@apiSecurity.getUserId() == #userId)")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToUpdateUser { }
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_USERS_GROUPS_PERMISSIONS')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToUpdate { }
+
+	}
 	
 }

@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.security.PermissionModelAssemble
 import com.studies.foodorders.api.v1.links.GroupLinks;
 import com.studies.foodorders.api.v1.models.security.permission.PermissionModel;
 import com.studies.foodorders.api.v1.openapi.controllers.GroupPermissionControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.security.Group;
 import com.studies.foodorders.domain.services.security.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
     @Autowired
     private GroupLinks groupLinks;
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<PermissionModel> list(@PathVariable Long groupId) {
         Group group = groupService.findIfExists(groupId);
@@ -44,6 +46,7 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
         return permissionsModel;
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToUpdate
     @PutMapping("/{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associate(@PathVariable Long groupId, @PathVariable Long permissionId) {
@@ -52,6 +55,7 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToUpdate
     @DeleteMapping("/{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> disassociate(@PathVariable Long groupId, @PathVariable Long permissionId) {

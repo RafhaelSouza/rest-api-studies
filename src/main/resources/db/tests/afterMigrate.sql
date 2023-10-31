@@ -74,8 +74,8 @@ insert into tab_permissions (name, description) values ('SEARCH_CITIES', 'Allow 
 insert into tab_permissions (name, description) values ('UPDATE_CITIES', 'Allow to update cities');
 insert into tab_permissions (name, description) values ('SEARCH_STATES', 'Allow to search states');
 insert into tab_permissions (name, description) values ('UPDATE_STATES', 'Allow to update states');
-insert into tab_permissions (name, description) values ('SEARCH_USERS', 'Allow to search users');
-insert into tab_permissions (name, description) values ('UPDATE_USERS', 'Allow to update users');
+insert into tab_permissions (name, description) values ('SEARCH_USERS_GROUPS_PERMISSIONS', 'Allow to search users');
+insert into tab_permissions (name, description) values ('UPDATE_USERS_GROUPS_PERMISSIONS', 'Allow to update users');
 insert into tab_permissions (name, description) values ('SEARCH_RESTAURANTS', 'Allow to search restaurants');
 insert into tab_permissions (name, description) values ('UPDATE_RESTAURANTS', 'Allow to create, update or manage restaurants');
 insert into tab_permissions (name, description) values ('SEARCH_PRODUCTS', 'Allow to search products');

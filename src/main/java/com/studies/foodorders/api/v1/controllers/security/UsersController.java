@@ -6,6 +6,7 @@ import com.studies.foodorders.api.v1.models.security.user.UserInput;
 import com.studies.foodorders.api.v1.models.security.user.UserModel;
 import com.studies.foodorders.api.v1.models.security.user.UserWithPasswordInput;
 import com.studies.foodorders.api.v1.openapi.controllers.UsersControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.services.security.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class UsersController implements UsersControllerOpenApi {
     @Autowired
     private UserModelAssembler userModelAssembler;
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<UserModel> list() {
         List<Users> allUsers = usersService.list();
@@ -34,6 +36,7 @@ public class UsersController implements UsersControllerOpenApi {
         return userModelAssembler.toCollectionModel(allUsers);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToSearch
     @GetMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserModel find(@PathVariable Long userId) {
         Users users = usersService.findIfExists(userId);
@@ -50,6 +53,7 @@ public class UsersController implements UsersControllerOpenApi {
         return userModelAssembler.toModel(users);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToUpdateUser
     @PutMapping(path = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserModel update(@PathVariable Long userId,
                                   @RequestBody @Valid UserInput userInput) {
@@ -60,6 +64,7 @@ public class UsersController implements UsersControllerOpenApi {
         return userModelAssembler.toModel(currentUsers);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowToUpdateOwnPassword
     @PutMapping("/{userId}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassord(@PathVariable Long userId, @RequestBody @Valid PasswordInput password) {
