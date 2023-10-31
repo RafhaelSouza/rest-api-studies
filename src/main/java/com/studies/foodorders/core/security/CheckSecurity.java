@@ -75,5 +75,19 @@ public @interface CheckSecurity {
 		@interface AllowToAdd { }
 
 	}
+
+	@interface PaymentWays {
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToSearch { }
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_PAYMENT_WAYS')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToUpdate { }
+
+	}
 	
 }
