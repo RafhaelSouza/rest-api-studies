@@ -40,8 +40,8 @@ public class KitchenController implements KitchenControllerOpenApi {
         return new KitchensXmlWrapper(kitchenService.list());
     }*/
 
-    @CheckSecurity.Kitchens.AllowToSearch
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<KitchenModel> list(@PageableDefault(size = 2) Pageable pageable) {
 
@@ -56,15 +56,15 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenPagedModel;
     }
 
-    @CheckSecurity.Kitchens.AllowToSearch
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToSearch
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel find(@PathVariable Long id) {
         return kitchenModelAssembler.toModel(kitchenService.findIfExists(id));
     }
 
-    @CheckSecurity.Kitchens.AllowToUpdate
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToUpdate
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public KitchenModel save(@RequestBody @Valid KitchenInput kitchenInput) {
@@ -72,8 +72,8 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenModelAssembler.toModel(kitchenService.save(kitchen));
     }
 
-    @CheckSecurity.Kitchens.AllowToUpdate
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToUpdate
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel update(@PathVariable Long id, @RequestBody @Valid KitchenInput kitchenInput) {
         Kitchen currentKitchen = kitchenService.findIfExists(id);
@@ -83,8 +83,8 @@ public class KitchenController implements KitchenControllerOpenApi {
         return kitchenModelAssembler.toModel(kitchenService.save(currentKitchen));
     }
 
-    @CheckSecurity.Kitchens.AllowToUpdate
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToUpdate
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

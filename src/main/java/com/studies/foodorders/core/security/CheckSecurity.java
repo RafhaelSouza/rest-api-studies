@@ -89,5 +89,33 @@ public @interface CheckSecurity {
 		@interface AllowToUpdate { }
 
 	}
+
+	@interface Cities {
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToSearch { }
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_CITIES')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToUpdate { }
+
+	}
+
+	@interface States {
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToSearch { }
+
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_STATES')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@interface AllowToUpdate { }
+
+	}
 	
 }
