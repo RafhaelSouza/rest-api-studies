@@ -3,6 +3,7 @@ package com.studies.foodorders.api.v1.assemblers.product;
 import com.studies.foodorders.api.v1.controllers.restaurant.RestaurantProductPhotoController;
 import com.studies.foodorders.api.v1.links.ProductLinks;
 import com.studies.foodorders.api.v1.models.product.ProductPhotoModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.product.ProductPhoto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class ProductPhotoModelAssembler extends RepresentationModelAssemblerSupp
 	@Autowired
 	private ProductLinks productLinks;
 
+	@Autowired
+	private ApiSecurity apiSecurity;
+
 	public ProductPhotoModelAssembler() {
 		super(RestaurantProductPhotoController.class, ProductPhotoModel.class);
 	}
@@ -26,11 +30,12 @@ public class ProductPhotoModelAssembler extends RepresentationModelAssemblerSupp
 
 		ProductPhotoModel productPhotoModel = modelMapper.map(productPhoto, ProductPhotoModel.class);
 
-		productPhotoModel.add(productLinks.linkToProductPhoto(
-				productPhoto.getRestaurantId(), productPhoto.getProduct().getId()));
-
-		productPhotoModel.add(productLinks.linkToProduct(
-				productPhoto.getRestaurantId(), productPhoto.getProduct().getId(), "product"));
+		if (apiSecurity.isAllowedToSearchRestaurants()) {
+			productPhotoModel.add(productLinks.linkToProductPhoto(
+					productPhoto.getRestaurantId(), productPhoto.getProduct().getId()));
+			productPhotoModel.add(productLinks.linkToProduct(
+					productPhoto.getRestaurantId(), productPhoto.getProduct().getId(), "product"));
+		}
 
 		return modelMapper.map(productPhoto, ProductPhotoModel.class);
 	}

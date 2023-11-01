@@ -18,7 +18,7 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		@interface AllowToUpdate { }
 
-		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchKitchens()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }
@@ -27,19 +27,17 @@ public @interface CheckSecurity {
 
 	@interface Restaurants {
 
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_RESTAURANTS')")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchRestaurants()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToManageRestaurant { }
 
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and "
-				+ "(hasAuthority('UPDATE_RESTAURANTS') or "
-				+ "@apiSecurity.manageRestaurant(#restaurantId))")
+		@PreAuthorize("@apiSecurity.isAllowedToManageRestaurantOperation(#restaurantId)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToManageRestaurantOperation { }
 
-		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchRestaurants()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }
@@ -56,15 +54,12 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		@interface AllowToFind { }
 
-		@PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('SEARCH_ORDERS') or "
-				+ "@apiSecurity.authenticatedUserEquals(#filters.clientId) or"
-				+ "@apiSecurity.manageRestaurant(#filters.restaurantId))")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchOrders(#filters.clientId, #filters.restaurantId)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }
 
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('MANAGE_ORDERS') or "
-				+ "@apiSecurity.manageOrderRestaurant(#orderCode))")
+		@PreAuthorize("@apiSecurity.manageOrder(#orderCode)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToManageOrders { }
@@ -78,7 +73,7 @@ public @interface CheckSecurity {
 
 	@interface PaymentWays {
 
-		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchPaymentWays()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }
@@ -92,7 +87,7 @@ public @interface CheckSecurity {
 
 	@interface Cities {
 
-		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchCities()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }
@@ -106,7 +101,7 @@ public @interface CheckSecurity {
 
 	@interface States {
 
-		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchStates()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }
@@ -120,7 +115,7 @@ public @interface CheckSecurity {
 
 	@interface UsersGroupsPermissions {
 
-		@PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('SEARCH_USERS_GROUPS_PERMISSIONS')")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchUsersGroupsPermissions()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }
@@ -136,7 +131,7 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		@interface AllowToUpdateUser { }
 
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_USERS_GROUPS_PERMISSIONS')")
+		@PreAuthorize("@apiSecurity.isAllowedToUpdateUsersGroupsPermissions()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToUpdate { }
@@ -145,7 +140,7 @@ public @interface CheckSecurity {
 
 	@interface Statistics {
 
-		@PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('GENERATE_REPORTS')")
+		@PreAuthorize("@apiSecurity.isAllowedToSearchStatistics()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToSearch { }

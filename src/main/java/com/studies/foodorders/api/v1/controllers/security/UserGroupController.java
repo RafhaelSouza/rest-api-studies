@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.security.GroupModelAssembler;
 import com.studies.foodorders.api.v1.links.UserLinks;
 import com.studies.foodorders.api.v1.models.security.group.GroupModel;
 import com.studies.foodorders.api.v1.openapi.controllers.UserGroupControllerOpenApi;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.services.security.UsersService;
@@ -23,10 +24,13 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 
     private UserLinks userLinks;
 
-    public UserGroupController(UsersService usersService, GroupModelAssembler groupModelAssembler, UserLinks userLinks) {
+    private ApiSecurity apiSecurity;
+
+    public UserGroupController(UsersService usersService, GroupModelAssembler groupModelAssembler, UserLinks userLinks, ApiSecurity apiSecurity) {
         this.usersService = usersService;
         this.groupModelAssembler = groupModelAssembler;
         this.userLinks = userLinks;
+        this.apiSecurity = apiSecurity;
     }
 
     @CheckSecurity.UsersGroupsPermissions.AllowToSearch
@@ -35,13 +39,16 @@ public class UserGroupController implements UserGroupControllerOpenApi {
         Users users = usersService.findIfExists(userId);
 
         CollectionModel<GroupModel> groupsModel = groupModelAssembler.toCollectionModel(users.getGroups())
-                .removeLinks()
-                .add(userLinks.linkToUserGroupAssociate(userId, "associate"));
+                .removeLinks();
 
-        groupsModel.getContent().forEach(groupModel -> {
-            groupModel.add(userLinks.linkToUserGroupDisassociate(
-                    userId, groupModel.getId(), "disassociate"));
-        });
+        if (apiSecurity.isAllowedToUpdateUsersGroupsPermissions()) {
+            groupsModel.add(userLinks.linkToUserGroupAssociate(userId, "associate"));
+
+            groupsModel.getContent().forEach(groupModel -> {
+                groupModel.add(userLinks.linkToUserGroupDisassociate(
+                        userId, groupModel.getId(), "disassociate"));
+            });
+        }
 
         return groupsModel;
     }

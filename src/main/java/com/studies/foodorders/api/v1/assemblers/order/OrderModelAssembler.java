@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.controllers.order.OrderController;
 import com.studies.foodorders.api.v1.links.*;
 import com.studies.foodorders.api.v1.models.order.OrderInput;
 import com.studies.foodorders.api.v1.models.order.OrderModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.order.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
     @Autowired
     private ProductLinks productLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public OrderModelAssembler() {
         super(OrderController.class, OrderModel.class);
     }
@@ -46,28 +50,37 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
         OrderModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(orderLinks.linkToOrders("orders"));
+        if (apiSecurity.isAllowedToSearchOrders())
+            orderModel.add(orderLinks.linkToOrders("orders"));
 
-        if (order.itCanBeConfirmed())
-            orderModel.add(orderLinks.linkToOrderConfirmation(String.valueOf(order.getCode()), "confirm"));
+        if (apiSecurity.manageOrder(String.valueOf(order.getCode()))) {
+            if (order.itCanBeConfirmed())
+                orderModel.add(orderLinks.linkToOrderConfirmation(String.valueOf(order.getCode()), "confirm"));
 
-        if (order.itCanBeCancelled())
-            orderModel.add(orderLinks.linkToOrderCancellation(String.valueOf(order.getCode()), "cancel"));
+            if (order.itCanBeCancelled())
+                orderModel.add(orderLinks.linkToOrderCancellation(String.valueOf(order.getCode()), "cancel"));
 
-        if (order.itCanBeDelivered())
-            orderModel.add(orderLinks.linkToOrderDeliver(String.valueOf(order.getCode()), "deliver"));
+            if (order.itCanBeDelivered())
+                orderModel.add(orderLinks.linkToOrderDeliver(String.valueOf(order.getCode()), "deliver"));
+        }
 
-        orderModel.getRestaurant().add(restaurantLinks.linkToRestaurant(order.getRestaurant().getId()));
+        if (apiSecurity.isAllowedToSearchRestaurants())
+            orderModel.getRestaurant().add(restaurantLinks.linkToRestaurant(order.getRestaurant().getId()));
 
-        orderModel.getClient().add(userLinks.linkToUser(order.getClient().getId()));
+        if (apiSecurity.isAllowedToSearchUsersGroupsPermissions())
+            orderModel.getClient().add(userLinks.linkToUser(order.getClient().getId()));
 
-        orderModel.getPaymentWay().add(paymentWayLinks.linkToPaymentWay(order.getPaymentWay().getId()));
+        if (apiSecurity.isAllowedToSearchPaymentWays())
+            orderModel.getPaymentWay().add(paymentWayLinks.linkToPaymentWay(order.getPaymentWay().getId()));
 
-        orderModel.getDeliveryAddress().getCity().add(cityLinks.linkToCity(order.getDeliveryAddress().getCity().getId()));
+        if (apiSecurity.isAllowedToSearchCities())
+            orderModel.getDeliveryAddress().getCity().add(cityLinks.linkToCity(order.getDeliveryAddress().getCity().getId()));
 
-        orderModel.getItems().forEach(item -> {
-            item.add(productLinks.linkToProduct(orderModel.getRestaurant().getId(), item.getProductId(), "product"));
-        });
+        if (apiSecurity.isAllowedToSearchRestaurants()) {
+            orderModel.getItems().forEach(item -> {
+                item.add(productLinks.linkToProduct(orderModel.getRestaurant().getId(), item.getProductId(), "product"));
+            });
+        }
 
         return orderModel;
     }

@@ -3,6 +3,7 @@ package com.studies.foodorders.api.v1.assemblers.restaurant;
 import com.studies.foodorders.api.v1.controllers.restaurant.RestaurantController;
 import com.studies.foodorders.api.v1.links.RestaurantLinks;
 import com.studies.foodorders.api.v1.models.restaurant.RestaurantIdAndNameModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class RestaurantIdAndNameModelAssembler extends RepresentationModelAssemb
     @Autowired
     private RestaurantLinks restaurantLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public RestaurantIdAndNameModelAssembler() {
         super(RestaurantController.class, RestaurantIdAndNameModel.class);
     }
@@ -30,7 +34,8 @@ public class RestaurantIdAndNameModelAssembler extends RepresentationModelAssemb
 
         modelMapper.map(restaurant, restaurantModel);
 
-        restaurantModel.add(restaurantLinks.linkToRestaurants("restaurants"));
+        if (apiSecurity.isAllowedToSearchRestaurants())
+            restaurantModel.add(restaurantLinks.linkToRestaurants("restaurants"));
 
         return restaurantModel;
 
@@ -38,8 +43,12 @@ public class RestaurantIdAndNameModelAssembler extends RepresentationModelAssemb
 
     @Override
     public CollectionModel<RestaurantIdAndNameModel> toCollectionModel(Iterable<? extends Restaurant> entities) {
-        return super.toCollectionModel(entities)
-                .add(restaurantLinks.linkToRestaurants());
+        CollectionModel<RestaurantIdAndNameModel> restaurantIdAndNameModelCollectionModel = super.toCollectionModel(entities);
+
+        if (apiSecurity.isAllowedToSearchRestaurants())
+            restaurantIdAndNameModelCollectionModel.add(restaurantLinks.linkToRestaurants());
+
+        return restaurantIdAndNameModelCollectionModel;
     }
 
 }

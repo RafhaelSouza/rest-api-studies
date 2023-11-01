@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.security.PermissionModelAssemble
 import com.studies.foodorders.api.v1.links.GroupLinks;
 import com.studies.foodorders.api.v1.models.security.permission.PermissionModel;
 import com.studies.foodorders.api.v1.openapi.controllers.GroupPermissionControllerOpenApi;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.security.Group;
 import com.studies.foodorders.domain.services.security.GroupService;
@@ -27,6 +28,9 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
     @Autowired
     private GroupLinks groupLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     @CheckSecurity.UsersGroupsPermissions.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<PermissionModel> list(@PathVariable Long groupId) {
@@ -34,14 +38,18 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
 
         CollectionModel<PermissionModel> permissionsModel =
                 permissionModelAssembler.toCollectionModel(group.getPermissions())
-                        .removeLinks()
-                        .add(groupLinks.linkToGroupPermissions(groupId))
-                        .add(groupLinks.linkToGroupPermissionAssociate(groupId, "associate"));
+                        .removeLinks();
 
-        permissionsModel.getContent().forEach(permissionModel -> {
-            permissionModel.add(groupLinks.linkToGroupPermissionDisassociate(
-                    groupId, permissionModel.getId(), "disassociate"));
-        });
+        permissionsModel.add(groupLinks.linkToGroupPermissions(groupId));
+
+        if (apiSecurity.isAllowedToUpdateUsersGroupsPermissions()) {
+            permissionsModel.add(groupLinks.linkToGroupPermissionAssociate(groupId, "associate"));
+
+            permissionsModel.getContent().forEach(permissionModel -> {
+                permissionModel.add(groupLinks.linkToGroupPermissionDisassociate(
+                        groupId, permissionModel.getId(), "disassociate"));
+            });
+        }
 
         return permissionsModel;
     }

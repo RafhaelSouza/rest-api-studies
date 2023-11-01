@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.security.UserModelAssembler;
 import com.studies.foodorders.api.v1.links.RestaurantLinks;
 import com.studies.foodorders.api.v1.models.security.user.UserModel;
 import com.studies.foodorders.api.v1.openapi.controllers.RestaurantResponsibleUserControllerOpenApi;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
@@ -23,12 +24,16 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
 
     private RestaurantLinks restaurantLinks;
 
+    private ApiSecurity apiSecurity;
+
     public RestaurantResponsibleUserController(RestaurantService restaurantService,
                                                UserModelAssembler userModelAssembler,
-                                               RestaurantLinks restaurantLinks) {
+                                               RestaurantLinks restaurantLinks,
+                                               ApiSecurity apiSecurity) {
         this.restaurantService = restaurantService;
         this.userModelAssembler = userModelAssembler;
         this.restaurantLinks = restaurantLinks;
+        this.apiSecurity = apiSecurity;
     }
 
     @CheckSecurity.Restaurants.AllowToManageRestaurant
@@ -37,14 +42,19 @@ public class RestaurantResponsibleUserController implements RestaurantResponsibl
         Restaurant restaurant = restaurantService.findIfExists(restaurantId);
 
         CollectionModel<UserModel> usersModel = userModelAssembler.toCollectionModel(restaurant.getResponsible())
-                .removeLinks()
-                .add(restaurantLinks.linkToRestaurantResponsible(restaurantId))
-                .add(restaurantLinks.linkToRestaurantResponsibleAssociation(restaurantId, "associate"));
+                .removeLinks();
 
-        usersModel.getContent().stream().forEach(userModel -> {
-            userModel.add(restaurantLinks.linkToRestaurantResponsibleDisassociation(
-                    restaurantId, userModel.getId(), "disassociate"));
-        });
+        usersModel.add(restaurantLinks.linkToRestaurantResponsible(restaurantId));
+
+
+        if (apiSecurity.isAllowedToManageRestaurant()) {
+            usersModel.add(restaurantLinks.linkToRestaurantResponsibleAssociation(restaurantId, "associate"));
+
+            usersModel.getContent().stream().forEach(userModel -> {
+                userModel.add(restaurantLinks.linkToRestaurantResponsibleDisassociation(
+                        restaurantId, userModel.getId(), "disassociate"));
+            });
+        }
 
         return usersModel;
     }
