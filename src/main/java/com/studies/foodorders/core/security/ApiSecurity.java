@@ -38,5 +38,10 @@ public class ApiSecurity {
 	public boolean manageOrderRestaurant(String orderCode) {
 		return orderRepository.isOrderManagedBy(UUID.fromString(orderCode), getUserId());
 	}
+
+	public boolean authenticatedUserEquals(Long userId) {
+		return getUserId() != null && userId != null
+				&& getUserId().equals(userId);
+	}
 	
 }

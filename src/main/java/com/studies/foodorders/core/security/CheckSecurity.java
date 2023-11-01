@@ -50,14 +50,14 @@ public @interface CheckSecurity {
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
 		@PostAuthorize("hasAuthority('SEARCH_ORDERS') or "
-				+ "@apiSecurity.getUserId() == returnObject.client.id or "
+				+ "@apiSecurity.authenticatedUserEquals(returnObject.client.id) or "
 				+ "@apiSecurity.manageRestaurant(returnObject.restaurant.id)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToFind { }
 
 		@PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('SEARCH_ORDERS') or "
-				+ "@apiSecurity.getUserId() == #filters.clientId or"
+				+ "@apiSecurity.authenticatedUserEquals(#filters.clientId) or"
 				+ "@apiSecurity.manageRestaurant(#filters.restaurantId))")
 		@Retention(RUNTIME)
 		@Target(METHOD)
@@ -125,14 +125,13 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		@interface AllowToSearch { }
 
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and "
-				+ "@apiSecurity.getUserId() == #userId")
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and @apiSecurity.authenticatedUserEquals(#userId)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToUpdateOwnPassword { }
 
 		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('UPDATE_USERS_GROUPS_PERMISSIONS') or "
-				+ "@apiSecurity.getUserId() == #userId)")
+				+ "@apiSecurity.authenticatedUserEquals(#userId))")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		@interface AllowToUpdateUser { }
