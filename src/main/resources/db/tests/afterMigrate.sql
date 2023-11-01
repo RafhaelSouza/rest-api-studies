@@ -17,6 +17,7 @@ delete from restaurant_responsible_user;
 delete from tab_orders;
 delete from tab_order_items;
 delete from tab_product_photo;
+delete from oauth_client_details;
 
 -- enable foreign key checks
 set session_replication_role = 'origin';
@@ -179,3 +180,30 @@ values ('3b686e44-b6dc-4a9f-ab43-f8b872d8e2bd', 4, 1, 2, 1, '55555-444', 'Fifth 
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
 values (5, 3, 1, 87.2, 87.2, null, current_timestamp at time zone 'utc');
+
+insert into oauth_client_details (client_id, resource_ids, client_secret,
+  scope, authorized_grant_types, web_server_redirect_uri, authorities,
+  access_token_validity, refresh_token_validity, autoapprove
+)
+values ('web-client', null, '$2a$12$R1fAEM6uD5rKvbkXMloflOkTM9vh2LYwtjCFqBMXQ86gqB6xwvO7m',
+  'READ,WRITE', 'password', null, null,
+  60 * 60 * 6, 7 * 24 * 60 * 60, null
+);
+
+insert into oauth_client_details (client_id, resource_ids, client_secret,
+  scope, authorized_grant_types, web_server_redirect_uri, authorities,
+  access_token_validity, refresh_token_validity, autoapprove
+)
+values ('client-oauth2-authorization-code', null, '$2a$12$R1fAEM6uD5rKvbkXMloflOkTM9vh2LYwtjCFqBMXQ86gqB6xwvO7m',
+  'READ,WRITE', 'authorization_code', 'http://localhost:8082', null,
+  null, null, null
+);
+
+insert into oauth_client_details (client_id, resource_ids, client_secret,
+  scope, authorized_grant_types, web_server_redirect_uri, authorities,
+  access_token_validity, refresh_token_validity, autoapprove
+)
+values ('any-back-end-application', null, '$2a$12$R1fAEM6uD5rKvbkXMloflOkTM9vh2LYwtjCFqBMXQ86gqB6xwvO7m',
+  'READ,WRITE', 'client_credentials', null, 'SEARCH_ORDERS,GENERATE_REPORTS',
+  null, null, null
+);
