@@ -2,6 +2,7 @@ package com.studies.foodorders.api.v1.controllers.sells;
 
 import com.studies.foodorders.api.v1.links.StatisticLinks;
 import com.studies.foodorders.api.v1.openapi.controllers.StatisticsControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.filter.DailySellsFilter;
 import com.studies.foodorders.domain.models.order.dto.DailySells;
 import com.studies.foodorders.domain.repositories.sells.SellsReportRepository;
@@ -30,6 +31,7 @@ public class StatisticsController implements StatisticsControllerOpenApi {
 	@Autowired
 	private StatisticLinks statisticLinks;
 
+	@CheckSecurity.Statistics.AllowToSearch
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public StatisticsModel statistics() {
 		var statisticsModel = new StatisticsModel();
@@ -38,12 +40,14 @@ public class StatisticsController implements StatisticsControllerOpenApi {
 
 		return statisticsModel;
 	}
-	
+
+	@CheckSecurity.Statistics.AllowToSearch
 	@GetMapping(path = "/daily-sells", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<DailySells> searchDailySales(DailySellsFilter filter) {
 		return sellsRepositoryQueries.searchDailySales(filter);
 	}
 
+	@CheckSecurity.Statistics.AllowToSearch
 	@GetMapping(path = "/daily-sells", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> searchDailySalesPdf(DailySellsFilter filter) {
 		byte[] bytesPdf = sellsReportRepository.searchDailySales(filter);

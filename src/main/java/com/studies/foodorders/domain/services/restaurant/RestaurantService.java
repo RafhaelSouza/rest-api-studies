@@ -6,12 +6,12 @@ import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
-import com.studies.foodorders.domain.models.security.User;
+import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.repositories.restaurant.RestaurantRepository;
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
 import com.studies.foodorders.domain.services.localization.CityService;
 import com.studies.foodorders.domain.services.paymentway.PaymentWayService;
-import com.studies.foodorders.domain.services.security.UserService;
+import com.studies.foodorders.domain.services.security.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -39,7 +39,7 @@ public class RestaurantService {
     private PaymentWayService paymentWayService;
 
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     public List<Restaurant> list() {
         return restaurantRepository.findAll();
@@ -135,17 +135,17 @@ public class RestaurantService {
     @Transactional
     public void associateResponsible(Long restaurantId, Long userId) {
         Restaurant restaurant = findIfExists(restaurantId);
-        User user = userService.findIfExists(userId);
+        Users users = usersService.findIfExists(userId);
 
-        restaurant.addResponsible(user);
+        restaurant.addResponsible(users);
     }
 
     @Transactional
     public void disassociateResponsible(Long restaurantId, Long userId) {
         Restaurant restaurant = findIfExists(restaurantId);
-        User user = userService.findIfExists(userId);
+        Users users = usersService.findIfExists(userId);
 
-        restaurant.deleteResponsible(user);
+        restaurant.deleteResponsible(users);
     }
 
     public Restaurant findIfExists(Long id) {

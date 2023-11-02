@@ -5,6 +5,7 @@ import com.studies.foodorders.api.v1.links.ProductLinks;
 import com.studies.foodorders.api.v1.models.product.ProductInput;
 import com.studies.foodorders.api.v1.models.product.ProductModel;
 import com.studies.foodorders.api.v1.openapi.controllers.RestaurantProductControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.product.Product;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.repositories.product.ProductRepository;
@@ -38,6 +39,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
     @Autowired
     private ProductLinks productLinks;
 
+    @CheckSecurity.Restaurants.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<ProductModel> list(@PathVariable Long restaurantId,
                                               @RequestParam(required = false) Boolean includeInactives) {
@@ -55,6 +57,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
                 .add(productLinks.linkToProducts(restaurantId));
     }
 
+    @CheckSecurity.Restaurants.AllowToSearch
     @GetMapping(path = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductModel find(@PathVariable Long restaurantId, @PathVariable Long productId) {
         Product product = productService.findIfExists(restaurantId, productId);
@@ -62,6 +65,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
+    @CheckSecurity.Restaurants.AllowToManageRestaurantOperation
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ProductModel save(@PathVariable Long restaurantId,
@@ -76,6 +80,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
+    @CheckSecurity.Restaurants.AllowToManageRestaurantOperation
     @PutMapping(path = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductModel update(@PathVariable Long restaurantId, @PathVariable Long productId,
                                   @RequestBody @Valid ProductInput productInput) {

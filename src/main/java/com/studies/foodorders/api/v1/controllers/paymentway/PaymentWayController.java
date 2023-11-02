@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.paymentway.PaymentWayModelAssemb
 import com.studies.foodorders.api.v1.models.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.v1.models.paymentway.PaymentWayModel;
 import com.studies.foodorders.api.v1.openapi.controllers.PaymentWayControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.services.paymentway.PaymentWayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
     @Autowired
     private PaymentWayModelAssembler paymentWayModelAssembler;
 
+    @CheckSecurity.PaymentWays.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CollectionModel<PaymentWayModel>> list(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -59,6 +61,7 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
                 .body(paymentWays);
     }
 
+    @CheckSecurity.PaymentWays.AllowToSearch
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PaymentWayModel> find(@PathVariable Long id, ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -81,6 +84,7 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
                 .body(paymentWay);
     }
 
+    @CheckSecurity.PaymentWays.AllowToUpdate
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentWayModel save(@RequestBody @Valid PaymentWayInput paymentWayInput) {
@@ -89,6 +93,7 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
         return paymentWayModelAssembler.toModel(paymentWayService.save(paymentWay));
     }
 
+    @CheckSecurity.PaymentWays.AllowToUpdate
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public PaymentWayModel update(@PathVariable Long id,
                                   @RequestBody @Valid PaymentWayInput paymentWayInput) {
@@ -99,6 +104,7 @@ public class PaymentWayController implements PaymentWayControllerOpenApi {
         return paymentWayModelAssembler.toModel(paymentWayService.save(currentPaymentWay));
     }
 
+    @CheckSecurity.PaymentWays.AllowToUpdate
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

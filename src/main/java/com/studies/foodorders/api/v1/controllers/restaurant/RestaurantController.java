@@ -8,6 +8,7 @@ import com.studies.foodorders.api.v1.models.restaurant.RestaurantIdAndNameModel;
 import com.studies.foodorders.api.v1.models.restaurant.RestaurantModel;
 import com.studies.foodorders.api.v1.models.restaurant.input.RestaurantInput;
 import com.studies.foodorders.api.v1.openapi.controllers.RestaurantControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.exceptions.BusinessException;
 import com.studies.foodorders.domain.exceptions.CityNotFoundException;
 import com.studies.foodorders.domain.exceptions.KitchenNotFoundException;
@@ -63,23 +64,27 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     }*/
 
     //@JsonView({ RestaurantView.Summary.class })
+    @CheckSecurity.Restaurants.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<RestaurantBasicModel> list() {
         return restaurantBasicModelAssembler.toCollectionModel(restaurantService.list());
     }
 
     //@JsonView({ RestaurantView.IdAndName.class })
+    @CheckSecurity.Restaurants.AllowToSearch
     @GetMapping(params = "projection=id-and-name", produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<RestaurantIdAndNameModel> listIdAndName() {
         return restaurantIdAndNameModelAssembler.toCollectionModel(restaurantService.list());
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestaurantModel find(@PathVariable Long id) {
-        Restaurant restaurant = restaurantService.findIfExists(id);
+    @CheckSecurity.Restaurants.AllowToSearch
+    @GetMapping(path = "/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestaurantModel find(@PathVariable Long restaurantId) {
+        Restaurant restaurant = restaurantService.findIfExists(restaurantId);
         return restaurantModelAssembler.toModel(restaurant);
     }
 
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantModel save(@RequestBody @Valid RestaurantInput restaurantInput) {
@@ -91,10 +96,11 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         }
     }
 
-    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestaurantModel update(@PathVariable Long id, @RequestBody @Valid RestaurantInput restaurantInput) {
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
+    @PutMapping(path = "/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestaurantModel update(@PathVariable Long restaurantId, @RequestBody @Valid RestaurantInput restaurantInput) {
 
-        Restaurant currentRestaurant = restaurantService.findIfExists(id);
+        Restaurant currentRestaurant = restaurantService.findIfExists(restaurantId);
         restaurantModelAssembler.copyToDomainObject(restaurantInput, currentRestaurant);
         /*BeanUtils.copyProperties(restaurant, currentRestaurant,
                 "id", "createdAt", "paymentWay", "address");*/
@@ -105,22 +111,25 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         }
     }
 
-    @PutMapping("/{id}/activate")
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
+    @PutMapping("/{restaurantId}/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> activate(@PathVariable Long id) {
-        restaurantService.activate(id);
+    public ResponseEntity<Void> activate(@PathVariable Long restaurantId) {
+        restaurantService.activate(restaurantId);
 
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}/inactivate")
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
+    @DeleteMapping("/{restaurantId}/inactivate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> inactivate(@PathVariable Long id) {
-        restaurantService.inactivate(id);
+    public ResponseEntity<Void> inactivate(@PathVariable Long restaurantId) {
+        restaurantService.inactivate(restaurantId);
 
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
     @PutMapping("/activations")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void batchActivate(@RequestBody List<Long> restaurantsId) {
@@ -131,6 +140,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Restaurants.AllowToManageRestaurant
     @DeleteMapping("/activations")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void batchInactivate(@RequestBody List<Long> restaurantsId) {
@@ -141,18 +151,20 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         }
     }
 
-    @PutMapping("/{id}/open")
+    @CheckSecurity.Restaurants.AllowToManageRestaurantOperation
+    @PutMapping("/{restaurantId}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> toOpen(@PathVariable Long id) {
-        restaurantService.toOpen(id);
+    public ResponseEntity<Void> toOpen(@PathVariable Long restaurantId) {
+        restaurantService.toOpen(restaurantId);
 
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}/close")
+    @CheckSecurity.Restaurants.AllowToManageRestaurantOperation
+    @DeleteMapping("/{restaurantId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> toClose(@PathVariable Long id) {
-        restaurantService.toClose(id);
+    public ResponseEntity<Void> toClose(@PathVariable Long restaurantId) {
+        restaurantService.toClose(restaurantId);
 
         return ResponseEntity.noContent().build();
     }

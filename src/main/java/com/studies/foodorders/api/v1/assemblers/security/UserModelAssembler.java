@@ -1,10 +1,11 @@
 package com.studies.foodorders.api.v1.assemblers.security;
 
-import com.studies.foodorders.api.v1.controllers.security.UserController;
+import com.studies.foodorders.api.v1.controllers.security.UsersController;
 import com.studies.foodorders.api.v1.links.UserLinks;
 import com.studies.foodorders.api.v1.models.security.user.UserInput;
 import com.studies.foodorders.api.v1.models.security.user.UserModel;
-import com.studies.foodorders.domain.models.security.User;
+import com.studies.foodorders.core.security.ApiSecurity;
+import com.studies.foodorders.domain.models.security.Users;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -12,7 +13,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserModelAssembler extends RepresentationModelAssemblerSupport<User, UserModel> {
+public class UserModelAssembler extends RepresentationModelAssemblerSupport<Users, UserModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -20,35 +21,43 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
 	@Autowired
 	private UserLinks userLinks;
 
+	@Autowired
+	private ApiSecurity apiSecurity;
+
 	public UserModelAssembler() {
-		super(UserController.class, UserModel.class);
+		super(UsersController.class, UserModel.class);
 	}
 	
-	public UserModel toModel(User user) {
+	public UserModel toModel(Users users) {
 
-		UserModel userModel = createModelWithId(user.getId(), user);
+		UserModel userModel = createModelWithId(users.getId(), users);
 
-		modelMapper.map(user, userModel);
+		modelMapper.map(users, userModel);
 
-		userModel.add(userLinks.linkToUsers("users"));
-
-		userModel.add(userLinks.linkToUserGroups(user.getId(),"user-group"));
+		if (apiSecurity.isAllowedToSearchUsersGroupsPermissions()) {
+			userModel.add(userLinks.linkToUsers("users"));
+			userModel.add(userLinks.linkToUserGroups(users.getId(),"user-group"));
+		}
 
 		return userModel;
 	}
 
 	@Override
-	public CollectionModel<UserModel> toCollectionModel(Iterable<? extends User> entities) {
-		return super.toCollectionModel(entities)
-				.add(userLinks.linkToUsers());
+	public CollectionModel<UserModel> toCollectionModel(Iterable<? extends Users> entities) {
+		CollectionModel<UserModel> userModelCollectionModel = super.toCollectionModel(entities);
+
+		if (apiSecurity.isAllowedToSearchUsersGroupsPermissions())
+			userModelCollectionModel.add(userLinks.linkToUsers());
+
+		return userModelCollectionModel;
 	}
 
-	public User toDomainObject(UserInput userInput) {
-		return modelMapper.map(userInput, User.class);
+	public Users toDomainObject(UserInput userInput) {
+		return modelMapper.map(userInput, Users.class);
 	}
 
-	public void copyToDomainObject(UserInput userInput, User user) {
-		modelMapper.map(userInput, user);
+	public void copyToDomainObject(UserInput userInput, Users users) {
+		modelMapper.map(userInput, users);
 	}
 	
 }

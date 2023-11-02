@@ -7,13 +7,13 @@ import com.studies.foodorders.domain.models.order.Order;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.models.product.Product;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
-import com.studies.foodorders.domain.models.security.User;
+import com.studies.foodorders.domain.models.security.Users;
 import com.studies.foodorders.domain.repositories.order.OrderRepository;
 import com.studies.foodorders.domain.services.localization.CityService;
 import com.studies.foodorders.domain.services.paymentway.PaymentWayService;
 import com.studies.foodorders.domain.services.product.ProductService;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
-import com.studies.foodorders.domain.services.security.UserService;
+import com.studies.foodorders.domain.services.security.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class OrderService {
     private CityService cityService;
 
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     @Autowired
     private ProductService productService;
@@ -54,12 +54,12 @@ public class OrderService {
 
     private void checkOrder(Order order) {
         City city = cityService.findIfExists(order.getDeliveryAddress().getCity().getId());
-        User user = userService.findIfExists(order.getClient().getId());
+        Users users = usersService.findIfExists(order.getClient().getId());
         Restaurant restaurant = restaurantService.findIfExists(order.getRestaurant().getId());
         PaymentWay paymentWay = paymentWayService.findIfExists(order.getPaymentWay().getId());
 
         order.getDeliveryAddress().setCity(city);
-        order.setClient(user);
+        order.setClient(users);
         order.setRestaurant(restaurant);
         order.setPaymentWay(paymentWay);
 

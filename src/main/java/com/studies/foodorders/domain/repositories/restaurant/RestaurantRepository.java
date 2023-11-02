@@ -2,7 +2,6 @@ package com.studies.foodorders.domain.repositories.restaurant;
 
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.repositories.springcustom.CustomJpaRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -27,5 +26,7 @@ public interface RestaurantRepository
     //@Query("from Restaurant r join r.kitchen left outer join fetch r.paymentWay")
     @Query("from Restaurant r join r.kitchen")
     List<Restaurant> findAll();
+
+    boolean isRestaurantResponsible(Long restaurantId, Long userId);
 
 }

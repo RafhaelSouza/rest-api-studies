@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.controllers.restaurant.RestaurantProductCon
 import com.studies.foodorders.api.v1.links.ProductLinks;
 import com.studies.foodorders.api.v1.models.product.ProductInput;
 import com.studies.foodorders.api.v1.models.product.ProductModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.product.Product;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class ProductModelAssembler extends RepresentationModelAssemblerSupport<P
     @Autowired
     private ProductLinks productLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public ProductModelAssembler() {
         super(RestaurantProductController.class, ProductModel.class);
     }
@@ -29,9 +33,10 @@ public class ProductModelAssembler extends RepresentationModelAssemblerSupport<P
 
         modelMapper.map(product, productModel);
 
-        productModel.add(productLinks.linkToProducts(product.getRestaurant().getId(), "products"));
-        productModel.add(productLinks.linkToProductPhoto(product.getRestaurant().getId(),
-                product.getId(), "photo"));
+        if (apiSecurity.isAllowedToSearchRestaurants()) {
+            productModel.add(productLinks.linkToProducts(product.getRestaurant().getId(), "products"));
+            productModel.add(productLinks.linkToProductPhoto(product.getRestaurant().getId(), product.getId(), "photo"));
+        }
 
         return productModel;
     }

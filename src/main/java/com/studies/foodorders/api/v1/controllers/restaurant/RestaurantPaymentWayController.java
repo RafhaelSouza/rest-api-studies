@@ -4,6 +4,8 @@ import com.studies.foodorders.api.v1.assemblers.paymentway.PaymentWayModelAssemb
 import com.studies.foodorders.api.v1.links.RestaurantLinks;
 import com.studies.foodorders.api.v1.models.paymentway.PaymentWayModel;
 import com.studies.foodorders.api.v1.openapi.controllers.RestaurantPaymentWayControllerOpenApi;
+import com.studies.foodorders.core.security.ApiSecurity;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import com.studies.foodorders.domain.services.restaurant.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +26,34 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 
 	@Autowired
 	private RestaurantLinks restaurantLinks;
-	
+
+	@Autowired
+	private ApiSecurity apiSecurity;
+
+	@CheckSecurity.Restaurants.AllowToSearch
 	@GetMapping
 	public CollectionModel<PaymentWayModel> list(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findIfExists(restaurantId);
 
 		CollectionModel<PaymentWayModel> paymentWaysModel =
 				paymentWayModelAssembler.toCollectionModel(restaurant.getPaymentWay())
-				.removeLinks()
-				.add(restaurantLinks.linkToRestaurantPaymentWays(restaurantId))
-				.add(restaurantLinks.linkToRestaurantPaymentWayAssociation(restaurantId, "associate"));
+				.removeLinks();
 
-		paymentWaysModel.getContent().forEach(paymentWayModel -> {
-			paymentWayModel.add(restaurantLinks.linkToRestaurantPaymentWayDisassociation(
-					restaurantId, paymentWayModel.getId(), "disassociate"));
-		});
+		paymentWaysModel.add(restaurantLinks.linkToRestaurantPaymentWays(restaurantId));
+
+		if (apiSecurity.isAllowedToManageRestaurantOperation(restaurantId)) {
+			paymentWaysModel.add(restaurantLinks.linkToRestaurantPaymentWayAssociation(restaurantId, "associate"));
+
+			paymentWaysModel.getContent().forEach(paymentWayModel -> {
+				paymentWayModel.add(restaurantLinks.linkToRestaurantPaymentWayDisassociation(
+						restaurantId, paymentWayModel.getId(), "disassociate"));
+			});
+		}
 
 		return paymentWaysModel;
 	}
-	
+
+	@CheckSecurity.Restaurants.AllowToManageRestaurantOperation
 	@PutMapping("/{paymentWayId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {
@@ -51,6 +62,7 @@ public class RestaurantPaymentWayController implements RestaurantPaymentWayContr
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.Restaurants.AllowToManageRestaurantOperation
 	@DeleteMapping("/{paymentWayId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long paymentWayId) {

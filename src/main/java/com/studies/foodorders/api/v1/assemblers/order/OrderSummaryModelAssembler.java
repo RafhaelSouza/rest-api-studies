@@ -5,6 +5,7 @@ import com.studies.foodorders.api.v1.links.OrderLinks;
 import com.studies.foodorders.api.v1.links.RestaurantLinks;
 import com.studies.foodorders.api.v1.links.UserLinks;
 import com.studies.foodorders.api.v1.models.order.OrderSummaryModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.order.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class OrderSummaryModelAssembler extends RepresentationModelAssemblerSupp
     @Autowired
     private UserLinks userLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public OrderSummaryModelAssembler() {
         super(OrderController.class, OrderSummaryModel.class);
     }
@@ -38,11 +42,14 @@ public class OrderSummaryModelAssembler extends RepresentationModelAssemblerSupp
         OrderSummaryModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(orderLinks.linkToOrders("orders"));
+        if (apiSecurity.isAllowedToSearchOrders())
+            orderModel.add(orderLinks.linkToOrders("orders"));
 
-        orderModel.getRestaurant().add(restaurantLinks.linkToRestaurant(order.getRestaurant().getId()));
+        if (apiSecurity.isAllowedToSearchRestaurants())
+            orderModel.getRestaurant().add(restaurantLinks.linkToRestaurant(order.getRestaurant().getId()));
 
-        orderModel.getClient().add(userLinks.linkToUser(order.getClient().getId()));
+        if (apiSecurity.isAllowedToSearchUsersGroupsPermissions())
+            orderModel.getClient().add(userLinks.linkToUser(order.getClient().getId()));
 
         return orderModel;
     }

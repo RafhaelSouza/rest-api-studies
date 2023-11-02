@@ -17,6 +17,7 @@ delete from restaurant_responsible_user;
 delete from tab_orders;
 delete from tab_order_items;
 delete from tab_product_photo;
+delete from oauth_client_details;
 
 -- enable foreign key checks
 set session_replication_role = 'origin';
@@ -68,6 +69,21 @@ insert into tab_payment_ways (description, updated_at) values ('Cash', current_t
 
 insert into tab_permissions (name, description) values ('SEARCH_KITCHEN', 'Allow to search kitchens');
 insert into tab_permissions (name, description) values ('UPDATE_KITCHEN', 'Allow to update kitchens');
+insert into tab_permissions (name, description) values ('SEARCH_PAYMENT_WAYS', 'Allow to search payment ways');
+insert into tab_permissions (name, description) values ('UPDATE_PAYMENT_WAYS', 'Allow to update payment ways');
+insert into tab_permissions (name, description) values ('SEARCH_CITIES', 'Allow to search cities');
+insert into tab_permissions (name, description) values ('UPDATE_CITIES', 'Allow to update cities');
+insert into tab_permissions (name, description) values ('SEARCH_STATES', 'Allow to search states');
+insert into tab_permissions (name, description) values ('UPDATE_STATES', 'Allow to update states');
+insert into tab_permissions (name, description) values ('SEARCH_USERS_GROUPS_PERMISSIONS', 'Allow to search users');
+insert into tab_permissions (name, description) values ('UPDATE_USERS_GROUPS_PERMISSIONS', 'Allow to update users');
+insert into tab_permissions (name, description) values ('SEARCH_RESTAURANTS', 'Allow to search restaurants');
+insert into tab_permissions (name, description) values ('UPDATE_RESTAURANTS', 'Allow to create, update or manage restaurants');
+insert into tab_permissions (name, description) values ('SEARCH_PRODUCTS', 'Allow to search products');
+insert into tab_permissions (name, description) values ('UPDATE_PRODUCTS', 'Allow to update products');
+insert into tab_permissions (name, description) values ('SEARCH_ORDERS', 'Allow to search orders');
+insert into tab_permissions (name, description) values ('MANAGE_ORDERS', 'Allow manage orders');
+insert into tab_permissions (name, description) values ('GENERATE_REPORTS', 'Allow generate reports');
 
 insert into restaurant_payment_way (restaurant_id, paymentway_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3), (4, 1), (4, 2), (5, 1), (5, 2), (6, 3);
 
@@ -85,23 +101,42 @@ insert into tab_groups (name, created_at, updated_at) values ('Manager', current
 insert into tab_groups (name, created_at, updated_at) values ('Seller', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_groups (name, created_at, updated_at) values ('Secretary', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 insert into tab_groups (name, created_at, updated_at) values ('Register', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_groups (name, created_at, updated_at) values ('Client', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
 
-insert into group_permission (group_id, permission_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
+-- Adds all permissions to the manager's group
+insert into group_permission (group_id, permission_id) select 1, id from tab_permissions;
 
-insert into tab_users (name, email, password, created_at, updated_at) values ('User One', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('User Two', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('User Three', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('User Four', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
-insert into tab_users (name, email, password, created_at, updated_at) values ('User Five', 'rafhael.projetos+ras1@gmail.com', '123', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+-- add permissions to the seller's group
+insert into group_permission (group_id, permission_id) select 2, id from tab_permissions where name ilike 'search%';
 
-insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
+insert into group_permission (group_id, permission_id) values (2, 14);
 
-insert into restaurant_responsible_user (user_id, restaurant_id) values (1, 5), (3, 5);
+-- add permissions to the secretary group
+insert into group_permission (group_id, permission_id) select 3, id from tab_permissions where name ilike 'search%';
+
+-- add permissions to the registering group
+insert into group_permission (group_id, permission_id) select 4, id from tab_permissions where name ilike '%_restaurants' or name ilike '%_products';
+
+-- add permissions to the client group
+-- insert into group_permission (group_id, permission_id) select 5, id from tab_permissions where name ilike '%_orders%';
+
+insert into tab_users (name, email, password, created_at, updated_at) values ('Manager User', 'rafhael.projetos+manager@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Seller User', 'rafhael.projetos+seller@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Secretary User', 'rafhael.projetos+secretary@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Register User', 'rafhael.projetos+register@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Client User One', 'rafhael.projetos+client1@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Client User Two', 'rafhael.projetos+client2@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Restaurant Owner One', 'rafhael.projetos+owner1@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+insert into tab_users (name, email, password, created_at, updated_at) values ('Restaurant Owner Two', 'rafhael.projetos+owner2@gmail.com', '$2a$12$bYpZuJJNCk8etcjX5fZAI.sGe57KPz49vG/URIs05aNXr0EiP2PWK', current_timestamp at time zone 'utc', current_timestamp at time zone 'utc');
+
+insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4), (5, 5);
+
+insert into restaurant_responsible_user (user_id, restaurant_id) values (7, 1), (7, 2), (7, 3), (8, 4), (8, 5);
 
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                     address_street, address_number, address_complement, address_district,
 	                status, created_at, partial_price, shipping_costs, total_price)
-values ('d4aed75c-44bd-4ec5-a303-ee20a0f88e32', 1, 1, 1, 1, '11111-111', 'First Avenue', '100', 'Apt 101', 'Downtown',
+values ('d4aed75c-44bd-4ec5-a303-ee20a0f88e32', 1, 5, 1, 1, '11111-111', 'First Avenue', '100', 'Apt 101', 'Downtown',
         'CREATED', current_timestamp at time zone 'utc', 298.90, 10, 308.90);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
@@ -113,7 +148,7 @@ values (1, 2, 2, 110, 220, 'More spicy, please', current_timestamp at time zone 
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                             address_street, address_number, address_complement, address_district,
                             status, created_at, partial_price, shipping_costs, total_price)
-values ('cee92b85-1456-43d7-842f-93be0d57b954', 4, 1, 2, 1, '22222-111', 'Second Avenue', '500', 'First block', 'Downtown',
+values ('cee92b85-1456-43d7-842f-93be0d57b954', 4, 3, 2, 1, '22222-111', 'Second Avenue', '500', 'First block', 'Downtown',
         'CREATED', current_timestamp at time zone 'utc', 79, 0, 79);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
@@ -122,7 +157,7 @@ values (2, 6, 1, 79, 79, 'Well done steak', current_timestamp at time zone 'utc'
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                             address_street, address_number, address_complement, address_district,
                             status, created_at, partial_price, shipping_costs, total_price)
-values ('12a0af35-759d-43d2-bdfa-6cd85e3354bf', 4, 1, 2, 1, '33333-222', 'Third Avenue', '505', 'Second block', 'Downtown',
+values ('12a0af35-759d-43d2-bdfa-6cd85e3354bf', 4, 6, 2, 1, '33333-222', 'Third Avenue', '505', 'Second block', 'Downtown',
         'DELIVERED', current_timestamp at time zone 'utc', 120, 30, 150);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
@@ -131,7 +166,7 @@ values (3, 2, 1, 120, 120, null, current_timestamp at time zone 'utc');
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                             address_street, address_number, address_complement, address_district,
                             status, created_at, partial_price, shipping_costs, total_price)
-values ('960bc0ee-d04a-4729-a0f2-df01bd488f1c', 4, 1, 2, 1, '44444-333', 'Fourth Avenue', '510', 'Third block', 'Downtown',
+values ('960bc0ee-d04a-4729-a0f2-df01bd488f1c', 4, 5, 2, 1, '44444-333', 'Fourth Avenue', '510', 'Third block', 'Downtown',
         'DELIVERED', current_timestamp at time zone 'utc', 174.4, 5, 179.4);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
@@ -140,8 +175,35 @@ values (4, 3, 2, 87.2, 174.4, null, current_timestamp at time zone 'utc');
 insert into tab_orders (code, restaurant_id, client_user_id, paymentway_id, address_city_id, address_postalcode,
                             address_street, address_number, address_complement, address_district,
                             status, created_at, partial_price, shipping_costs, total_price)
-values ('3b686e44-b6dc-4a9f-ab43-f8b872d8e2bd', 4, 1, 2, 1, '55555-444', 'Fifth Avenue', '510', 'Fourth block', 'Downtown',
+values ('3b686e44-b6dc-4a9f-ab43-f8b872d8e2bd', 4, 6, 2, 1, '55555-444', 'Fifth Avenue', '510', 'Fourth block', 'Downtown',
         'DELIVERED', current_timestamp at time zone 'utc', 87.2, 10, 97.2);
 
 insert into tab_order_items (order_id, product_id, amount, unit_price, total_price, observations, created_at)
 values (5, 3, 1, 87.2, 87.2, null, current_timestamp at time zone 'utc');
+
+insert into oauth_client_details (client_id, resource_ids, client_secret,
+  scope, authorized_grant_types, web_server_redirect_uri, authorities,
+  access_token_validity, refresh_token_validity, autoapprove
+)
+values ('web-client', null, '$2a$12$R1fAEM6uD5rKvbkXMloflOkTM9vh2LYwtjCFqBMXQ86gqB6xwvO7m',
+  'READ,WRITE', 'password', null, null,
+  60 * 60 * 6, 7 * 24 * 60 * 60, null
+);
+
+insert into oauth_client_details (client_id, resource_ids, client_secret,
+  scope, authorized_grant_types, web_server_redirect_uri, authorities,
+  access_token_validity, refresh_token_validity, autoapprove
+)
+values ('client-oauth2-authorization-code', null, '$2a$12$R1fAEM6uD5rKvbkXMloflOkTM9vh2LYwtjCFqBMXQ86gqB6xwvO7m',
+  'READ,WRITE', 'authorization_code', 'http://localhost:8082', null,
+  null, null, null
+);
+
+insert into oauth_client_details (client_id, resource_ids, client_secret,
+  scope, authorized_grant_types, web_server_redirect_uri, authorities,
+  access_token_validity, refresh_token_validity, autoapprove
+)
+values ('any-back-end-application', null, '$2a$12$R1fAEM6uD5rKvbkXMloflOkTM9vh2LYwtjCFqBMXQ86gqB6xwvO7m',
+  'READ,WRITE', 'client_credentials', null, 'SEARCH_ORDERS,GENERATE_REPORTS',
+  null, null, null
+);

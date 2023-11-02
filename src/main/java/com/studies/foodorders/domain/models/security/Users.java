@@ -16,7 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tab_users")
-public class User implements Serializable {
+public class Users implements Serializable {
 
     private static final long serialVersionUID = 8287152537168643618L;
 
@@ -51,12 +51,8 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Set<Group> groups = new HashSet<>();
 
-    public boolean passwordMatches(String password) {
-        return getPassword().equals(password);
-    }
-
-    public boolean passwordDoesNotMatch(String password) {
-        return !passwordMatches(password);
+    public boolean isNew() {
+        return getId() == null;
     }
 
     public boolean addGroup(Group group) {

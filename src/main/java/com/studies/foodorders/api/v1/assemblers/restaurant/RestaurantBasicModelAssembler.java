@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.controllers.restaurant.RestaurantController
 import com.studies.foodorders.api.v1.links.KitchenLinks;
 import com.studies.foodorders.api.v1.links.RestaurantLinks;
 import com.studies.foodorders.api.v1.models.restaurant.RestaurantBasicModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class RestaurantBasicModelAssembler extends RepresentationModelAssemblerS
     @Autowired
     private KitchenLinks kitchenLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public RestaurantBasicModelAssembler() {
         super(RestaurantController.class, RestaurantBasicModel.class);
     }
@@ -34,9 +38,11 @@ public class RestaurantBasicModelAssembler extends RepresentationModelAssemblerS
 
         modelMapper.map(restaurant, restaurantModel);
 
-        restaurantModel.add(restaurantLinks.linkToRestaurants("restaurants"));
+        if (apiSecurity.isAllowedToSearchRestaurants())
+            restaurantModel.add(restaurantLinks.linkToRestaurants("restaurants"));
 
-        restaurantModel.getKitchen().add(kitchenLinks.linkToKitchen(restaurant.getKitchen().getId()));
+        if (apiSecurity.isAllowedToSearchKitchens())
+            restaurantModel.getKitchen().add(kitchenLinks.linkToKitchen(restaurant.getKitchen().getId()));
 
         return restaurantModel;
 
@@ -44,8 +50,12 @@ public class RestaurantBasicModelAssembler extends RepresentationModelAssemblerS
 
     @Override
     public CollectionModel<RestaurantBasicModel> toCollectionModel(Iterable<? extends Restaurant> entities) {
-        return super.toCollectionModel(entities)
-                .add(restaurantLinks.linkToRestaurants());
+        CollectionModel<RestaurantBasicModel> restaurantBasicModelCollectionModel = super.toCollectionModel(entities);
+
+        if (apiSecurity.isAllowedToSearchRestaurants())
+            restaurantBasicModelCollectionModel.add(restaurantLinks.linkToRestaurants());
+
+        return restaurantBasicModelCollectionModel;
     }
 
 }

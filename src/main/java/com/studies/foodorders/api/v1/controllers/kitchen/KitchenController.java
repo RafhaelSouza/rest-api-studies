@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.assemblers.kitchen.KitchenModelAssembler;
 import com.studies.foodorders.api.v1.models.kitchen.KitchenInput;
 import com.studies.foodorders.api.v1.models.kitchen.KitchenModel;
 import com.studies.foodorders.api.v1.openapi.controllers.KitchenControllerOpenApi;
+import com.studies.foodorders.core.security.CheckSecurity;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import com.studies.foodorders.domain.services.kitchen.KitchenService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,8 +41,11 @@ public class KitchenController implements KitchenControllerOpenApi {
     }*/
 
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PagedModel<KitchenModel> list(@PageableDefault(size = 2) Pageable pageable) {
+
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
 
         log.info("Listing kitchens with pages of {} records...", pageable.getPageSize());
         Page<Kitchen> kitchensPage = kitchenService.list(pageable);
@@ -52,12 +57,14 @@ public class KitchenController implements KitchenControllerOpenApi {
     }
 
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToSearch
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel find(@PathVariable Long id) {
         return kitchenModelAssembler.toModel(kitchenService.findIfExists(id));
     }
 
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToUpdate
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public KitchenModel save(@RequestBody @Valid KitchenInput kitchenInput) {
@@ -66,6 +73,7 @@ public class KitchenController implements KitchenControllerOpenApi {
     }
 
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToUpdate
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public KitchenModel update(@PathVariable Long id, @RequestBody @Valid KitchenInput kitchenInput) {
         Kitchen currentKitchen = kitchenService.findIfExists(id);
@@ -76,6 +84,7 @@ public class KitchenController implements KitchenControllerOpenApi {
     }
 
     @Deprecated
+    @CheckSecurity.Kitchens.AllowToUpdate
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

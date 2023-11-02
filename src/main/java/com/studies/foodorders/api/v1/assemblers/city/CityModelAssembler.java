@@ -5,6 +5,7 @@ import com.studies.foodorders.api.v1.links.CityLinks;
 import com.studies.foodorders.api.v1.links.StateLinks;
 import com.studies.foodorders.api.v1.models.localization.city.CityInput;
 import com.studies.foodorders.api.v1.models.localization.city.CityModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.localization.City;
 import com.studies.foodorders.domain.models.localization.State;
 import org.modelmapper.ModelMapper;
@@ -25,6 +26,9 @@ public class CityModelAssembler extends RepresentationModelAssemblerSupport<City
     @Autowired
     private StateLinks stateLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public CityModelAssembler() {
         super(CityController.class, CityModel.class);
     }
@@ -35,17 +39,23 @@ public class CityModelAssembler extends RepresentationModelAssemblerSupport<City
 
         modelMapper.map(city, cityModel);
 
-        cityModel.add(cityLinks.linkToCities("cities"));
+        if (apiSecurity.isAllowedToSearchCities())
+            cityModel.add(cityLinks.linkToCities("cities"));
 
-        cityModel.getState().add(stateLinks.linkToState(cityModel.getState().getId()));
+        if (apiSecurity.isAllowedToSearchStates())
+            cityModel.getState().add(stateLinks.linkToState(cityModel.getState().getId()));
 
         return cityModel;
     }
 
     @Override
     public CollectionModel<CityModel> toCollectionModel(Iterable<? extends City> entities) {
-        return super.toCollectionModel(entities)
-                .add(cityLinks.linkToCities());
+        CollectionModel<CityModel> cityModelCollectionModel = super.toCollectionModel(entities);
+
+        if (apiSecurity.isAllowedToSearchCities())
+            cityModelCollectionModel.add(cityLinks.linkToCities());
+
+        return cityModelCollectionModel;
     }
 
     public City toDomainObject(CityInput cityInput) {

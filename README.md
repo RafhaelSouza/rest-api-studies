@@ -32,13 +32,13 @@
 
 ✔️ API Versioning (Media Types e URIs)
 
-✖️️ Configuration and log management (Loggly)
+✔️ Configuration and log management (Loggly)
 
-✖️️️ Spring Security, OAuth2 e JWT (Opaque Tokens and Transparent Tokens)
+✔️ Spring Security, OAuth2 e JWT (Opaque Tokens and Transparent Tokens)
 
 ✖️️ Cloud-native APIs
 
-✔️ Docker, DockerHub e Docker compose
+✖️️ Docker, DockerHub e Docker compose
 
 ✖️️️ Deploy
 

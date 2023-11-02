@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.controllers.paymentway.PaymentWayController
 import com.studies.foodorders.api.v1.links.PaymentWayLinks;
 import com.studies.foodorders.api.v1.models.paymentway.PaymentWayInput;
 import com.studies.foodorders.api.v1.models.paymentway.PaymentWayModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class PaymentWayModelAssembler extends RepresentationModelAssemblerSuppor
 	@Autowired
 	private PaymentWayLinks paymentWayLinks;
 
+	@Autowired
+	private ApiSecurity apiSecurity;
+
 	public PaymentWayModelAssembler() {
 		super(PaymentWayController.class, PaymentWayModel.class);
 	}
@@ -31,15 +35,20 @@ public class PaymentWayModelAssembler extends RepresentationModelAssemblerSuppor
 
 		modelMapper.map(paymentWay, paymentWayModel);
 
-		paymentWayModel.add(paymentWayLinks.linkToPaymentWays("paymentWays"));
+		if (apiSecurity.isAllowedToSearchPaymentWays())
+			paymentWayModel.add(paymentWayLinks.linkToPaymentWays("paymentWays"));
 
 		return paymentWayModel;
 	}
 
 	@Override
 	public CollectionModel<PaymentWayModel> toCollectionModel(Iterable<? extends PaymentWay> entities) {
-		return super.toCollectionModel(entities)
-				.add(paymentWayLinks.linkToPaymentWays());
+		CollectionModel<PaymentWayModel> paymentWayModelCollectionModel = super.toCollectionModel(entities);
+
+		if (apiSecurity.isAllowedToSearchPaymentWays())
+			paymentWayModelCollectionModel.add(paymentWayLinks.linkToPaymentWays());
+
+		return paymentWayModelCollectionModel;
 	}
 
 	public PaymentWay toDomainObject(PaymentWayInput paymentWayInput) {

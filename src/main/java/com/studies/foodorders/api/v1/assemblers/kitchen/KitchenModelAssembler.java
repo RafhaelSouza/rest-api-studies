@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.controllers.kitchen.KitchenController;
 import com.studies.foodorders.api.v1.links.KitchenLinks;
 import com.studies.foodorders.api.v1.models.kitchen.KitchenInput;
 import com.studies.foodorders.api.v1.models.kitchen.KitchenModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.kitchen.Kitchen;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class KitchenModelAssembler extends RepresentationModelAssemblerSupport<K
     @Autowired
     private KitchenLinks kitchenLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public KitchenModelAssembler() {
         super(KitchenController.class, KitchenModel.class);
     }
@@ -28,7 +32,8 @@ public class KitchenModelAssembler extends RepresentationModelAssemblerSupport<K
         KitchenModel kitchenModel = createModelWithId(kitchen.getId(), kitchen);
         modelMapper.map(kitchen, kitchenModel);
 
-        kitchenModel.add(kitchenLinks.linkToKitchens("kitchens"));
+        if (apiSecurity.isAllowedToSearchKitchens())
+            kitchenModel.add(kitchenLinks.linkToKitchens("kitchens"));
 
         return kitchenModel;
     }

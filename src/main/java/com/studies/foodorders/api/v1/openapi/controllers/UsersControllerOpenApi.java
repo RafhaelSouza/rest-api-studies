@@ -9,7 +9,7 @@ import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Users")
-public interface UserControllerOpenApi {
+public interface UsersControllerOpenApi {
 
     @ApiOperation("List of users")
     CollectionModel<UserModel> list();

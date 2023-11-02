@@ -8,7 +8,7 @@ import com.studies.foodorders.domain.models.localization.Address;
 import com.studies.foodorders.domain.models.order.enumerations.OrderStatus;
 import com.studies.foodorders.domain.models.paymentway.PaymentWay;
 import com.studies.foodorders.domain.models.restaurant.Restaurant;
-import com.studies.foodorders.domain.models.security.User;
+import com.studies.foodorders.domain.models.security.Users;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -92,7 +92,7 @@ public class Order extends AbstractAggregateRoot<Order> implements Serializable 
 
     @ManyToOne
     @JoinColumn(name = "client_user_id", nullable = false)
-    private User client;
+    private Users client;
 
     public void calculateTotalPrice() {
         getItems().forEach(OrderItem::calculateTotalPrice);

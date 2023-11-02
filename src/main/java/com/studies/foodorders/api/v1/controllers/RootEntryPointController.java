@@ -1,6 +1,7 @@
 package com.studies.foodorders.api.v1.controllers;
 
 import com.studies.foodorders.api.v1.links.*;
+import com.studies.foodorders.core.security.ApiSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.MediaType;
@@ -41,19 +42,42 @@ public class RootEntryPointController {
 	@Autowired
 	private StatisticLinks statisticLinks;
 
+	@Autowired
+	private GroupLinks groupLinks;
+
+	@Autowired
+	private ApiSecurity apiSecurity;
+
 	@GetMapping
 	public RootEntryPointModel root() {
 		var rootEntryPointModel = new RootEntryPointModel();
 
-		rootEntryPointModel.add(cityLinks.linkToCities("cities"));
-		rootEntryPointModel.add(stateLinks.linkToStates("states"));
-		rootEntryPointModel.add(kitchenLinks.linkToKitchens("kitchens"));
-		rootEntryPointModel.add(restaurantLinks.linkToRestaurants("restaurants"));
-		rootEntryPointModel.add(paymentWayLinks.linkToPaymentWays("paymentWays"));
-		rootEntryPointModel.add(orderLinks.linkToOrders("orders"));
-		rootEntryPointModel.add(userLinks.linkToUsers("users"));
-		rootEntryPointModel.add(permissionLinks.linkToPermissions("permissions"));
-		rootEntryPointModel.add(statisticLinks.linkToStatistics("statistics"));
+		if (apiSecurity.isAllowedToSearchCities())
+			rootEntryPointModel.add(cityLinks.linkToCities("cities"));
+
+		if (apiSecurity.isAllowedToSearchStates())
+			rootEntryPointModel.add(stateLinks.linkToStates("states"));
+
+		if (apiSecurity.isAllowedToSearchKitchens())
+			rootEntryPointModel.add(kitchenLinks.linkToKitchens("kitchens"));
+
+		if (apiSecurity.isAllowedToSearchRestaurants())
+			rootEntryPointModel.add(restaurantLinks.linkToRestaurants("restaurants"));
+
+		if (apiSecurity.isAllowedToSearchPaymentWays())
+			rootEntryPointModel.add(paymentWayLinks.linkToPaymentWays("paymentWays"));
+
+		if (apiSecurity.isAllowedToSearchOrders())
+			rootEntryPointModel.add(orderLinks.linkToOrders("orders"));
+
+		if (apiSecurity.isAllowedToSearchUsersGroupsPermissions()) {
+			rootEntryPointModel.add(userLinks.linkToUsers("users"));
+			rootEntryPointModel.add(groupLinks.linkToGroups("groups"));
+			rootEntryPointModel.add(permissionLinks.linkToPermissions("permissions"));
+		}
+
+		if (apiSecurity.isAllowedToSearchStatistics())
+			rootEntryPointModel.add(statisticLinks.linkToStatistics("statistics"));
 
 		return rootEntryPointModel;
 	}

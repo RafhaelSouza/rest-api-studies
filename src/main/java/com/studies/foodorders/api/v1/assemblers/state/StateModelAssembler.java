@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.controllers.localization.StateController;
 import com.studies.foodorders.api.v1.links.StateLinks;
 import com.studies.foodorders.api.v1.models.localization.state.StateInput;
 import com.studies.foodorders.api.v1.models.localization.state.StateModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.localization.State;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class StateModelAssembler extends RepresentationModelAssemblerSupport<Sta
     @Autowired
     private StateLinks stateLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public StateModelAssembler() {
         super(StateController.class, StateModel.class);
     }
@@ -29,15 +33,20 @@ public class StateModelAssembler extends RepresentationModelAssemblerSupport<Sta
         StateModel stateModel = createModelWithId(state.getId(), state);
         modelMapper.map(state, stateModel);
 
-        stateModel.add(stateLinks.linkToStates("states"));
+        if (apiSecurity.isAllowedToSearchStates())
+            stateModel.add(stateLinks.linkToStates("states"));
 
         return stateModel;
     }
 
     @Override
     public CollectionModel<StateModel> toCollectionModel(Iterable<? extends State> entities) {
-        return super.toCollectionModel(entities)
-                .add(stateLinks.linkToStates());
+        CollectionModel<StateModel> stateModelCollectionModel = super.toCollectionModel(entities);
+
+        if (apiSecurity.isAllowedToSearchStates())
+            stateModelCollectionModel.add(stateLinks.linkToStates());
+
+        return stateModelCollectionModel;
     }
 
     public State toDomainObject(StateInput stateInput) {

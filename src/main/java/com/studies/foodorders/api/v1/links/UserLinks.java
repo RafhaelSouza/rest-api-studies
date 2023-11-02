@@ -1,6 +1,6 @@
 package com.studies.foodorders.api.v1.links;
 
-import com.studies.foodorders.api.v1.controllers.security.UserController;
+import com.studies.foodorders.api.v1.controllers.security.UsersController;
 import com.studies.foodorders.api.v1.controllers.security.UserGroupController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
@@ -13,7 +13,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserLinks {
 
     public Link linkToUser(Long userId, String rel) {
-        return linkTo(methodOn(UserController.class)
+        return linkTo(methodOn(UsersController.class)
                 .find(userId)).withRel(rel);
     }
 
@@ -22,7 +22,7 @@ public class UserLinks {
     }
 
     public Link linkToUsers(String rel) {
-        return linkTo(UserController.class).withRel(rel);
+        return linkTo(UsersController.class).withRel(rel);
     }
 
     public Link linkToUsers() {

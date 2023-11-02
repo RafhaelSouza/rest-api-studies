@@ -4,6 +4,7 @@ import com.studies.foodorders.api.v1.controllers.security.GroupController;
 import com.studies.foodorders.api.v1.links.GroupLinks;
 import com.studies.foodorders.api.v1.models.security.group.GroupInput;
 import com.studies.foodorders.api.v1.models.security.group.GroupModel;
+import com.studies.foodorders.core.security.ApiSecurity;
 import com.studies.foodorders.domain.models.security.Group;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
     @Autowired
     private GroupLinks groupLinks;
 
+    @Autowired
+    private ApiSecurity apiSecurity;
+
     public GroupModelAssembler() {
         super(GroupController.class, GroupModel.class);
     }
@@ -30,17 +34,22 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
         GroupModel groupModel = createModelWithId(group.getId(), group);
         modelMapper.map(group, groupModel);
 
-        groupModel.add(groupLinks.linkToGroups("groups"));
-
-        groupModel.add(groupLinks.linkToGroupPermissions(group.getId(), "permissions"));
+        if (apiSecurity.isAllowedToSearchUsersGroupsPermissions()) {
+            groupModel.add(groupLinks.linkToGroups("groups"));
+            groupModel.add(groupLinks.linkToGroupPermissions(group.getId(), "permissions"));
+        }
 
         return groupModel;
     }
 
     @Override
     public CollectionModel<GroupModel> toCollectionModel(Iterable<? extends Group> entities) {
-        return super.toCollectionModel(entities)
-                .add(groupLinks.linkToGroups());
+        CollectionModel<GroupModel> groupModelCollectionModel = super.toCollectionModel(entities);
+
+        if (apiSecurity.isAllowedToSearchUsersGroupsPermissions())
+            groupModelCollectionModel.add(groupLinks.linkToGroups());
+
+        return groupModelCollectionModel;
     }
 
     public Group toDomainObject(GroupInput groupInput) {
