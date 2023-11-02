@@ -1,5 +1,6 @@
 package com.studies.foodorders;
 
+import com.studies.foodorders.core.io.Base64ProtocolResolver;
 import com.studies.foodorders.infrastructure.repositories.springcustom.CustomJpaRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +14,10 @@ public class FoodOrderApiApplication {
 
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		SpringApplication.run(FoodOrderApiApplication.class, args);
+
+		var app = new SpringApplication(FoodOrderApiApplication.class);
+		app.addListeners(new Base64ProtocolResolver());
+		app.run(args);
 	}
 
 }
