@@ -29,3 +29,13 @@ services:
       - foodorders-db
     #deploy: // it's necessary remove ports property
       #replicas: 2
+
+  foodorders-proxy:
+    build: ./nginx
+    image: foodorders-proxy
+    ports:
+      - "80:80"
+    networks:
+      - foodorders-network
+    depends_on:
+      - foodorders-api
