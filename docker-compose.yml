@@ -1,8 +1,11 @@
 version: '3.1'
 
-services:
+networks:
+  foodorders-network:
+    driver: bridge
 
-  postgres_foodorders:
+services:
+  foodorders-db:
     image: postgres:14
     environment:
       POSTGRES_DB: foodorders
@@ -10,5 +13,16 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - 5432:5432
-    volumes:
-      - ~/food_data-database:/var/lib/postgresql/data
+    networks:
+      - foodorders-network
+
+  foodorders-api:
+    image: foodorders-api
+    environment:
+      DB_HOST: foodorders-db
+    ports:
+      - "8080:8080"
+    networks:
+      - foodorders-network
+    depends_on:
+      - foodorders-db
