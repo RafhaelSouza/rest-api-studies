@@ -21,9 +21,11 @@ services:
     command: ["/wait-for-it.sh", "foodorders-db:5432", "-t", "20", "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: foodorders-db
-    ports:
-      - "8080:8080"
+    #ports:
+    #  - "8080:8080"
     networks:
       - foodorders-network
     depends_on:
       - foodorders-db
+    #deploy: // it's necessary remove ports property
+      #replicas: 2

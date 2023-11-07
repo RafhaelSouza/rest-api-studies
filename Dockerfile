@@ -17,4 +17,7 @@ CMD ["java", "-jar", "api.jar"]
 # docker image build -t foodorders-api .
 # mvn package -Pdocker
 # docker image tag foodorders-api rafhaeldev/foodorders-api
-# docker container run --rm -p 8080:8080 -e DB_HOST=foodorders-db --network foodorders-network rafhaeldev/foodorders-api
+# docker run --rm -p 8080:8080 -e DB_HOST=foodorders-db --network foodorders-network rafhaeldev/foodorders-api
+# docker run --rm -it --network rest-api-studies_foodorders-network alpine sh (run: nslookup foodorders-api)
+# docker compose up --scale foodorders-api=2
+# apk add curl

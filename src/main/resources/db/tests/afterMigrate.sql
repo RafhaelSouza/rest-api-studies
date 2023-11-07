@@ -1,6 +1,26 @@
 -- disable foreign key checks
 set session_replication_role = 'replica';
 
+-- In PostgreSQL, you don't need to use the LOCK TABLES statement to lock tables explicitly like you do in MySQL.
+-- Instead, PostgreSQL handles concurrency and locking using transactions and isolation levels.
+lock table tab_cities in share row exclusive mode;
+lock table tab_kitchens in share row exclusive mode;
+lock table tab_states in share row exclusive mode;
+lock table tab_payment_ways in share row exclusive mode;
+lock table tab_groups in share row exclusive mode;
+lock table group_permission in share row exclusive mode;
+lock table tab_permissions in share row exclusive mode;
+lock table tab_products in share row exclusive mode;
+lock table tab_restaurants in share row exclusive mode;
+lock table restaurant_payment_way in share row exclusive mode;
+lock table tab_users in share row exclusive mode;
+lock table user_group in share row exclusive mode;
+lock table restaurant_responsible_user in share row exclusive mode;
+lock table tab_orders in share row exclusive mode;
+lock table tab_order_items in share row exclusive mode;
+lock table tab_product_photo in share row exclusive mode;
+lock table oauth_client_details in share row exclusive mode;
+
 delete from tab_cities;
 delete from tab_kitchens;
 delete from tab_states;
