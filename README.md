@@ -36,10 +36,10 @@
 
 ✔️ Spring Security, OAuth2 e JWT (Opaque Tokens and Transparent Tokens)
 
-✖️️ Cloud-native APIs
-
-✖️️ Docker, DockerHub e Docker compose
+✔️ Docker, DockerHub e Docker compose
 
 ✖️️️ Deploy
+
+✖️️ Cloud-native APIs
 
 ✖️️ Amazon AWS (EC2, EKS, ECS, Fargate, ELB, ECR, RDS, S3, Systems Manager Parameter Store, Certificate manager), RedisLabs and PWS
