@@ -21,6 +21,8 @@ services:
     command: ["/wait-for-it.sh", "foodorders-db:5432", "-t", "20", "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: foodorders-db
+      SPRING_SESSION_STORE_TYPE: redis
+      SPRING_REDIS_HOST: foodorders-redis
     #ports:
     #  - "8080:8080"
     networks:
@@ -39,3 +41,8 @@ services:
       - foodorders-network
     depends_on:
       - foodorders-api
+
+  foodorders-redis:
+    image: redis:6.2.1-alpine
+    networks:
+      - foodorders-network
