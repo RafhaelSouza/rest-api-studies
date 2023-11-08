@@ -21,3 +21,9 @@ CMD ["java", "-jar", "api.jar"]
 # docker run --rm -it --network rest-api-studies_foodorders-network alpine sh (run: nslookup foodorders-api)
 # docker compose up --scale foodorders-api=2
 # apk add curl
+# docker run --rm -it --network rest-api-studies_foodorders-network redis:6.2.1-alpine sh
+# redis-cli -h foodorders-redis -p 6379
+# keys *
+# set name key-name
+# get name
+# del name
