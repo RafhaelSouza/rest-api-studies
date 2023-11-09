@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - 5432:5432
+      - 15432:5432
     networks:
       - foodorders-network
 
@@ -23,6 +23,7 @@ services:
       DB_HOST: foodorders-db
       SPRING_SESSION_STORE_TYPE: redis
       SPRING_REDIS_HOST: foodorders-redis
+      SPRING_PROFILES_ACTIVE: development
     #ports:
     #  - "8080:8080"
     networks:
