@@ -1,6 +1,7 @@
 package com.studies.foodorders.infrastructure.storage;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -31,8 +32,8 @@ public class S3ProductPhotoStorageService implements ProductPhotoStorageService 
                     storageProperties.getS3().getBucket(),
                     filePath,
                     newProductPhoto.getInputStream(),
-                    objectMetadata);
-                    //.withCannedAcl(CannedAccessControlList.PublicRead);
+                    objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead);
 
             amazonS3.putObject(putObjectRequest);
         } catch (Exception e) {

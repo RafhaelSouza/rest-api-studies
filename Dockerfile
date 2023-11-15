@@ -27,3 +27,6 @@ CMD ["java", "-jar", "api.jar"]
 # set name key-name
 # get name
 # del name
+# docker run --rm -it redis:6.0.10-alpine redis-cli -h redis-19080.c9.us-east-1-2.ec2.cloud.redislabs.com -p 19080
+# auth yourRedisPassword
+# keytool -genkeypair -alias restapistudies -keyalg RSA -keypass 123456@prod -keystore restapistudies-prod.jks -storepass 123456@prod -validity 3650

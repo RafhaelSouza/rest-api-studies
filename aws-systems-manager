@@ -1,0 +1,28 @@
+# Just to save variables pattern
+
+SPRING_PROFILES_ACTIVE=production
+
+/production/foodorders-api-service/DB_HOST=foodorders-db.ccbc1b3pj7dj.us-east-1.rds.amazonaws.com
+/production/foodorders-api-service/SPRING_DATASOURCE_USERNAME=postgres
+/production/foodorders-api-service/SPRING_DATASOURCE_PASSWORD=
+
+/production/foodorders-api-service/SPRING_REDIS_HOST=redis-19080.c9.us-east-1-2.ec2.cloud.redislabs.com
+/production/foodorders-api-service/SPRING_REDIS_PORT=19080
+/production/foodorders-api-service/SPRING_REDIS_PASSWORD=
+
+/production/foodorders-api-service/LOGGING_LOGGLY_TOKEN=
+
+/production/foodorders-api-service/SECURITY_JWT_KEYSTORE_JKS_LOCATION=base64:
+/production/foodorders-api-service/SECURITY_JWT_KEYSTORE_PASSWORD=
+/production/foodorders-api-service/SECURITY_JWT_KEYSTORE_KEYPAIR_ALIAS=restapistudies
+
+/production/foodorders-api-service/STORAGE_S3_ACCESS-KEY=
+/production/foodorders-api-service/STORAGE_S3_SECRET_ACCESS_KEY=
+/production/foodorders-api-service/STORAGE_S3_BUCKET=rest-api-studies-aws1-production
+/production/foodorders-api-service/STORAGE_S3_REGION=us-east-1
+
+/production/foodorders-api-service/EMAIL_SENDER=Company Name <rafhael.dev+donotanswer@gmail.com>
+/production/foodorders-api-service/SPRING_MAIL_HOST=smtp.sendgrid.net
+/production/foodorders-api-service/SPRING_MAIL_PORT=587
+/production/foodorders-api-service/SPRING_MAIL_USERNAME=apikey
+/production/foodorders-api-service/SPRING_MAIL_PASSWORD=

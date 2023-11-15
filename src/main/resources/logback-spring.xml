@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="true">
+<configuration>
 
 	<include resource="org/springframework/boot/logging/logback/base.xml" />
 
-	<springProfile name="prod">
+	<springProfile name="production">
 		<springProperty name="logglyToken" source="logging.loggly.token" />
 
 		<appender name="loggly" class="ch.qos.logback.ext.loggly.LogglyAppender">

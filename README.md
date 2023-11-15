@@ -34,12 +34,10 @@
 
 ✔️ Configuration and log management (Loggly)
 
-✔️ Spring Security, OAuth2 e JWT (Opaque Tokens and Transparent Tokens)
+✔️ Spring Security, OAuth2 and JWT (Opaque Tokens and Transparent Tokens)
 
-✔️ Docker, DockerHub e Docker compose
+✔️ Docker, DockerHub and Docker compose
 
-✖️️️ Deploy
+✔️ Deploy
 
-✖️️ Cloud-native APIs
-
-✖️️ Amazon AWS (EC2, EKS, ECS, Fargate, ELB, ECR, RDS, S3, Systems Manager Parameter Store, Certificate manager), RedisLabs and PWS
+✔️ Amazon AWS (EC2, ECS, Fargate, ELB, ECR, RDS, S3, Systems Manager Parameter Store, Certificate manager)
